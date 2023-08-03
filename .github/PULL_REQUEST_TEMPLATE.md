@@ -14,7 +14,7 @@
 - [ ] ⏪ Revert
 
 
-## Descriptions
+## Descriptions and rationale
 
 ## Screenshots/Recordings
 
