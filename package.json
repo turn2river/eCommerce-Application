@@ -35,6 +35,10 @@
     "jest": "^29.6.2",
     "prettier": "^3.0.1",
     "sass": "^1.64.2",
+    "stylelint": "^15.10.2",
+    "stylelint-config-clean-order": "^5.0.1",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-config-standard-scss": "^10.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }
