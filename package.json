@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "jest",
     "lint:fix": "eslint . --fix",
-    "prettier": "prettier . --write"
+    "prettier": "prettier . --write",
+    "prepare": "husky install"
   },
   "dependencies": {
     "react": "^18.2.0",
