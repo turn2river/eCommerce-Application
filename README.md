@@ -8,7 +8,7 @@ This is our study task - an e-commerce project for a perfume shop 🛍️.
 This project is intended for non-commercial use. Our only profit is knowledge and improving our technological skills.🚸.
 
 If you have any questions, please do not hesitate to contact us at
-[![Static Badge](https://img.shields.io/badge/contact_us-blue?style=plastic)](<fake@example.com>).
+[![Static Badge](https://img.shields.io/badge/contact_us-blue?style=plastic)](fake@example.com).
 
 The project is built using
 [![Static Badge](https://img.shields.io/badge/React-v.18.2.0-blue?style=plastic&logo=react&logoColor=white)](https://www.npmjs.com/package/react)
@@ -33,19 +33,20 @@ The project is built using
 Before you start, ensure you have [Node.js](https://nodejs.org/en/download/) installed.
 
 1. **Clone** the repository [link](https://github.com/turn2river/eCommerce-Application.git).
-    
-    To clone the repository you can use the following command
 
-    ```shell
-    git clone https://github.com/turn2river/eCommerce-Application.git
-    ```
-    or the interface of your IDE.
+   To clone the repository you can use the following command
+
+   ```shell
+   git clone https://github.com/turn2river/eCommerce-Application.git
+   ```
+
+   or the interface of your IDE.
 
 2. **Install** dependencies
 
-    ```shell
-    npm run install
-    ```
+   ```shell
+   npm run install
+   ```
 
 ## Scripts
 
@@ -92,23 +93,24 @@ After cloning the repository and installing the dependencies you can run scripts
     After executing this command you will see all the errors in the code of all the files with .ts and .tsx extensions
 
     If errors are detected, some of them can be fixed automatically by running the following command
-    
+
     ```shell
     npm run lint:fix
     ```
 
 5.  **Run Prettier to format code**
 
-      If you want to format the code according to Prettier rules, you can run the following command
+    If you want to format the code according to Prettier rules, you can run the following command
 
-      ```shell
-      npm run prettier
-      ```
-      It will format the code in all the files.
+    ```shell
+    npm run prettier
+    ```
 
-6.  **Run StyleLint to finde and fix mistakes in style files with .scss extension**
+    It will format the code in all the files.
 
-   If you want to check for errors in the .scss files, you can run the following command
+6.  **Run StyleLint to find and fix mistakes in style files with .scss extension**
+
+If you want to check for errors in the .scss files, you can run the following command
 
     ```shell
     npm run stylelint
@@ -117,11 +119,10 @@ After cloning the repository and installing the dependencies you can run scripts
     After executing this command you will see all the errors in the code of all the files with .scss extension
 
      If errors are detected, some of them can be fixed automatically by running the following command
-    
+
     ```shell
     npm run stylelint:fix
     ```
-
 
 ## About Husky
 
@@ -132,6 +133,7 @@ npm run lint:fix
 npm run prettier
 npm run stylelint:fix
 ```
+
 and if any mistakes are detected after executing these scripts, you'll have to fix them manually before you can commit.
 
 ## Testing
@@ -147,4 +149,3 @@ npm run test
 ## Contributing
 
 Contributions are welcome. Please make sure to update tests as appropriate.
-
