@@ -1,7 +1,8 @@
 ## Ticket number
-***enter your ticket number here***
 
-## What type of PR is this? *(check all applicable)*
+**_enter your ticket number here_**
+
+## What type of PR is this? _(check all applicable)_
 
 - [ ] 🍕 Feature
 - [ ] 🐜 Bug Fix
@@ -13,7 +14,6 @@
 - [ ] 📦 Chore
 - [ ] ⏪ Revert
 
-
 ## Descriptions and rationale
 
 ## Screenshots/Recordings
@@ -23,4 +23,3 @@
 - [ ] 👍 Yes
 - [ ] 🙅‍♂️ No, because it's not necessary
 - [ ] 🆘 No, because I need help
-
