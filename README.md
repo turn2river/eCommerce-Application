@@ -44,7 +44,10 @@ Before you start, ensure you have [Node.js](https://nodejs.org/en/download/) ins
 
 2. **Install** dependencies
 
+Go to the development branch
+
    ```shell
+   git checkout development
    npm run install
    ```
 
