@@ -44,12 +44,12 @@ Before you start, ensure you have [Node.js](https://nodejs.org/en/download/) ins
 
 2. **Install** dependencies
 
-Go to the development branch
-
-   ```shell
-   git checkout development
-   npm run install
-   ```
+    Go to the development branch
+    
+    ```shell
+    git checkout development
+    npm run install
+    ```
 
 ## Scripts
 
@@ -113,7 +113,7 @@ After cloning the repository and installing the dependencies you can run scripts
 
 6.  **Run StyleLint to find and fix mistakes in style files with .scss extension**
 
-If you want to check for errors in the .scss files, you can run the following command
+    If you want to check for errors in the .scss files, you can run the following command
 
     ```shell
     npm run stylelint
@@ -121,7 +121,7 @@ If you want to check for errors in the .scss files, you can run the following co
 
     After executing this command you will see all the errors in the code of all the files with .scss extension
 
-     If errors are detected, some of them can be fixed automatically by running the following command
+    If errors are detected, some of them can be fixed automatically by running the following command
 
     ```shell
     npm run stylelint:fix
