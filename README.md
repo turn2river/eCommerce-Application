@@ -22,15 +22,16 @@ The project is built using:
 [![Static Badge](https://img.shields.io/badge/Sass-preprocessor-orange?style=plastic&logo=sass&logoColor=white)](https://sass-lang.com/)
 [![Static Badge](https://img.shields.io/badge/RTK-v.8.1.2-blue?style=plastic&logo=redux&logoColor=white)](https://redux-toolkit.js.org/)
 [![Static Badge](https://img.shields.io/badge/React_Router-v.6.14.2-orange?style=plastic&logo=reactrouter&logoColor=white)](https://reactrouter.com/)
-[![Static Badge](https://img.shields.io/badge/Commitezen-v.4.3.0-blue?style=plastic)](https://www.npmjs.com/package/commitizen)
+[![Static Badge](https://img.shields.io/badge/commitizen-friendly-blue?style=plastic)](https://www.npmjs.com/package/commitizen)
 
 ## Table of Contents
 
 1. 🖥️ [Installation](#installation)
 2. 🤖 [Scripts](#scripts)
 3. 🐶 [About Husky](#about-husky)
-4. ⚙️ [Testing](#testing)
-5. ✍️ [Contributing](#contributing)
+4. 📑 [About Commitizen](#about-commitizen)
+5. ⚙️ [Testing](#testing)
+6. ✍️ [Contributing](#contributing)
 
 ## Installation
 
@@ -142,6 +143,18 @@ npm run stylelint:fix
 ```
 
 and if any mistakes are detected after executing these scripts, you'll have to fix them manually before you can commit.
+
+## About Commitizen
+
+In our project we use Commitizen to standardize all commits in project. It means you should fill certain template of commit before push it in GitHub, It guarantees that all commits will have the same structure:
+
+To commit changes you need to run following command in terminal
+
+```shell
+npm run commit
+```
+
+This will launch Husky.
 
 ## Testing
 

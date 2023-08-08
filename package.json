@@ -13,7 +13,13 @@
     "prettier": "prettier . --write",
     "prepare": "husky install",
     "stylelint": "stylelint \"**/*.scss\"",
-    "stylelint:fix": "stylelint \"**/*.scss\" --fix"
+    "stylelint:fix": "stylelint \"**/*.scss\" --fix",
+    "commit": "cz"
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && npx cz --hook || true"
+    }
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -26,6 +32,8 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.45.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
@@ -43,5 +51,10 @@
     "stylelint-config-standard-scss": "^10.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
