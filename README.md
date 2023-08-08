@@ -2,7 +2,7 @@
 
 Hi there guys!👋
 
-"We are a young team of JS developers 👨‍💻, students of RS-School.
+We are a young team of JS developers 👨‍💻, students of RS-School.
 This is our study task - an e-commerce project for a perfume shop 🛍️.
 
 This project is intended for non-commercial use. Our only profit is knowledge and improving our technological skills.🚸.
@@ -10,7 +10,8 @@ This project is intended for non-commercial use. Our only profit is knowledge an
 If you have any questions, please do not hesitate to contact us at
 [![Static Badge](https://img.shields.io/badge/contact_us-blue?style=plastic)](fake@example.com).
 
-The project is built using
+The project is built using:
+
 [![Static Badge](https://img.shields.io/badge/React-v.18.2.0-blue?style=plastic&logo=react&logoColor=white)](https://www.npmjs.com/package/react)
 [![Static Badge](https://img.shields.io/badge/Vite-v.4.4.5-orange?style=plastic&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Static Badge](https://img.shields.io/badge/TypeScript-v.5.0.2-blue?style=plastic&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -19,6 +20,9 @@ The project is built using
 [![Static Badge](https://img.shields.io/badge/StyleLint-v.15.10.2-orange?style=plastic&logo=stylelint&logoColor=white)](https://www.npmjs.com/package/stylelint)
 [![Static Badge](https://img.shields.io/badge/Husky-v.8.0.3-blue?style=plastic&logo=husky&logoColor=white)](https://www.npmjs.com/package/husky)
 [![Static Badge](https://img.shields.io/badge/Sass-preprocessor-orange?style=plastic&logo=sass&logoColor=white)](https://sass-lang.com/)
+[![Static Badge](https://img.shields.io/badge/RTK-v.8.1.2-blue?style=plastic&logo=redux&logoColor=white)](https://redux-toolkit.js.org/)
+[![Static Badge](https://img.shields.io/badge/React_Router-v.6.14.2-orange?style=plastic&logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+[![Static Badge](https://img.shields.io/badge/Commitezen-v.4.3.0-blue?style=plastic)](https://www.npmjs.com/package/commitizen)
 
 ## Table of Contents
 
@@ -44,12 +48,12 @@ Before you start, ensure you have [Node.js](https://nodejs.org/en/download/) ins
 
 2. **Install** dependencies
 
-    Go to the development branch
-    
-    ```shell
-    git checkout development
-    npm run install
-    ```
+   Go to the development branch
+
+   ```shell
+   git checkout development
+   npm run install
+   ```
 
 ## Scripts
 
