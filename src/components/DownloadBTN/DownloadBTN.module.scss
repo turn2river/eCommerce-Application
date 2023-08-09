@@ -57,4 +57,8 @@
     background: linear-gradient(144deg, #977c55 0%, #e8d2b3 42.62%, #9f7a58 100%);
     border: 1px solid #d6b88d;
   }
+
+  &__wrapper {
+    position: absolute;
+  }
 }
