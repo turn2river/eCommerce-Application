@@ -25,7 +25,7 @@
     height: 24px;
     margin-right: 20px;
 
-    background-image: 'url(../../assets/image/svg/burger-button.svg)';
+    background-image: url('../../assets/image/svg/burger-button.svg');
 
     transition: 0.5s linear;
   }
@@ -49,14 +49,7 @@
     }
 
     .button-icon {
-      background-image: 'url(../../assets/image/svg/dark-burger-button.svg)';
+      background-image: url('../../assets/image/svg/dark-burger-button.svg');
     }
   }
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 20px;
-  background-image: 'url(../../assets/image/svg/burger-button.svg)';
 }
