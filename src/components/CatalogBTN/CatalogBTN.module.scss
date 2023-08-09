@@ -1,55 +1,78 @@
 @import 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap';
 
-.button {
-  cursor: pointer;
+.container {
+  position: relative;
+  width: 165px;
 
-  display: flex;
-  align-items: center;
+  .button {
+    cursor: pointer;
 
-  padding: 10px 19px;
+    display: flex;
+    align-items: center;
 
-  font-family: Montserrat, sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: normal;
-  text-align: center;
-  text-transform: uppercase;
+    padding: 10px 19px;
 
-  background: #2b2825;
-  border: 1px solid #d6b88d;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px 0 rgba(184 164 142 / 40%);
+    font-family: Montserrat, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    text-align: center;
+    text-transform: uppercase;
 
-  &-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 20px;
+    background: #2b2825;
+    border: 1px solid #d6b88d;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px 0 rgba(184 164 142 / 40%);
 
-    background-image: url('../../assets/image/svg/burger-button.svg');
+    &-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 20px;
 
-    transition: 0.5s linear;
-  }
+      background-image: url('../../assets/image/svg/burger-button.svg');
 
-  &-caption {
-    color: transparent;
-
-    background: linear-gradient(118deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
-    background-clip: text;
-    /* stylelint-disable-next-line */
-    -webkit-background-clip: text;
-
-    transition: 0.5s linear;
-  }
-
-  &:hover {
-    background: linear-gradient(144deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
-
-    .button-caption {
-      color: #3c3428;
+      transition: 0.5s linear;
     }
 
-    .button-icon {
-      background-image: url('../../assets/image/svg/dark-burger-button.svg');
+    &-caption {
+      color: transparent;
+
+      background: linear-gradient(118deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
+      background-clip: text;
+      /* stylelint-disable-next-line */
+      -webkit-background-clip: text;
+
+      transition: 0.5s linear;
     }
+
+    &__active {
+      background: linear-gradient(144deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
+
+      .button-caption {
+        color: #3c3428;
+      }
+
+      .button-icon {
+        background-image: url('../../assets/image/svg/dark-burger-button.svg');
+      }
+    }
+
+    &:hover {
+      background: linear-gradient(144deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
+
+      .button-caption {
+        color: #3c3428;
+      }
+
+      .button-icon {
+        background-image: url('../../assets/image/svg/dark-burger-button.svg');
+      }
+    }
+  }
+
+  &__wrapper {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
   }
 }
