@@ -5,6 +5,6 @@ export interface IInput {
   placeholder: string
   value: string
   disabled?: boolean | undefined
-  alert: boolean
+  isValid: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
