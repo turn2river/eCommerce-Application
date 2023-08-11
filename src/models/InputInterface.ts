@@ -1,9 +1,10 @@
 export interface IInput {
-  id: string | undefined
-  label: string | undefined
+  id: string
+  label: string
   type?: string | undefined
-  placeholder: string | undefined
-  value: string | undefined
+  placeholder: string
+  value: string
   disabled?: boolean | undefined
+  alert: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }

@@ -1,28 +1,28 @@
 import { IInput } from '../../models/InputInterface'
-import { container, input_label, input } from './Input.module.scss'
+import { container, input_label, input, input_alert } from './Input.module.scss'
 
-export const Input = ({
-  id = undefined,
-  label = undefined,
-  type = undefined,
-  placeholder = undefined,
-  value = undefined,
-  disabled = undefined,
-  onChange,
-}: IInput): JSX.Element => {
+export const Input = ({ id, label, type, placeholder, value, disabled, alert, onChange }: IInput): JSX.Element => {
+  let className: string = ''
+
+  if (alert) {
+    className = `${input} ${input_alert}`
+  } else {
+    className = input
+  }
+
   return (
     <div className={container}>
       <label htmlFor={id} className={input_label}>
         {label}
       </label>
       <input
-        className={input}
+        className={className}
         id={id}
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        disabled={disabled} // Manually pass the 'disabled' property
+        disabled={disabled}
       />
     </div>
   )
