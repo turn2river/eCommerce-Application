@@ -34,12 +34,8 @@
 
   &_caption {
     color: transparent;
-
     background: linear-gradient(118deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
     background-clip: text;
-    /* stylelint-disable-next-line */
-    -webkit-background-clip: text;
-
     transition: 0.5s linear;
   }
 
