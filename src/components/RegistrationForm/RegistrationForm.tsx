@@ -3,6 +3,8 @@ import { MyButton } from '../MyButton/MyButton.tsx'
 import { Input } from '../Input/Input.tsx'
 import { registration_form, wrapper, title, subtitle } from './RegistrationForm.module.scss'
 import { ISignUpDataInterface } from '../../models/SignUpDataInterface'
+import { IInput } from '../../models/InputInterface'
+import { inputsList } from '../../models/InputsList'
 
 export const RegistrationForm = (): JSX.Element => {
   const [inputValues, setInputValues] = useState({
@@ -91,93 +93,28 @@ export const RegistrationForm = (): JSX.Element => {
       <h2 className={title}>Sign Up</h2>
       <div className={wrapper}>
         <p className={subtitle}>Your credentials</p>
-        <Input
-          id="email"
-          isValid={inputValues.emailIsValid}
-          label="Enter your valid email:*"
-          placeholder="<E-mail>"
-          value={inputValues.email}
-          type="email"
-          onChange={changeHandler}
-          required={true}></Input>
-        <Input
-          id="password"
-          isValid={inputValues.passwordIsValid}
-          label="Create your password:"
-          placeholder="<Password>"
-          value={inputValues.password}
-          type="password"
-          onChange={changeHandler}
-          required={true}></Input>
+        {inputsList(inputValues, changeHandler).map((element: IInput, index): JSX.Element | null => {
+          return element.id === 'email' || element.id === 'password' ? <Input key={index} {...element} /> : null
+        })}
       </div>
       <div className={wrapper}>
         <p className={subtitle}>Personal Information</p>
-        <Input
-          id="firstName"
-          isValid={inputValues.firstNameIsValid}
-          label="Enter your first name:*"
-          placeholder="<First Name>"
-          value={inputValues.firstName}
-          type="text"
-          onChange={changeHandler}
-          required={true}></Input>
-        <Input
-          id="lastName"
-          isValid={inputValues.lastNameIsValid}
-          label="Enter your last name:*"
-          placeholder="<Last Name>"
-          value={inputValues.lastName}
-          type="text"
-          onChange={changeHandler}
-          required={true}></Input>
-        <Input
-          id="dateOfBirth"
-          isValid={inputValues.dateOfBirthIsValid}
-          label="Enter your date of birth:*"
-          placeholder="<Date of birth>"
-          value={inputValues.dateOfBirth}
-          type="date"
-          onChange={changeHandler}
-          required={true}></Input>
+        {inputsList(inputValues, changeHandler).map((element, index): JSX.Element | null => {
+          return element.id === 'firstName' || element.id === 'lastName' || element.id === 'dateOfBirth' ? (
+            <Input key={index} {...element} />
+          ) : null
+        })}
       </div>
       <div className={wrapper}>
         <p className={subtitle}>Adress Information:*</p>
-        <Input
-          id="street"
-          isValid={inputValues.streetIsValid}
-          label=""
-          placeholder="<Street>"
-          value={inputValues.street}
-          type="text"
-          onChange={changeHandler}
-          required={true}></Input>
-        <Input
-          id="city"
-          isValid={inputValues.cityIsValid}
-          label=""
-          placeholder="<City>"
-          value={inputValues.city}
-          type="text"
-          onChange={changeHandler}
-          required={true}></Input>
-        <Input
-          id="zipCode"
-          isValid={inputValues.zipCodeIsValid}
-          label=""
-          placeholder="<Postal code>"
-          value={inputValues.zipCode}
-          type="text"
-          onChange={changeHandler}
-          required={true}></Input>
-        <Input
-          id="country"
-          isValid={inputValues.countryIsValid}
-          label=""
-          placeholder="<Country>"
-          value={inputValues.country}
-          type="text"
-          onChange={changeHandler}
-          required={true}></Input>
+        {inputsList(inputValues, changeHandler).map((element, index): JSX.Element | null => {
+          return element.id === 'street' ||
+            element.id === 'city' ||
+            element.id === 'zipCode' ||
+            element.id === 'country' ? (
+            <Input key={index} {...element} />
+          ) : null
+        })}
       </div>
       <MyButton onClick={submitHandler}>Submit</MyButton>
     </form>
