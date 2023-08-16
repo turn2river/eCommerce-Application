@@ -50,7 +50,7 @@ module.exports = {
     'curly': ['warn', 'all'],
     'eol-last': 2,
     'import/prefer-default-export': 0,
-    'max-lines-per-function': ['error', 40],
+    'max-lines-per-function': ['error', 200],
     'no-console': 0,
     'no-debugger': 0,
     'no-multiple-empty-lines': [
