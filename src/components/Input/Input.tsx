@@ -1,7 +1,17 @@
 import { IInput } from '../../models/InputInterface'
 import { container, input_label, input, input_invalid } from './Input.module.scss'
 
-export const Input = ({ id, label, type, placeholder, value, disabled, isValid, onChange }: IInput): JSX.Element => {
+export const Input = ({
+  id,
+  label,
+  type,
+  placeholder,
+  value,
+  disabled,
+  isValid,
+  onChange,
+  required,
+}: IInput): JSX.Element => {
   return (
     <div className={container}>
       <label htmlFor={id} className={input_label}>
@@ -15,6 +25,7 @@ export const Input = ({ id, label, type, placeholder, value, disabled, isValid, 
         value={value}
         onChange={onChange}
         disabled={disabled}
+        required={required}
       />
     </div>
   )

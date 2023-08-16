@@ -7,4 +7,5 @@ export interface IInput {
   disabled?: boolean | undefined
   isValid: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  required?: boolean | undefined
 }
