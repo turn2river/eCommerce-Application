@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+
+  .input {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+
+    padding: 16px 14px;
+
+    font-family: Montserrat, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+    color: #7a7364;
+
+    border: 1px solid #565147;
+    border-radius: 4px;
+    outline: none;
+
+    &:focus {
+      color: #beae97;
+      border: 1px solid #beae97;
+    }
+
+    &_label {
+      margin: 6px 0;
+
+      font-family: Montserrat, serif;
+      font-size: 16px;
+      font-weight: 400;
+      font-style: normal;
+      line-height: normal;
+      color: #beae97;
+    }
+
+    &_invalid {
+      border: 1px solid #b04a4a;
+
+      &:focus {
+        border: 1px solid #b04a4a;
+      }
+    }
+  }
+}
