@@ -1,4 +1,4 @@
-import { IInputValues } from './ImputValuesInterface'
+import { IInputValues } from './InputValuesInterface'
 import { IInput } from './InputInterface'
 
 export const inputsList = (
