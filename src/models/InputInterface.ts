@@ -9,7 +9,3 @@ export interface IInput {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   required?: boolean | undefined
 }
-
-export interface IChangeService {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
