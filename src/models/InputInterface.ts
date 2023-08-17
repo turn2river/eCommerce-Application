@@ -3,9 +3,9 @@ export interface IInput {
   label: string
   type?: string | undefined
   placeholder: string
-  value: string
+  value: string | undefined
   disabled?: boolean | undefined
-  isValid: boolean
+  isValid: boolean | undefined
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   required?: boolean | undefined
 }
