@@ -1,5 +1,5 @@
 export interface ISignUpAdressInterface {
-  country: string
+  country: string | null
   firstName: string
   lastName: string
   streetName: string
