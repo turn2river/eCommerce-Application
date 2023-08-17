@@ -5,6 +5,7 @@ import { registration_form, wrapper, title, subtitle } from './RegistrationForm.
 import { ISignUpDataInterface } from '../../models/SignUpDataInterface'
 import { IInput } from '../../models/InputInterface'
 import { inputsList } from '../../models/InputsList'
+import { getCountryCode } from '../../utils/GetContryCode'
 
 export const RegistrationForm = (): JSX.Element => {
   const [inputValues, setInputValues] = useState({
@@ -70,11 +71,11 @@ export const RegistrationForm = (): JSX.Element => {
       password: inputValues.password,
       firstName: inputValues.firstName,
       lastName: inputValues.lastName,
-      dateOfBirth: inputValues.dateOfBirth, // date format has to be 'YYYY-MM-DD'
+      dateOfBirth: inputValues.dateOfBirth,
       isEmailVerified: true,
       addresses: [
         {
-          country: inputValues.country, // country format has to be'RU'
+          country: getCountryCode(inputValues.country),
           firstName: inputValues.firstName,
           lastName: inputValues.lastName,
           streetName: inputValues.street,
