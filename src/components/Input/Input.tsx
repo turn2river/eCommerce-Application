@@ -26,6 +26,8 @@ export const Input = ({
         onChange={onChange}
         disabled={disabled}
         required={required}
+
+        /* {!isValid && <span className={error}>{errorMessage}</span>} // Display the error message if isValid is false*/
       />
     </div>
   )

@@ -8,6 +8,8 @@ export interface IInput {
   isValid: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   required?: boolean | undefined
+  key?: number
+  errorMessage?: string
 }
 
 export interface IChangeService {

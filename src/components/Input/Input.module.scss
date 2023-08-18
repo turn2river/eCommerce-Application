@@ -23,6 +23,11 @@
     border-radius: 4px;
     outline: none;
 
+    .error {
+      font-family: Montserrat, sans-serif;
+      color:#b04a4a;
+    }
+
     &:focus {
       color: #beae97;
       border: 1px solid #beae97;
