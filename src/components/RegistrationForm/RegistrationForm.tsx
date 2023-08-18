@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import * as Yup from 'yup'
 import { MyButton } from '../MyButton/MyButton.tsx'
 import { Input } from '../Input/Input.tsx'
 import { registration_form, wrapper, title, subtitle } from './RegistrationForm.module.scss'
@@ -8,9 +9,11 @@ import { inputsList } from '../../models/InputsList'
 import { getCountryCode } from '../../utils/GetCountryCode'
 import { AutoCompleteInput } from '../AutoCompleteInput/AutoCompleteInput.tsx'
 import { IAutocompleteInput } from '../../models/AutocompleteInputInterface'
+import { schema } from '../../utils/RegistrationValidation'
+import { IInputValues } from '../../models/InputValuesInterface'
 
 export const RegistrationForm = (): JSX.Element => {
-  const [inputValues, setInputValues] = useState({
+  const [inputValues, setInputValues] = useState<IInputValues>({
     email: '',
     password: '',
     firstName: '',
@@ -30,40 +33,69 @@ export const RegistrationForm = (): JSX.Element => {
     zipCodeIsValid: true,
     countryIsValid: true,
     suggestionVisibility: false,
+    validationErrorMessages: {},
   })
 
   function changeHandler(e: React.ChangeEvent<HTMLInputElement>): void {
-    const newValue = e.target.value
-    switch (e.target.id) {
-      case 'email':
-        setInputValues({ ...inputValues, email: newValue })
-        break
-      case 'password':
-        setInputValues({ ...inputValues, password: newValue })
-        break
-      case 'firstName':
-        setInputValues({ ...inputValues, firstName: newValue })
-        break
-      case 'lastName':
-        setInputValues({ ...inputValues, lastName: newValue })
-        break
-      case 'dateOfBirth':
-        setInputValues({ ...inputValues, dateOfBirth: newValue })
-        break
-      case 'street':
-        setInputValues({ ...inputValues, street: newValue })
-        break
-      case 'city':
-        setInputValues({ ...inputValues, city: newValue })
-        break
-      case 'zipCode':
-        setInputValues({ ...inputValues, zipCode: newValue })
-        break
-      case 'country':
-        setInputValues({ ...inputValues, country: newValue, suggestionVisibility: true })
-        break
-      default:
-        break
+    const { value, id } = e.target
+
+    setInputValues((prevInputValues) => {
+      return {
+        ...prevInputValues,
+        [id]: value,
+        validationErrorMessages: { ...prevInputValues.validationErrorMessages, [id]: [] },
+        [`${id}IsValid`]: true,
+        suggestionVisibility: !!value,
+      }
+    })
+  }
+
+  const onSubmit = async (): Promise<void> => {
+    const errors: { [key: string]: string[] } = {}
+    try {
+      schema.validateSync(inputValues, { abortEarly: false })
+      setInputValues((prevInputValues) => ({
+        ...prevInputValues,
+        emailError: '',
+        passwordError: '',
+        firstNameError: '',
+        lastNameError: '',
+        dateOfBirthError: '',
+        streetError: '',
+        cityError: '',
+        zipCodeError: '',
+        countryError: '',
+        emailIsValid: true,
+        passwordIsValid: true,
+        firstNameIsValid: true,
+        lastNameIsValid: true,
+        dateOfBirthIsValid: true,
+        streetIsValid: true,
+        cityIsValid: true,
+        zipCodeIsValid: true,
+        countryIsValid: true,
+      }))
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        error.inner.forEach((validationError) => {
+          const inputId = validationError.path
+          const errorMessage = validationError.message
+          if (inputId) {
+            if (inputId in errors) {
+              errors[inputId].push(errorMessage)
+            } else {
+              errors[inputId] = [errorMessage]
+            }
+          }
+          setInputValues((prevInputvalues) => {
+            return {
+              ...prevInputvalues,
+              [`${inputId}IsValid`]: false,
+              validationErrorMessages: errors,
+            }
+          })
+        })
+      }
     }
   }
 
@@ -85,6 +117,7 @@ export const RegistrationForm = (): JSX.Element => {
 
   function submitHandler(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): ISignUpDataInterface {
     e.preventDefault()
+    onSubmit()
     const customerInfo = {
       email: inputValues.email,
       password: inputValues.password,
@@ -114,14 +147,30 @@ export const RegistrationForm = (): JSX.Element => {
       <div className={wrapper}>
         <p className={subtitle}>Your credentials</p>
         {inputsList(inputValues, changeHandler).map((element: IInput): JSX.Element | null => {
-          return element.id === 'email' || element.id === 'password' ? <Input key={element.id} {...element} /> : null
+          return element.id === 'email' || element.id === 'password' ? (
+            <Input
+              key={element.id}
+              {...element}
+              errorMessage={
+                element.id in inputValues.validationErrorMessages
+                  ? inputValues.validationErrorMessages[element.id]
+                  : undefined
+              }
+            />
+          ) : null
         })}
       </div>
       <div className={wrapper}>
         <p className={subtitle}>Personal Information</p>
         {inputsList(inputValues, changeHandler).map((element): JSX.Element | null => {
           return element.id === 'firstName' || element.id === 'lastName' || element.id === 'dateOfBirth' ? (
-            <Input key={element.id} {...element} />
+            <Input
+              key={element.id}
+              {...element}
+              errorMessage={
+                inputValues.validationErrorMessages ? inputValues.validationErrorMessages[element.id] : undefined
+              }
+            />
           ) : null
         })}
       </div>
@@ -134,7 +183,15 @@ export const RegistrationForm = (): JSX.Element => {
               input = <Input key={element.id} {...element} />
             } else if (element.id === 'country') {
               if ('onClick' in element && 'visibility' in element) {
-                input = <AutoCompleteInput key={element.id} {...element} />
+                input = (
+                  <AutoCompleteInput
+                    key={element.id}
+                    {...element}
+                    errorMessage={
+                      inputValues.validationErrorMessages ? inputValues.validationErrorMessages[element.id] : undefined
+                    }
+                  />
+                )
               }
             }
             return input

@@ -8,6 +8,7 @@ import {
   suggestions,
   suggestions_container,
   suggestions_container_invisible,
+  error_message,
 } from './AutoCompleteInput.module.scss'
 
 export const AutoCompleteInput = ({
@@ -22,6 +23,7 @@ export const AutoCompleteInput = ({
   onClick,
   required,
   visibility,
+  errorMessage,
 }: IAutocompleteInput): JSX.Element => {
   const countriesArray = countriesList.map((country) => country.name)
 
@@ -40,6 +42,13 @@ export const AutoCompleteInput = ({
         required={required}
         onChange={onChange}
       />
+      {errorMessage
+        ? errorMessage.map((error, index) => (
+            <span key={index} className={error_message}>
+              {error}
+            </span>
+          ))
+        : null}
       <div
         className={visibility ? suggestions_container : `${suggestions_container} ${suggestions_container_invisible}`}>
         {value

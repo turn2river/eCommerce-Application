@@ -18,4 +18,5 @@ export interface IInputValues {
   zipCodeIsValid: boolean
   countryIsValid: boolean
   suggestionVisibility: boolean
+  validationErrorMessages: { [key: string]: string[] }
 }

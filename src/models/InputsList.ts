@@ -91,7 +91,7 @@ export const inputsList = (
     {
       id: 'country',
       label: '',
-      isValid: true,
+      isValid: inputValues.countryIsValid,
       placeholder: '<Country>',
       value: inputValues.country,
       onChange: changeHandler,
