@@ -1,10 +1,12 @@
-import { IInputValues } from './ImputValuesInterface'
+import { IAutocompleteInput } from './AutocompleteInputInterface'
+import { IInputValues } from './InputValuesInterface'
 import { IInput } from './InputInterface'
 
 export const inputsList = (
   inputValues: IInputValues,
   changeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void,
-): IInput[] => {
+  clickHadler?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
+): (IAutocompleteInput | IInput)[] => {
   return [
     {
       id: 'email',
@@ -88,13 +90,13 @@ export const inputsList = (
     },
     {
       id: 'country',
-      isValid: inputValues.countryIsValid,
       label: '',
+      isValid: inputValues.countryIsValid,
       placeholder: '<Country>',
       value: inputValues.country,
-      type: 'text',
       onChange: changeHandler,
-      required: true,
+      onClick: clickHadler,
+      visibility: inputValues.suggestionVisibility,
     },
   ]
 }
