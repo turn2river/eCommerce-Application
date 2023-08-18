@@ -7,12 +7,13 @@ import { getRefreshToken } from './services/refreshToken'
 import { getCategories } from './services/viewCategories'
 
 import './App.scss'
+import { AppRoutes } from './routes/AppRoutes.tsx'
 
 export function App(): JSX.Element {
   return (
     <Fragment>
       <Header />
-      <div className="app">This is our react application</div>
+      <AppRoutes />
     </Fragment>
   )
 }
