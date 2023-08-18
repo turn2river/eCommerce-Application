@@ -86,14 +86,9 @@ export const RegistrationForm = (): JSX.Element => {
             return {
               ...prevInputvalues,
               [`${inputId}IsValid`]: false,
+              validationErrorMessages: errors,
             }
           })
-        })
-        setInputValues((prevInputvalues) => {
-          return {
-            ...prevInputvalues,
-            validationErrorMessages: errors,
-          }
         })
       }
     }

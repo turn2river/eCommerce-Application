@@ -18,8 +18,18 @@ export const schema: Yup.ObjectSchema<InputValues> = Yup.object().shape({
   lastName: Yup.string()
     .matches(/^[a-zA-Z]+$/, 'Last name should only contain letters')
     .required('Last name is required'),
-  dateOfBirth: Yup.date().required('Date of birth is required'),
-  /* .min(new Date().setFullYear(new Date().getFullYear() - 13), 'You must be at least 13 years old'),*/
+  dateOfBirth: Yup.date() // Change Yup.string() to Yup.date()
+    .required('Date of birth is required')
+    .test('age', 'You must be at least 13 years old', (value) => {
+      const currentDate = new Date()
+      const dob = new Date(value)
+      const age = currentDate.getFullYear() - dob.getFullYear()
+      if (age < 13) {
+        return false
+      }
+      return true
+    }),
+
   street: Yup.string().required('Street is required'),
   city: Yup.string()
     .matches(/^[a-zA-Z\s-]+$/, 'City should only contain letters, spaces, and hyphens')
@@ -29,7 +39,7 @@ export const schema: Yup.ObjectSchema<InputValues> = Yup.object().shape({
       if (!value) {
         return true // Skip validation if the postalCode field is undefined
       }
-      return /^[A-Za-z0-9]{5}([- ]?[A-Za-z0-9]{4})?$/.test(value)
+      return /^[A-Za-z0-9]{6}([- ]?[A-Za-z0-9]{4})?$/.test(value) // TODO implement the zipCode validation depending on the country
     })
     .nullable() // Allow null values for the postalCode field
     .required('Postal code is required'),

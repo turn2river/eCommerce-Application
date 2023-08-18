@@ -30,7 +30,13 @@ export const Input = ({
 
         /* {!isValid && <span className={error}>{errorMessage}</span>} // Display the error message if isValid is false*/
       />
-      {errorMessage ? errorMessage.map((message) => <span className={error_message}>- {message}</span>) : null}
+      {errorMessage
+        ? errorMessage.map((message, index) => (
+            <span key={index} className={error_message}>
+              - {message}
+            </span>
+          ))
+        : null}
     </div>
   )
 }
