@@ -5,7 +5,7 @@ export interface ISignUpDataInterface {
   password: string
   firstName: string
   lastName: string
-  dateOfBirth: string
+  dateOfBirth: Date
   isEmailVerified: boolean
   addresses: ISignUpAdressInterface[]
 }

@@ -9,13 +9,11 @@ import { getCategories } from './services/viewCategories'
 
 // import {inputsList} from './models/InputsList'
 // import { InputValues } from './models/yupType'
-import { RegistrationForm } from './components/RegistrationForm/RegistrationForm'
 
 export function App(): JSX.Element {
   return (
     <React.Fragment>
       <Header />
-      <RegistrationForm />
       <div className="app">This is our react application</div>
     </React.Fragment>
   )

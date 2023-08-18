@@ -2,7 +2,11 @@ import * as Yup from 'yup'
 import { InputValues } from '../models/yupType'
 
 export const schema: Yup.ObjectSchema<InputValues> = Yup.object().shape({
-  email: Yup.string().trim().email('Invalid email format').required('Email is required'),
+  email: Yup.string()
+    .trim()
+    .email('Invalid email format')
+    .required('Email is required')
+    .matches(/^\S+@\S+.\S+$/, 'Please enter a valid email address'),
   password: Yup.string()
     .trim()
     .required('Password is required')
