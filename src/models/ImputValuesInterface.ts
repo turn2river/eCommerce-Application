@@ -17,4 +17,5 @@ export interface IInputValues {
   cityIsValid: boolean
   zipCodeIsValid: boolean
   countryIsValid: boolean
+  validationErrorMessages: { [key: string]: string[] }
 }

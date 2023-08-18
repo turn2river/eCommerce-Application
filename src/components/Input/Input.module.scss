@@ -25,7 +25,7 @@
 
     .error {
       font-family: Montserrat, sans-serif;
-      color:#b04a4a;
+      color: #b04a4a;
     }
 
     &:focus {
@@ -51,5 +51,12 @@
         border: 1px solid #b04a4a;
       }
     }
+  }
+
+  .error_message {
+    max-width: 250px;
+    font-family: Montserrat, sans-serif;
+    font-size: 10px;
+    color: #b04a4a;
   }
 }

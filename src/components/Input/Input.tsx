@@ -1,5 +1,5 @@
 import { IInput } from '../../models/InputInterface'
-import { container, input_label, input, input_invalid } from './Input.module.scss'
+import { container, input_label, input, input_invalid, error_message } from './Input.module.scss'
 
 export const Input = ({
   id,
@@ -11,6 +11,7 @@ export const Input = ({
   isValid,
   onChange,
   required,
+  errorMessage,
 }: IInput): JSX.Element => {
   return (
     <div className={container}>
@@ -29,6 +30,7 @@ export const Input = ({
 
         /* {!isValid && <span className={error}>{errorMessage}</span>} // Display the error message if isValid is false*/
       />
+      {errorMessage ? errorMessage.map((message) => <span className={error_message}>- {message}</span>) : null}
     </div>
   )
 }

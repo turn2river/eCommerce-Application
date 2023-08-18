@@ -9,7 +9,7 @@ export interface IInput {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   required?: boolean | undefined
   key?: number
-  errorMessage?: string
+  errorMessage?: string[]
 }
 
 export interface IChangeService {

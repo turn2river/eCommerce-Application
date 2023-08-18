@@ -1,6 +1,5 @@
 /* eslint-disable import/extensions */
 import React from 'react'
-import * as Yup from 'yup'
 import './App.scss'
 import { Header } from './components'
 import { getAnonymousToken } from './services/anonUserAuth'
