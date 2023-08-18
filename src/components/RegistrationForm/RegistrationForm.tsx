@@ -7,9 +7,10 @@ import { ISignUpDataInterface } from '../../models/SignUpDataInterface'
 import { IInput } from '../../models/InputInterface'
 import { inputsList } from '../../models/InputsList'
 import { schema } from '../../utils/RegistrationValidation'
+import { IInputValues } from '../../models/ImputValuesInterface'
 
 export const RegistrationForm = (): JSX.Element => {
-  const [inputValues, setInputValues] = useState({
+  const [inputValues, setInputValues] = useState<IInputValues>({
     email: '',
     password: '',
     firstName: '',
@@ -34,12 +35,14 @@ export const RegistrationForm = (): JSX.Element => {
   function changeHandler(e: React.ChangeEvent<HTMLInputElement>): void {
     const { value, id } = e.target
 
-    setInputValues((prevInputValues) => ({
-      ...prevInputValues,
-      [id]: value,
-      validationErrorMessages: { ...inputValues.validationErrorMessages, id: [] },
-      [`${id}IsValid`]: true,
-    }))
+    setInputValues((prevInputValues) => {
+      return {
+        ...prevInputValues,
+        [id]: value,
+        validationErrorMessages: { ...prevInputValues.validationErrorMessages, [id]: [] },
+        [`${id}IsValid`]: true,
+      }
+    })
   }
 
   const onSubmit = async (): Promise<void> => {
@@ -86,7 +89,6 @@ export const RegistrationForm = (): JSX.Element => {
             }
           })
         })
-        console.log(errors)
         setInputValues((prevInputvalues) => {
           return {
             ...prevInputvalues,
