@@ -1,4 +1,5 @@
-import { useState } from 'react'
+/* eslint-disable max-lines-per-function */
+import { useCallback, useState } from 'react'
 import * as Yup from 'yup'
 import { MyButton } from '../MyButton/MyButton.tsx'
 import { Input } from '../Input/Input.tsx'
@@ -36,68 +37,55 @@ export const RegistrationForm = (): JSX.Element => {
     validationErrorMessages: {},
   })
 
-  function changeHandler(e: React.ChangeEvent<HTMLInputElement>): void {
-    const { value, id } = e.target
-
-    setInputValues((prevInputValues) => {
-      return {
-        ...prevInputValues,
-        [id]: value,
-        validationErrorMessages: { ...prevInputValues.validationErrorMessages, [id]: [] },
-        [`${id}IsValid`]: true,
-        suggestionVisibility: !!value,
-      }
-    })
-  }
-
-  const onSubmit = async (): Promise<void> => {
+  const checkInputs = useCallback(async (id): Promise<void> => {
     const errors: { [key: string]: string[] } = {}
+    console.log()
     try {
-      schema.validateSync(inputValues, { abortEarly: false })
+      await schema.fields[id].validateSync(inputValues[id], { abortEarly: false })
       setInputValues((prevInputValues) => ({
         ...prevInputValues,
-        emailError: '',
-        passwordError: '',
-        firstNameError: '',
-        lastNameError: '',
-        dateOfBirthError: '',
-        streetError: '',
-        cityError: '',
-        zipCodeError: '',
-        countryError: '',
-        emailIsValid: true,
-        passwordIsValid: true,
-        firstNameIsValid: true,
-        lastNameIsValid: true,
-        dateOfBirthIsValid: true,
-        streetIsValid: true,
-        cityIsValid: true,
-        zipCodeIsValid: true,
-        countryIsValid: true,
+        [`${id}IsValid`]: true,
+        validationErrorMessages: { ...prevInputValues.validationErrorMessages, [id]: [] },
       }))
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         error.inner.forEach((validationError) => {
-          const inputId = validationError.path
+          console.log(validationError.path)
           const errorMessage = validationError.message
-          if (inputId) {
-            if (inputId in errors) {
-              errors[inputId].push(errorMessage)
-            } else {
-              errors[inputId] = [errorMessage]
-            }
+          if (id in errors) {
+            errors[id].push(errorMessage)
+          } else {
+            errors[id] = [errorMessage]
           }
           setInputValues((prevInputvalues) => {
             return {
               ...prevInputvalues,
-              [`${inputId}IsValid`]: false,
+              [`${id}IsValid`]: false,
               validationErrorMessages: errors,
             }
           })
         })
       }
     }
-  }
+  }, [])
+
+  const changeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { value, id } = e.target
+      checkInputs(id)
+
+      setInputValues((prevInputValues) => {
+        return {
+          ...prevInputValues,
+          [id]: value,
+          // validationErrorMessages: { ...prevInputValues.validationErrorMessages, [id]: [] },
+          // [`${id}IsValid`]: true,
+          suggestionVisibility: !!value,
+        }
+      })
+    },
+    [inputValues],
+  )
 
   function suggestionClickHandler(e: React.MouseEvent<HTMLDivElement, MouseEvent>): void {
     if (e.target instanceof HTMLDivElement) {
@@ -117,7 +105,7 @@ export const RegistrationForm = (): JSX.Element => {
 
   function submitHandler(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): ISignUpDataInterface {
     e.preventDefault()
-    onSubmit()
+    // onSubmit()
     const customerInfo = {
       email: inputValues.email,
       password: inputValues.password,
@@ -180,7 +168,15 @@ export const RegistrationForm = (): JSX.Element => {
           (element: IInput | IAutocompleteInput): JSX.Element | undefined => {
             let input
             if (element.id === 'street' || element.id === 'city' || element.id === 'zipCode') {
-              input = <Input key={element.id} {...element} />
+              input = (
+                <Input
+                  key={element.id}
+                  {...element}
+                  errorMessage={
+                    inputValues.validationErrorMessages ? inputValues.validationErrorMessages[element.id] : undefined
+                  }
+                />
+              )
             } else if (element.id === 'country') {
               if ('onClick' in element && 'visibility' in element) {
                 input = (
