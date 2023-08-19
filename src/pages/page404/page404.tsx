@@ -8,7 +8,7 @@ export const Page404 = (): JSX.Element => {
       <div className={denied__wrapper}>
         <h1>404</h1>
         <h3>
-          LOST IN <span>SPACE</span> App-Name? Hmm, looks like that page doesn't exist.
+          LOST IN <span>SPACE</span> Perfumerie? Hmm, looks like that page doesn't exist.
         </h3>
         <img className={astranout} src="public/astronaut.svg" />
         <NavLink className={`${nav_link} ${link_to_main}`} to="/">
