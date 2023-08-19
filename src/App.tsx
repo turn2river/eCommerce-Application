@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
-import React from 'react'
-import './App.scss'
+import { Fragment } from 'react'
 import { Header } from './components'
+
 import { getAnonymousToken } from './services/anonUserAuth'
 import { getCustomerToken } from './services/customerAuth'
 import { getRefreshToken } from './services/refreshToken'
@@ -11,13 +11,16 @@ import { getCategories } from './services/viewCategories'
 // import { InputValues } from './models/yupType'
 import { RegistrationForm } from './components/RegistrationForm/RegistrationForm'
 
+import './App.scss'
+import { AppRoutes } from './routes/AppRoutes.tsx'
+
 export function App(): JSX.Element {
   return (
-    <React.Fragment>
+    <Fragment>
       <Header />
       <RegistrationForm />
-      <div className="app">This is our react application</div>
-    </React.Fragment>
+      <AppRoutes />
+    </Fragment>
   )
 }
 getAnonymousToken()
