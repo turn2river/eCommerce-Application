@@ -38,16 +38,28 @@ export const AutoCompleteInput = ({
         {...validation}
         onChange={(e): void => {
           if (e.target.value && Number.isNaN(+e.target.value)) {
-            setVisibility(true)
+            setVisibility((prevVisibility) => {
+              return {
+                ...prevVisibility,
+                [id]: true,
+              }
+            })
           } else {
-            setVisibility(false)
+            setVisibility((prevVisibility) => {
+              return {
+                ...prevVisibility,
+                [id]: false,
+              }
+            })
           }
           setValue(e.target.value)
         }}
       />
       <span className={error_message}>{error}</span>
       <div
-        className={visibility ? suggestions_container : `${suggestions_container} ${suggestions_container_invisible}`}>
+        className={
+          visibility[id] ? suggestions_container : `${suggestions_container} ${suggestions_container_invisible}`
+        }>
         {value
           ? countriesArray.map((country): JSX.Element | undefined => {
               let result
@@ -57,11 +69,17 @@ export const AutoCompleteInput = ({
                     className={suggestions}
                     key={country}
                     onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
-                      const { textContent } = e.target as HTMLDivElement
+                      const { textContent } = e.currentTarget
+                      console.log()
                       if (textContent) {
-                        setCountryValue('country', textContent)
+                        setCountryValue(id, textContent)
                       }
-                      setVisibility(false)
+                      setVisibility((prevVisibility) => {
+                        return {
+                          ...prevVisibility,
+                          [id]: false,
+                        }
+                      })
                     }}>
                     {country}
                   </div>
