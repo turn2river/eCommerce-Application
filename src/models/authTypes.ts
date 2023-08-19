@@ -60,3 +60,8 @@ export type CreatedModifiedBy = {
   isPlatformClient: boolean
   user: User
 }
+
+export type Token = {
+  accessToken: string
+  refreshToken: string
+}
