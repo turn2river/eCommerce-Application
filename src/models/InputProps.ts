@@ -6,7 +6,17 @@ export interface InputPropsInterface {
   type: string
   placeholder: string
   validation?: UseFormRegisterReturn<
-    'street' | 'city' | 'zipCode' | 'firstName' | 'lastName' | 'dateOfBirth' | 'email' | 'password'
+    | 'billing_street'
+    | 'billing_city'
+    | 'billing_zipCode'
+    | 'shipping_street'
+    | 'shipping_city'
+    | 'shipping_zipCode'
+    | 'firstName'
+    | 'lastName'
+    | 'dateOfBirth'
+    | 'email'
+    | 'password'
   >
   error?: string | undefined
 }
