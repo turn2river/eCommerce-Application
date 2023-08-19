@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { Logo } from '../Logo/Logo.tsx'
 import { header, nav, nav_list, nav_item, nav_link } from './Header.module.scss'
 
-const isAuth = false // TODO make this var from context
+const isAuth = false // TODO get isAuth from api
 
 export const Header = (): JSX.Element => {
   return (
