@@ -9,6 +9,7 @@ import { MyButton } from '../MyButton/MyButton.tsx'
 import { AutoCompleteInput } from '../AutoCompleteInput/AutoCompleteInput.tsx'
 import { getCountryCode } from '../../utils/GetCountryCode'
 import { ISignUpDataInterface } from '../../models/SignUpDataInterface'
+import { ISubmitedData } from '../../models/SubmitedDataInterface'
 
 export const RegistrationForm = (): JSX.Element => {
   const {
@@ -16,29 +17,39 @@ export const RegistrationForm = (): JSX.Element => {
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'all',
   })
 
-  function submitHandler(e: React.MouseEvent<HTMLButtonElement>): ISignUpDataInterface {
-    e.preventDefault()
+  const [visibility, setVisibility] = useState(false)
+
+  const onSubmit = ({
+    email: currentEmail,
+    zipCode: currentZipCode,
+    city: currentCity,
+    country: currentCountry,
+    dateOfBirth: currentDateOfBirth,
+    firstName: currentFirstName,
+    lastName: currentLastName,
+    street: currentStreet,
+    password: currentCityPassword,
+  }: ISubmitedData): ISignUpDataInterface => {
     const customerInfo = {
-      email: getValues('email'),
-      password: getValues('password'),
-      firstName: getValues('firstName'),
-      lastName: getValues('lastName'),
-      dateOfBirth: getValues('dateOfBirth'),
+      email: currentEmail,
+      password: currentCityPassword,
+      firstName: currentFirstName,
+      lastName: currentLastName,
+      dateOfBirth: currentDateOfBirth,
       isEmailVerified: true,
       addresses: [
         {
-          country: getCountryCode(getValues('country')),
-          firstName: getValues('firstName'),
-          lastName: getValues('lastName'),
-          streetName: getValues('street'),
-          postalCode: getValues('zipCode'),
-          city: getValues('city'),
+          country: getCountryCode(currentCountry),
+          firstName: currentFirstName,
+          lastName: currentLastName,
+          streetName: currentStreet,
+          postalCode: currentZipCode,
+          city: currentCity,
         },
       ],
     }
@@ -46,10 +57,6 @@ export const RegistrationForm = (): JSX.Element => {
     console.log(customerInfo)
     return customerInfo
   }
-
-  const [visibility, setVisibility] = useState(false)
-
-  const onSubmit = (): void => console.log('submited')
 
   return (
     <form className={registration_form} onSubmit={handleSubmit(onSubmit)}>
@@ -97,7 +104,7 @@ export const RegistrationForm = (): JSX.Element => {
         })}
       </div>
 
-      <MyButton onClick={submitHandler}>Sign Up</MyButton>
+      <MyButton>Sign Up</MyButton>
     </form>
   )
 }

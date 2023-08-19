@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import React from 'react'
 import './App.scss'
-import { Header } from './components'
+import { Header, RegistrationForm } from './components'
 import { getAnonymousToken } from './services/anonUserAuth'
 import { getCustomerToken } from './services/customerAuth'
 import { getRefreshToken } from './services/refreshToken'
@@ -14,7 +14,7 @@ export function App(): JSX.Element {
   return (
     <React.Fragment>
       <Header />
-      <div className="app">This is our react application</div>
+      <RegistrationForm />
     </React.Fragment>
   )
 }
