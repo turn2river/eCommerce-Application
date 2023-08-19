@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import { Fragment } from 'react'
 import { Header } from './components'
 
@@ -6,12 +7,12 @@ import { getCustomerToken } from './services/customerAuth'
 import { getRefreshToken } from './services/refreshToken'
 import { getCategories } from './services/viewCategories'
 
-import './App.scss'
-import { AppRoutes } from './routes/AppRoutes.tsx'
-
 // import {inputsList} from './models/InputsList'
 // import { InputValues } from './models/yupType'
-import { RegistrationForm } from './components/RegistrationForm/RegistrationForm.tsx'
+import { RegistrationForm } from './components/RegistrationForm/RegistrationForm'
+
+import './App.scss'
+import { AppRoutes } from './routes/AppRoutes.tsx'
 
 export function App(): JSX.Element {
   return (
