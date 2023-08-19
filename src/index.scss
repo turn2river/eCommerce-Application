@@ -5,14 +5,20 @@
   src: url('../public/fonts/Dellatine.otf');
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 div {
   display: flex;
   flex-direction: column;
+  color: #beae97;
   background: #211e1c;
+}
 
-  & > * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+.container {
+  max-width: 1320px;
+  padding: 0 20px;
 }

@@ -1,8 +1,8 @@
 export interface ISignUpAdressInterface {
   country: string | null
-  firstName: string
-  lastName: string
-  streetName: string
-  postalCode: string
-  city: string
+  firstName: string | undefined
+  lastName: string | undefined
+  streetName: string | undefined
+  postalCode: string | undefined
+  city: string | undefined
 }
