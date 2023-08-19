@@ -9,10 +9,15 @@ import { getCategories } from './services/viewCategories'
 import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.tsx'
 
+// import {inputsList} from './models/InputsList'
+// import { InputValues } from './models/yupType'
+import { RegistrationForm } from './components/RegistrationForm/RegistrationForm.tsx'
+
 export function App(): JSX.Element {
   return (
     <Fragment>
       <Header />
+      <RegistrationForm />
       <AppRoutes />
     </Fragment>
   )
@@ -20,4 +25,4 @@ export function App(): JSX.Element {
 getAnonymousToken()
 getCustomerToken()
 getRefreshToken('parfumerie:Hs2lsmw-p0rA2Q4wx7wAo37OHj6dttKdrySjIqmEwY4')
-getCategories('C5CrfIHMqMFHJjJbLdD2Lo5MH02nOJOl')
+getCategories('PskMUM-2819KZO4qNrReLWW7iZwldoAC')
