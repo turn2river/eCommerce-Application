@@ -1,158 +1,176 @@
-@import url("https://fonts.googleapis.com/css?family=Dosis:300,400,700,800");
+@import 'https://fonts.googleapis.com/css?family=Dosis:300,400,700,800';
 
 .particle-error,
 .permission_denied {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .permission_denied {
-    background: #211e1c;
+  background: #211e1c;
 }
 
 .permission_denied a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .denied__wrapper {
-    max-width: 390px;
-    width: 100%;
-    height: 390px;
-    display: block;
-    margin: 0 auto;
-    position: relative;
-    margin-top: 8vh;
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  max-width: 390px;
+  height: 390px;
+  margin: 0 auto;
+  margin-top: 8vh;
 }
 
 .permission_denied h1 {
-    text-align: center;
-    color: #fff;
-    font-family: "Dosis", sans-serif;
-    font-size: 100px;
-    margin-bottom: 0px;
-    font-weight: 800;
+  margin-bottom: 0;
+
+  font-family: Dosis, sans-serif;
+  font-size: 100px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
 }
 
 .permission_denied h3 {
-    text-align: center;
-    color: #fff;
-    font-size: 19px;
-    line-height: 23px;
-    max-width: 330px;
-    margin: 0px auto 30px auto;
-    font-family: "Dosis", sans-serif;
-    font-weight: 400;
+  max-width: 330px;
+  margin: 0 auto 30px;
+
+  font-family: Dosis, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #fff;
+  text-align: center;
 }
 
 .permission_denied h3 span {
-    position: relative;
-    width: 65px;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
+  width: 65px;
 }
 
-.permission_denied h3 span:after {
-    content: "";
-    border-bottom: 3px solid #ffbb39;
-    position: absolute;
-    left: 0;
-    top: 43%;
-    width: 100%;
+.permission_denied h3 span::after {
+  content: '';
+
+  position: absolute;
+  top: 43%;
+  left: 0;
+
+  width: 100%;
+
+  border-bottom: 3px solid #ffbb39;
 }
 
 .denied__link {
-    background: none;
-    color: #fff;
-    padding: 12px 0px 10px 0px;
-    border: 1px solid #fff;
-    outline: none;
-    border-radius: 7px;
-    width: 150px;
-    font-size: 15px;
-    text-align: center;
-    margin: 0 auto;
-    vertical-align: middle;
-    display: block;
-    margin-bottom: 40px;
-    margin-top: 25px;
-    font-family: "Dosis", sans-serif;
-    font-weight: 400;
+  display: block;
+
+  width: 150px;
+  margin: 0 auto;
+  margin-top: 25px;
+  margin-bottom: 40px;
+  padding: 12px 0 10px;
+
+  font-family: Dosis, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  vertical-align: middle;
+
+  background: none;
+  border: 1px solid #fff;
+  border-radius: 7px;
+  outline: none;
 }
 
 .denied__link:hover {
-    color: #ffbb39;
-    border-color: #ffbb39;
-    cursor: pointer;
-    opacity: 1;
+  cursor: pointer;
+  color: #ffbb39;
+  opacity: 1;
+  border-color: #ffbb39;
 }
 
 .permission_denied .stars {
-    animation: sparkle 1.6s infinite ease-in-out alternate;
+  animation: sparkle 1.6s infinite ease-in-out alternate;
 }
 
 @keyframes sparkle {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0.3;
-    }
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.3;
+  }
 }
 
 .astranout {
-    width: 43px;
-    position: absolute;
-    right: 20px;
-    top: 210px;
-    animation: spin 4.5s infinite linear;
+  position: absolute;
+  top: 210px;
+  right: 20px;
+
+  width: 43px;
+
+  animation: spin 4.5s infinite linear;
 }
 
 @keyframes spin {
-    0% {
-        transform: rotateZ(0deg);
-    }
-    100% {
-        transform: rotateZ(360deg);
-    }
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
 }
 
-@media (max-width: 600px) {
-    .permission_denied h1 {
-        font-size: 75px;
-    }
-    .permission_denied h3 {
-        font-size: 16px;
-        width: 200px;
-        margin: 0 auto;
-        line-height: 23px;
-    }
-    .permission_denied h3 span {
-        width: 60px;
-    }
-    #astronaut {
-        width: 35px;
-        right: 40px;
-        top: 170px;
-    }
+@media (width <= 600px) {
+  .permission_denied h1 {
+    font-size: 75px;
+  }
+
+  .permission_denied h3 {
+    width: 200px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 23px;
+  }
+
+  .permission_denied h3 span {
+    width: 60px;
+  }
+
+  #astronaut {
+    top: 170px;
+    right: 40px;
+    width: 35px;
+  }
 }
 
 .saturn,
 .saturn-2,
 .hover {
-    animation: hover 2s infinite ease-in-out alternate;
+  animation: hover 2s infinite ease-in-out alternate;
 }
 
 @keyframes hover {
-    0% {
-        transform: translateY(3px);
-    }
-    100% {
-        transform: translateY(-3px);
-    }
+  0% {
+    transform: translateY(3px);
+  }
+
+  100% {
+    transform: translateY(-3px);
+  }
 }
 
 .link_to_main {
-  font-family: "Dosis", sans-serif;
-    font-size: 20px;
-    margin-bottom: 0px;
-    font-weight: 800;
+  margin-bottom: 0;
+  font-family: Dosis, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
 }
