@@ -6,7 +6,7 @@ export const schema: Yup.ObjectSchema<InputValues> = Yup.object().shape({
     .trim()
     .email('Invalid email format')
     .required('Email is required')
-    .matches(/^\S+@\S+.\S+$/, 'Please enter a valid email address'),
+    .matches(/^\S+@\S+\.\S+$/, 'Please enter a valid email address'),
   password: Yup.string()
     .trim()
     .required('Password is required')
