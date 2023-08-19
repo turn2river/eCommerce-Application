@@ -1,4 +1,4 @@
-import { IAutocompleteInput } from '../../models/AutocompleteInputInterface'
+import { useState } from 'react'
 import { countriesList } from '../../models/CountriesList'
 import {
   container,
@@ -10,45 +10,42 @@ import {
   suggestions_container_invisible,
   error_message,
 } from './AutoCompleteInput.module.scss'
+import { AutocompleteInputProps } from '../../models/AutocompleteInputProps'
 
 export const AutoCompleteInput = ({
   id,
   label,
   type,
+  error,
   placeholder,
-  value,
-  disabled,
-  isValid,
-  onChange,
-  onClick,
-  required,
+  validation,
+  setVisibility,
+  setCountryValue,
   visibility,
-  errorMessage,
-}: IAutocompleteInput): JSX.Element => {
+}: AutocompleteInputProps): JSX.Element => {
   const countriesArray = countriesList.map((country) => country.name)
-
+  const [value, setValue] = useState('')
   return (
     <div className={container}>
       <label htmlFor={id} className={input_label}>
         {label}
       </label>
       <input
-        className={isValid ? input : `${input} ${input_invalid}`}
-        id={id}
         type={type}
+        className={error ? `${input} ${input_invalid}` : input}
+        id={id}
         placeholder={placeholder}
-        value={value}
-        disabled={disabled}
-        required={required}
-        onChange={onChange}
+        {...validation}
+        onChange={(e): void => {
+          if (e.target.value && Number.isNaN(+e.target.value)) {
+            setVisibility(true)
+          } else {
+            setVisibility(false)
+          }
+          setValue(e.target.value)
+        }}
       />
-      {errorMessage
-        ? errorMessage.map((error, index) => (
-            <span key={index} className={error_message}>
-              {error}
-            </span>
-          ))
-        : null}
+      <span className={error_message}>{error}</span>
       <div
         className={visibility ? suggestions_container : `${suggestions_container} ${suggestions_container_invisible}`}>
         {value
@@ -56,7 +53,16 @@ export const AutoCompleteInput = ({
               let result
               if (country.toLocaleLowerCase().startsWith(value.toLocaleLowerCase())) {
                 result = (
-                  <div className={suggestions} key={country} onClick={onClick}>
+                  <div
+                    className={suggestions}
+                    key={country}
+                    onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
+                      const { textContent } = e.target as HTMLDivElement
+                      if (textContent) {
+                        setCountryValue('country', textContent)
+                      }
+                      setVisibility(false)
+                    }}>
                     {country}
                   </div>
                 )

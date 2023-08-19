@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { Fragment } from 'react'
-import { Header } from './components'
+import { Header, RegistrationForm } from './components'
 
 import { getAnonymousToken } from './services/anonUserAuth'
 import { getCustomerToken } from './services/customerAuth'
@@ -9,7 +9,6 @@ import { getCategories } from './services/viewCategories'
 
 // import {inputsList} from './models/InputsList'
 // import { InputValues } from './models/yupType'
-import { RegistrationForm } from './components/RegistrationForm/RegistrationForm'
 
 import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.tsx'
