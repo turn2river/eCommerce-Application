@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { Fragment } from 'react'
-import { Header, RegistrationForm } from './components'
+import { Header } from './components'
 import { AnonTokensStorage } from './models/AnonTokensStorage.ts'
 import { getCustomerToken } from './services/customerAuth'
 import { getRefreshToken } from './services/refreshToken'
@@ -16,7 +16,6 @@ export function App(): JSX.Element {
   return (
     <Fragment>
       <Header />
-      <RegistrationForm />
       <AppRoutes />
     </Fragment>
   )

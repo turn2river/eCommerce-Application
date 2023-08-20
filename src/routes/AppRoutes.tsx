@@ -3,7 +3,7 @@ import { Main } from '../pages/Main/Main.tsx'
 import { About } from '../pages/About/About.tsx'
 import { Login } from '../pages/Login/Login.tsx'
 import { Registration } from '../pages/Registration/Registration.tsx'
-import { Page404 } from '../pages/page404/page404.tsx'
+import { PageNotFound } from '../pages/PageNotFound/PageNotFound.tsx'
 
 const isAuth = false // TODO get isAuth from api
 
@@ -13,6 +13,6 @@ export const AppRoutes = (): JSX.Element => (
     <Route path="/about" element={<About />} />
     {isAuth ? <Route path="/login" element={<Navigate to="/" />} /> : <Route path="/login" element={<Login />} />}
     <Route path="/registration" element={<Registration />} />
-    <Route path="/*" element={<Page404 />}></Route>
+    <Route path="/*" element={<PageNotFound />}></Route>
   </Routes>
 )
