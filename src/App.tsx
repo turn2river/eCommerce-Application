@@ -10,7 +10,6 @@ import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.tsx'
 import { getAnonymousToken } from './services/anonUserAuth.ts'
 import { LogInInputsInterface } from './models/LogInInputsInterface.ts'
-import { LoginForm } from './components/LoginForm/LoginForm.tsx'
 
 const anonTokensStorage = new AnonTokensStorage()
 export const anonUserAuthToken = anonTokensStorage.anonAuthToken
@@ -20,7 +19,6 @@ export function App(): JSX.Element {
   return (
     <Fragment>
       <Header />
-      <LoginForm />
       <AppRoutes />
     </Fragment>
   )
