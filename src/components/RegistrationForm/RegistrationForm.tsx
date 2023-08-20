@@ -12,6 +12,7 @@ import {
   container,
   check_box,
   personal_info,
+  checkbox_wrapper,
 } from './RegistrationForm.module.scss'
 import { inputsList } from '../../models/InputsList'
 import { MyButton } from '../MyButton/MyButton.tsx'
@@ -148,27 +149,29 @@ export const RegistrationForm = (): JSX.Element => {
                 />
               ) : null
             })}
-            <div className={check_box}>
-              <input
-                id="shipping_checkbox"
-                value="shipping"
-                type="checkbox"
-                checked={checkBoxState.shipping_checkbox}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="shipping_checkbox">Use as shipping</label>
-            </div>
-            <div className={check_box}>
-              <input
-                id="shipping_checkbox_default"
-                value="shipping_default"
-                type="checkbox"
-                checked={checkBoxState.shipping_checkbox_default}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="shipping_checkbox_default">Use as shipping default</label>
+            <div className={checkbox_wrapper}>
+              <div className={check_box}>
+                <input
+                  id="shipping_checkbox"
+                  value="shipping"
+                  type="checkbox"
+                  checked={checkBoxState.shipping_checkbox}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="shipping_checkbox">Use as shipping</label>
+              </div>
+              <div className={check_box}>
+                <input
+                  id="shipping_checkbox_default"
+                  value="shipping_default"
+                  type="checkbox"
+                  checked={checkBoxState.shipping_checkbox_default}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="shipping_checkbox_default">Use as shipping default</label>
+              </div>
             </div>
           </div>
 
@@ -194,27 +197,29 @@ export const RegistrationForm = (): JSX.Element => {
                 />
               ) : null
             })}
-            <div className={check_box}>
-              <input
-                id="billing_checkbox"
-                value="billing"
-                type="checkbox"
-                checked={checkBoxState.billing_checkbox}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="billing_checkbox">Use as billing</label>
-            </div>
-            <div className={check_box}>
-              <input
-                id="billing_checkbox_default"
-                value="billing_default"
-                type="checkbox"
-                checked={checkBoxState.billing_checkbox_default}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="billing_checkbox_default">Use as billing default</label>
+            <div className={checkbox_wrapper}>
+              <div className={check_box}>
+                <input
+                  id="billing_checkbox"
+                  value="billing"
+                  type="checkbox"
+                  checked={checkBoxState.billing_checkbox}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="billing_checkbox">Use as billing</label>
+              </div>
+              <div className={check_box}>
+                <input
+                  id="billing_checkbox_default"
+                  value="billing_default"
+                  type="checkbox"
+                  checked={checkBoxState.billing_checkbox_default}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="billing_checkbox_default">Use as billing default</label>
+              </div>
             </div>
           </div>
         </div>
