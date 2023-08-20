@@ -25,6 +25,7 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     .required('Last name is required'),
 
   dateOfBirth: Yup.date() // Change Yup.string() to Yup.date()
+    .transform((curr, orig) => (orig === '' ? null : curr))
     .required('Date of birth is required')
     .test('age', 'You must be at least 13 years old', (value) => {
       const currentDate = new Date()
