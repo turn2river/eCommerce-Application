@@ -3,12 +3,23 @@ import { RegistrationInputsInterface } from '../models/RegistrationInputsInterfa
 
 export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object().shape({
   email: Yup.string()
-    .trim()
     .email('Invalid email format')
     .required('Email is required')
+    .test('no-space', 'Email cannot contain spaces', (value) => {
+      if (value) {
+        return !value.includes(' ')
+      }
+      return true
+    })
     .matches(/^\S+@\S+\.\S+$/, 'Please enter a valid email address'),
   password: Yup.string()
-    .trim()
+
+    .test('no-space', 'Password cannot contain spaces', (value) => {
+      if (value) {
+        return !value.includes(' ')
+      }
+      return true
+    })
     .required('Password is required')
     .min(8, 'Password must be at least 8 characters long')
     .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
