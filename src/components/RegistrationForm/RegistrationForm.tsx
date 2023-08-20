@@ -7,12 +7,12 @@ import { Input } from '../Input/Input.tsx'
 import {
   registration_form,
   title,
-  wrapper,
+  card_wrapper,
   subtitle,
   container,
   check_box,
-  personal_info,
   checkbox_wrapper,
+  cards_row,
 } from './RegistrationForm.module.scss'
 import { inputsList } from '../../models/InputsList'
 import { MyButton } from '../MyButton/MyButton.tsx'
@@ -106,8 +106,8 @@ export const RegistrationForm = (): JSX.Element => {
     <form className={registration_form} onSubmit={handleSubmit(onSubmit)}>
       <h2 className={title}>Sign Up</h2>
       <div className={container}>
-        <div className="column">
-          <div className={wrapper}>
+        <div className={cards_row}>
+          <div className={card_wrapper}>
             <p className={subtitle}>Your credentials</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'email' || id === 'password' ? (
@@ -116,7 +116,7 @@ export const RegistrationForm = (): JSX.Element => {
             })}
           </div>
 
-          <div className={`${wrapper} ${personal_info}`}>
+          <div className={`${card_wrapper}`}>
             <p className={subtitle}>Personal Information</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'firstName' || id === 'lastName' || id === 'dateOfBirth' ? (
@@ -126,8 +126,8 @@ export const RegistrationForm = (): JSX.Element => {
           </div>
         </div>
 
-        <div className="column">
-          <div className={wrapper}>
+        <div className={cards_row}>
+          <div className={card_wrapper}>
             <p className={subtitle}>Shipping Adress Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'shipping_street' || id === 'shipping_city' || id === 'shipping_zipCode' ? (
@@ -175,7 +175,7 @@ export const RegistrationForm = (): JSX.Element => {
             </div>
           </div>
 
-          <div className={wrapper}>
+          <div className={card_wrapper}>
             <p className={subtitle}>Billing Adress Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'billing_street' || id === 'billing_city' || id === 'billing_zipCode' ? (

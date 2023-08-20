@@ -1,8 +1,8 @@
 import { NavLink } from 'react-router-dom'
-import { permission_denied, denied__wrapper, astranout, link_to_main } from './page404.module.scss'
+import { permission_denied, denied__wrapper, astranout, link_to_main } from './PageNotFound.module.scss'
 import { nav_link } from '../../components/Header/Header.module.scss'
 
-export const Page404 = (): JSX.Element => {
+export const PageNotFound = (): JSX.Element => {
   return (
     <div className={permission_denied}>
       <div className={denied__wrapper}>
