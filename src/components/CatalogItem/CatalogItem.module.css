@@ -8,12 +8,12 @@
   color: transparent;
   background: linear-gradient(118deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
   -webkit-background-clip: text;
-          background-clip: text;
+  background-clip: text;
   border-radius: 4px;
   box-shadow: 0 2px 10px 0 rgba(184, 164, 142, 0.4);
 }
 .item::before {
-  content: "";
+  content: '';
   position: absolute;
   z-index: -1;
   top: 0;
@@ -33,4 +33,4 @@
   color: #3c3428;
   background: linear-gradient(144deg, #977c55 0%, #e8d2b3 42.62%, #9f7a58 100%);
   border: 1px solid #d6b88d;
-}/*# sourceMappingURL=CatalogItem.module.css.map */
+} /*# sourceMappingURL=CatalogItem.module.css.map */

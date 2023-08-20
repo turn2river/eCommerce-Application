@@ -14,7 +14,7 @@
   box-shadow: 0 2px 10px 0 rgba(184, 164, 142, 0.4);
 }
 .button::before {
-  content: "";
+  content: '';
   position: absolute;
   z-index: -1;
   top: 0;
@@ -28,7 +28,7 @@
   color: transparent;
   background: linear-gradient(118deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
   -webkit-background-clip: text;
-          background-clip: text;
+  background-clip: text;
   transition: 0.5s linear;
 }
 .button:hover {
@@ -43,4 +43,4 @@
 }
 .button_wrapper {
   position: absolute;
-}/*# sourceMappingURL=MyButton.module.css.map */
+} /*# sourceMappingURL=MyButton.module.css.map */

@@ -13,12 +13,12 @@
   width: 20px;
   height: 20px;
   background-color: #beae97;
-  background-image: url("../../assets/image/png/lamp-off.png");
+  background-image: url('../../assets/image/png/lamp-off.png');
   background-size: contain;
   border-radius: 50%;
 }
 .container .type_toggler_active {
-  background-image: url("../../assets/image/png/lamp-on.png");
+  background-image: url('../../assets/image/png/lamp-on.png');
 }
 .container .input {
   position: relative;
@@ -60,4 +60,4 @@
   font-family: Montserrat, sans-serif;
   font-size: 10px;
   color: #b04a4a;
-}/*# sourceMappingURL=Input.module.css.map */
+} /*# sourceMappingURL=Input.module.css.map */

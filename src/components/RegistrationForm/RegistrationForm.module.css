@@ -24,7 +24,7 @@
   text-align: center;
   background: linear-gradient(118deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
   -webkit-background-clip: text;
-          background-clip: text;
+  background-clip: text;
   transition: 0.5s linear;
 }
 .registration_form .wrapper {
@@ -55,4 +55,4 @@
 .registration_form .wrapper .check_box input {
   margin-right: 10px;
   background: none;
-}/*# sourceMappingURL=RegistrationForm.module.css.map */
+} /*# sourceMappingURL=RegistrationForm.module.css.map */
