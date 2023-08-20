@@ -33,6 +33,10 @@
   &_link {
     color: #beae97;
     text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
