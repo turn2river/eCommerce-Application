@@ -1,0 +1,70 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+}
+.container .input {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 14px;
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  color: #7a7364;
+  background: none;
+  border: 1px solid #565147;
+  border-radius: 4px;
+  outline: none;
+}
+.container .input:focus {
+  color: #beae97;
+  border: 1px solid #beae97;
+}
+.container .input_label {
+  margin: 6px 0;
+  font-family: Montserrat, serif;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  color: #beae97;
+}
+.container .input_invalid {
+  border: 1px solid #b04a4a;
+}
+.container .input_invalid:focus {
+  border: 1px solid #b04a4a;
+}
+.container .suggestions_container {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  left: 0;
+  overflow-y: scroll;
+  display: block;
+  width: 100%;
+  max-height: 270px;
+}
+.container .suggestions_container_invisible {
+  display: none;
+}
+.container .suggestions {
+  cursor: pointer;
+  padding: 16px 14px;
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  color: #7a7364;
+}
+.container .error_message {
+  max-width: 250px;
+  font-family: Montserrat, sans-serif;
+  font-size: 10px;
+  color: #b04a4a;
+}/*# sourceMappingURL=AutoCompleteInput.module.css.map */

@@ -1,0 +1,26 @@
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(229, 197, 197);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+.popup h2 {
+  margin-bottom: 10px;
+}
+.popup button {
+  background-color: #edbf79;
+  color: rgb(26, 18, 18);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.popup button:hover {
+  background-color: #0056b3;
+}/*# sourceMappingURL=Popup.module.css.map */

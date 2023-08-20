@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  align-items: center;
+  width: 1300px;
+  height: 132px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  height: 132px;
+  margin: 0 auto;
+}
+.nav_list {
+  display: flex;
+}
+.nav_item {
+  position: relative;
+  padding: 0 25px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #beae97;
+  text-transform: capitalize;
+  list-style: none;
+}
+.nav_link {
+  color: #beae97;
+  text-decoration: none;
+}
+
+.active {
+  text-decoration: underline;
+}/*# sourceMappingURL=Header.module.css.map */

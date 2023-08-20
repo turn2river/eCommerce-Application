@@ -1,0 +1,22 @@
+@import 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap';
+@font-face {
+  font-family: Dellatine;
+  src: url("../public/fonts/Dellatine.otf");
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  color: #beae97;
+  background: #211e1c;
+}
+
+.container {
+  max-width: 1320px;
+  padding: 0 20px;
+}/*# sourceMappingURL=index.css.map */
