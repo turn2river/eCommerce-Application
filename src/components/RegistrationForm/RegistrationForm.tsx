@@ -17,8 +17,8 @@ import { inputsList } from '../../models/InputsList'
 import { MyButton } from '../MyButton/MyButton.tsx'
 import { AutoCompleteInput } from '../AutoCompleteInput/AutoCompleteInput.tsx'
 import { getCountryCode } from '../../utils/GetCountryCode'
-import { ISignUpDataInterface } from '../../models/SignUpDataInterface'
-import { ISubmitedData } from '../../models/SubmitedDataInterface'
+import { SignUpDataInterface } from '../../models/SignUpDataInterface'
+import { RegistrationInputsInterface } from '../../models/RegistrationInputsInterface'
 
 export const RegistrationForm = (): JSX.Element => {
   const {
@@ -65,7 +65,7 @@ export const RegistrationForm = (): JSX.Element => {
     firstName: currentFirstName,
     lastName: currentLastName,
     password: currentCityPassword,
-  }: ISubmitedData): ISignUpDataInterface => {
+  }: RegistrationInputsInterface): SignUpDataInterface => {
     const customerInfo = {
       email: currentEmail,
       password: currentCityPassword,

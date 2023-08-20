@@ -1,6 +1,6 @@
 import { ISignUpAdressInterface } from './SignUpAddressInterface'
 
-export interface ISignUpDataInterface {
+export interface SignUpDataInterface {
   email: string
   password: string
   firstName: string

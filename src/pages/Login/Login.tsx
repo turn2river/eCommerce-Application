@@ -1,3 +1,5 @@
+import { LoginForm } from '../../components/LoginForm/LoginForm.tsx'
+
 export const Login = (): JSX.Element => {
-  return <div>Login Page</div>
+  return <LoginForm />
 }
