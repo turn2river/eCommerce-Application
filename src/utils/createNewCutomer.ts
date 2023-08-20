@@ -2,11 +2,11 @@
 
 import { createCustomer } from '../services/createCustomer'
 import { Customer } from '../models/authTypes'
-import { ISignUpDataInterface } from '../models/SignUpDataInterface'
+import { SignUpDataInterface } from '../models/SignUpDataInterface'
 
 export async function createNewCustomer(
   anonUserAuthToken: string,
-  customerInfo: ISignUpDataInterface,
+  customerInfo: SignUpDataInterface,
 ): Promise<Customer | undefined> {
   try {
     const response = await createCustomer(anonUserAuthToken, customerInfo)

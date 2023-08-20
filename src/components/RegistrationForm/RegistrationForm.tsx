@@ -17,7 +17,7 @@ import { inputsList } from '../../models/InputsList'
 import { MyButton } from '../MyButton/MyButton.tsx'
 import { AutoCompleteInput } from '../AutoCompleteInput/AutoCompleteInput.tsx'
 import { getCountryCode } from '../../utils/GetCountryCode'
-import { ISignUpDataInterface } from '../../models/SignUpDataInterface'
+import { SignUpDataInterface } from '../../models/SignUpDataInterface'
 import { ISubmitedData } from '../../models/SubmitedDataInterface'
 import { AnonTokensStorage } from '../../models/AnonTokensStorage'
 import { createNewCustomer } from '../../utils/createNewCutomer'
@@ -73,7 +73,7 @@ export const RegistrationForm = (): JSX.Element => {
     firstName: currentFirstName,
     lastName: currentLastName,
     password: currentCityPassword,
-  }: ISubmitedData): Promise<ISignUpDataInterface> => {
+  }: ISubmitedData): Promise<SignUpDataInterface> => {
     const customerInfo = {
       email: currentEmail,
       password: currentCityPassword,

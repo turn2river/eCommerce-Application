@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { Customer } from '../models/authTypes'
-import { ISignUpDataInterface } from '../models/SignUpDataInterface'
+import { SignUpDataInterface } from '../models/SignUpDataInterface'
 
-export async function createCustomer(token: string, customerData: ISignUpDataInterface): Promise<Customer | undefined> {
+export async function createCustomer(token: string, customerData: SignUpDataInterface): Promise<Customer | undefined> {
   const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/customers'
   const headers = {
     'Content-Type': 'application/json',
