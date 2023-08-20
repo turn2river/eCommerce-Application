@@ -1,4 +1,4 @@
-export interface ISubmitedData {
+export interface RegistrationInputsInterface {
   email: string
   password: string
   firstName: string
@@ -8,8 +8,8 @@ export interface ISubmitedData {
   billing_city: string
   billing_country: string
   billing_street: string
-  shipping_zipCode?: string
-  shipping_city?: string
-  shipping_country?: string
-  shipping_street?: string
+  shipping_zipCode: string
+  shipping_city: string
+  shipping_country: string
+  shipping_street: string
 }

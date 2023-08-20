@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
-import { InputValues } from '../models/yupType'
+import { RegistrationInputsInterface } from '../models/RegistrationInputsInterface'
 
-export const schema: Yup.ObjectSchema<InputValues> = Yup.object().shape({
+export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object().shape({
   email: Yup.string()
     .trim()
     .email('Invalid email format')

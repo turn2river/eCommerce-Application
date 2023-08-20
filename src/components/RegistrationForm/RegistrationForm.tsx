@@ -7,18 +7,19 @@ import { Input } from '../Input/Input.tsx'
 import {
   registration_form,
   title,
-  wrapper,
+  card_wrapper,
   subtitle,
   container,
   check_box,
-  personal_info,
+  checkbox_wrapper,
+  cards_row,
 } from './RegistrationForm.module.scss'
 import { inputsList } from '../../models/InputsList'
 import { MyButton } from '../MyButton/MyButton.tsx'
 import { AutoCompleteInput } from '../AutoCompleteInput/AutoCompleteInput.tsx'
 import { getCountryCode } from '../../utils/GetCountryCode'
 import { SignUpDataInterface } from '../../models/SignUpDataInterface'
-import { ISubmitedData } from '../../models/SubmitedDataInterface'
+import { RegistrationInputsInterface } from '../../models/RegistrationInputsInterface'
 import { AnonTokensStorage } from '../../models/AnonTokensStorage'
 import { createNewCustomer } from '../../utils/createNewCutomer'
 import { Popup } from '../Popup/Popup.tsx'
@@ -73,7 +74,7 @@ export const RegistrationForm = (): JSX.Element => {
     firstName: currentFirstName,
     lastName: currentLastName,
     password: currentCityPassword,
-  }: ISubmitedData): Promise<SignUpDataInterface> => {
+  }: RegistrationInputsInterface): Promise<SignUpDataInterface> => {
     const customerInfo = {
       email: currentEmail,
       password: currentCityPassword,
@@ -132,8 +133,8 @@ export const RegistrationForm = (): JSX.Element => {
     <form className={registration_form} onSubmit={handleSubmit(onSubmit)}>
       <h2 className={title}>Sign Up</h2>
       <div className={container}>
-        <div className="column">
-          <div className={wrapper}>
+        <div className={cards_row}>
+          <div className={card_wrapper}>
             <p className={subtitle}>Your credentials</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'email' || id === 'password' ? (
@@ -142,7 +143,7 @@ export const RegistrationForm = (): JSX.Element => {
             })}
           </div>
 
-          <div className={`${wrapper} ${personal_info}`}>
+          <div className={`${card_wrapper}`}>
             <p className={subtitle}>Personal Information</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'firstName' || id === 'lastName' || id === 'dateOfBirth' ? (
@@ -152,8 +153,8 @@ export const RegistrationForm = (): JSX.Element => {
           </div>
         </div>
 
-        <div className="column">
-          <div className={wrapper}>
+        <div className={cards_row}>
+          <div className={card_wrapper}>
             <p className={subtitle}>Shipping Adress Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'shipping_street' || id === 'shipping_city' || id === 'shipping_zipCode' ? (
@@ -175,31 +176,32 @@ export const RegistrationForm = (): JSX.Element => {
                 />
               ) : null
             })}
-            <div className={check_box}>
-              <input
-                id="shipping_checkbox"
-                value="shipping"
-                type="checkbox"
-                defaultChecked={checkBoxState.shipping_checkbox}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="shipping_checkbox">Use as shipping</label>
-            </div>
-            <div className={check_box}>
-              <input
-                id="shipping_checkbox_default"
-                value="shipping_default"
-                type="checkbox"
-                defaultChecked={checkBoxState.shipping_checkbox_default}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="shipping_checkbox_default">Use as shipping default</label>
+            <div className={checkbox_wrapper}>
+              <div className={check_box}>
+                <input
+                  id="shipping_checkbox"
+                  value="shipping"
+                  type="checkbox"
+                  defaultChecked={checkBoxState.shipping_checkbox}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="shipping_checkbox">Use as shipping</label>
+              </div>
+              <div className={check_box}>
+                <input
+                  id="shipping_checkbox_default"
+                  value="shipping_default"
+                  type="checkbox"
+                  defaultChecked={checkBoxState.shipping_checkbox_default}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="shipping_checkbox_default">Use as shipping default</label>
+              </div>
             </div>
           </div>
-
-          <div className={wrapper}>
+          <div className={card_wrapper}>
             <p className={subtitle}>Billing Adress Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'billing_street' || id === 'billing_city' || id === 'billing_zipCode' ? (
@@ -221,34 +223,35 @@ export const RegistrationForm = (): JSX.Element => {
                 />
               ) : null
             })}
-            <div className={check_box}>
-              <input
-                id="billing_checkbox"
-                value="billing"
-                type="checkbox"
-                defaultChecked={checkBoxState.billing_checkbox}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="billing_checkbox">Use as billing</label>
-            </div>
-            <div className={check_box}>
-              <input
-                id="billing_checkbox_default"
-                value="billing_default"
-                type="checkbox"
-                defaultChecked={checkBoxState.billing_checkbox_default}
-                onClick={(e): void => {
-                  checkBoxHandleClick(e)
-                }}></input>
-              <label htmlFor="billing_checkbox_default">Use as billing default</label>
+            <div className={checkbox_wrapper}>
+              <div className={check_box}>
+                <input
+                  id="billing_checkbox"
+                  value="billing"
+                  type="checkbox"
+                  defaultChecked={checkBoxState.billing_checkbox}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="billing_checkbox">Use as billing</label>
+              </div>
+              <div className={check_box}>
+                <input
+                  id="billing_checkbox_default"
+                  value="billing_default"
+                  type="checkbox"
+                  defaultChecked={checkBoxState.billing_checkbox_default}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="billing_checkbox_default">Use as billing default</label>
+              </div>
             </div>
           </div>
         </div>
       </div>
       {formStatus === 'success' && <Popup message="Congratulations, you have successfully signed up!" />}
       {formStatus === 'error' && <Popup message={errorMessage} />}
-
       <MyButton>Sign Up</MyButton>
     </form>
   )
