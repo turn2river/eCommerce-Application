@@ -123,6 +123,9 @@ export const RegistrationForm = (): JSX.Element => {
     } catch (error) {
       if (error instanceof Error) {
         setFormStatus('error')
+        if (error.message === 'Request failed with status code 400') {
+          error.message = "Something went wrong. Please, check the data you've provided."
+        }
         setErrorMessage(error.message)
       }
     }
@@ -155,7 +158,7 @@ export const RegistrationForm = (): JSX.Element => {
 
         <div className={cards_row}>
           <div className={card_wrapper}>
-            <p className={subtitle}>Shipping Adress Information:*</p>
+            <p className={subtitle}>Shipping Address Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'shipping_street' || id === 'shipping_city' || id === 'shipping_zipCode' ? (
                 <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
@@ -202,7 +205,7 @@ export const RegistrationForm = (): JSX.Element => {
             </div>
           </div>
           <div className={card_wrapper}>
-            <p className={subtitle}>Billing Adress Information:*</p>
+            <p className={subtitle}>Billing Address Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
               return id === 'billing_street' || id === 'billing_city' || id === 'billing_zipCode' ? (
                 <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />

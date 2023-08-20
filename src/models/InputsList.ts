@@ -9,7 +9,7 @@ export const inputsList = [
     id: 'password',
     type: 'password',
     placeholder: '<Password>',
-    label: 'Create storng password:*',
+    label: 'Create strong password:*',
   },
   {
     id: 'firstName',

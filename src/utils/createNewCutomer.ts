@@ -13,13 +13,10 @@ export async function createNewCustomer(
     console.log(response)
     return response
   } catch (error) {
-    if (typeof error === 'string') {
-      console.log(1, error) // handle string error
-    } else if (error instanceof Error) {
-      console.log(2, error.message) // handle Error object
-    } else {
-      console.log('Unknown error occurred') // handle unknown error
+    if (error instanceof Error) {
+      console.log(2, error.message)
+      throw new Error(`${error.message}`)
     }
-    throw new Error(`Failed to create new customer`)
+    throw new Error('Failed to sign up')
   }
 }
