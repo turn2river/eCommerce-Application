@@ -92,3 +92,7 @@ export type Customer = {
   stores: string[]
   authenticationMode: string
 }
+export type StorageTokens = {
+  accessToken: string
+  refreshToken: string
+}
