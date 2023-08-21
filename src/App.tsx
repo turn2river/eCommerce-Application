@@ -1,15 +1,14 @@
 /* eslint-disable import/no-cycle */
-/* eslint-disable import/extensions */
 import { Fragment } from 'react'
 import { Header } from './components'
-import { AnonTokensStorage } from './models/AnonTokensStorage.ts'
-import { getCustomerToken } from './services/customerLogin.ts'
+import { AnonTokensStorage } from './models/AnonTokensStorage'
+import { getCustomerToken } from './services/customerLogin'
 import { getRefreshToken } from './services/refreshToken'
 import { getCategories } from './services/viewCategories'
 import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.tsx'
-import { getAnonymousToken } from './services/anonUserAuth.ts'
-import { LogInInputsInterface } from './models/LogInInputsInterface.ts'
+import { getAnonymousToken } from './services/anonUserAuth'
+import { LogInInputsInterface } from './models/LogInInputsInterface'
 
 const anonTokensStorage = new AnonTokensStorage()
 export const anonUserAuthToken = anonTokensStorage.anonAuthToken
