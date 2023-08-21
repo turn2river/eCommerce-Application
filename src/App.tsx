@@ -2,13 +2,9 @@
 import { Fragment } from 'react'
 import { Header } from './components'
 import { AnonTokensStorage } from './models/AnonTokensStorage'
-import { getCustomerToken } from './services/customerLogin'
-import { getRefreshToken } from './services/refreshToken'
-import { getCategories } from './services/viewCategories'
 import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.tsx'
 import { getAnonymousToken } from './services/anonUserAuth'
-import { LogInInputsInterface } from './models/LogInInputsInterface'
 
 const anonTokensStorage = new AnonTokensStorage()
 export const anonUserAuthToken = anonTokensStorage.anonAuthToken
@@ -23,11 +19,4 @@ export function App(): JSX.Element {
   )
 }
 
-const customerData: LogInInputsInterface = {
-  email: 'alice@something.com',
-  password: 'alice123',
-}
 getAnonymousToken()
-getCustomerToken(customerData)
-getRefreshToken('parfumerie:Hs2lsmw-p0rA2Q4wx7wAo37OHj6dttKdrySjIqmEwY4')
-getCategories('QIQgrGqpLLkx0rm47N6hZRIlMzbCo2gT')
