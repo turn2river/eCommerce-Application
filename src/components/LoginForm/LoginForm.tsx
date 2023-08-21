@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
 import { login_form, title, wrapper, subtitle } from './LoginForm.module.scss'
 import { inputsList } from '../../models/InputsList'
 import { Input } from '../Input/Input.tsx'
@@ -8,11 +9,12 @@ import { MyButton } from '../index'
 import { schema } from '../../utils/LogInValidation'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { singInCustomer } from '../../utils/singInCustomer'
-import { Popup } from '../Popup/Popup.tsx'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const LoginForm = (): JSX.Element => {
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [userData, setUserData] = useState({})
   const {
     register,
     handleSubmit,
@@ -26,7 +28,7 @@ export const LoginForm = (): JSX.Element => {
     console.log(data)
     try {
       const response = await singInCustomer(data)
-      if (response !== undefined) {
+      if (response) {
         setFormStatus('success')
         setErrorMessage('')
       } else {
@@ -37,14 +39,27 @@ export const LoginForm = (): JSX.Element => {
       if (error instanceof Error) {
         setFormStatus('error')
         if (error.message === 'Request failed with status code 400') {
-          error.message = 'Check your login and password'
+          error.message = 'Invalid credentials. Incorrect email or password'
         }
         setErrorMessage(error.message)
       }
     }
-
+    setUserData((prevUserData) => {
+      return {
+        ...prevUserData,
+        ...data,
+      }
+    })
     return data
   }
+
+  useEffect(() => {
+    if (formStatus === 'success') {
+      toast.success('Congratulations, you have successfully signed in!')
+    } else if (formStatus === 'error') {
+      toast.error(errorMessage)
+    }
+  }, [userData])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={login_form}>
@@ -77,8 +92,16 @@ export const LoginForm = (): JSX.Element => {
           return result
         })}
       </div>
-      {formStatus === 'success' && <Popup message="Congratulations, you have successfully signed in!" />}
-      {formStatus === 'error' && <Popup message={errorMessage} />}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnHover
+        theme="light"
+      />
       <MyButton>Sign In</MyButton>
     </form>
   )

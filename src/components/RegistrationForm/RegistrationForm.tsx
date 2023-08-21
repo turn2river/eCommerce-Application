@@ -1,7 +1,8 @@
 /* eslint-disable max-lines-per-function */
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
 import { schema } from '../../utils/RegistrationValidation'
 import { Input } from '../Input/Input.tsx'
 import {
@@ -22,7 +23,7 @@ import { SignUpDataInterface } from '../../models/SignUpDataInterface'
 import { RegistrationInputsInterface } from '../../models/RegistrationInputsInterface'
 import { AnonTokensStorage } from '../../models/AnonTokensStorage'
 import { createNewCustomer } from '../../utils/createNewCutomer'
-import { Popup } from '../Popup/Popup.tsx'
+import 'react-toastify/dist/ReactToastify.css'
 
 const anonTokensStorage = new AnonTokensStorage()
 export const anonUserAuthToken = anonTokensStorage.anonAuthToken
@@ -40,6 +41,8 @@ export const RegistrationForm = (): JSX.Element => {
     resolver: yupResolver(schema),
     mode: 'all',
   })
+
+  const [userData, setUserData] = useState({})
 
   const [checkBoxState, setCheckBoxState] = useState({
     billing_checkbox: true,
@@ -124,14 +127,28 @@ export const RegistrationForm = (): JSX.Element => {
       if (error instanceof Error) {
         setFormStatus('error')
         if (error.message === 'Request failed with status code 400') {
-          error.message = "Something went wrong. Please, check the data you've provided."
+          error.message = 'Account already exists. Try to sing in.'
         }
         setErrorMessage(error.message)
       }
     }
-
+    setUserData((prevUserData) => {
+      return {
+        ...prevUserData,
+        ...customerInfo,
+      }
+    })
     return customerInfo
   }
+
+  useEffect(() => {
+    if (formStatus === 'success') {
+      toast.success('Congratulations, you have successfully signed up!')
+    } else if (formStatus === 'error') {
+      toast.error(errorMessage)
+    }
+  }, [userData])
+
   return (
     <form className={registration_form} onSubmit={handleSubmit(onSubmit)}>
       <h2 className={title}>Sign Up</h2>
@@ -253,8 +270,16 @@ export const RegistrationForm = (): JSX.Element => {
           </div>
         </div>
       </div>
-      {formStatus === 'success' && <Popup message="Congratulations, you have successfully signed up!" />}
-      {formStatus === 'error' && <Popup message={errorMessage} />}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnHover
+        theme="light"
+      />
       <MyButton>Sign Up</MyButton>
     </form>
   )
