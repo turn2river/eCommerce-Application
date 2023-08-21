@@ -115,6 +115,7 @@ export const RegistrationForm = (): JSX.Element => {
 
     try {
       // Make the API call to create a new customer
+
       const response = await createNewCustomer(anonUserAuthToken, customerInfo)
 
       // Check the server response and set the form status and error message accordingly

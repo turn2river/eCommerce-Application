@@ -1,34 +1,42 @@
-// eslint-disable-next-line import/extensions
 import { getAnonTokens } from '../utils/getAnonTokens'
+import { StorageTokens, Token } from './authTypes'
 
-const tokens = await getAnonTokens()
+let storageTokens: StorageTokens
 
-let accessToken: string
-if (typeof tokens === 'object' && 'accessToken' in tokens) {
-  accessToken = tokens.accessToken
+/* async function getTokens(): Promise<string | Token> {
+  const tokens = await getAnonTokens()
+
+  if (typeof tokens === 'object' && 'accessToken' in tokens && 'refreshToken' in tokens) {
+    storageTokens = {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    }
+  }
+  return storageTokens
 }
 
-let refreshToken: string
-if (typeof tokens === 'object' && 'accessToken' in tokens) {
-  refreshToken = tokens.refreshToken
-}
+getTokens()*/
 
 export class AnonTokensStorage {
-  public anonAuthToken: string
-  public anonRefreshToken: string
+  public anonAuthToken: string = ''
+  public anonRefreshToken: string = ''
   constructor() {
     if (window.localStorage.getItem('parfAnonAuthToken')) {
       this.anonAuthToken = this.getLocalStorageAnonAuthToken()
       console.log('localStorage loaded')
     } else {
-      this.anonAuthToken = accessToken
-      this.setLocalStorageAnonAuthToken(this.anonAuthToken)
+      this.getTokens().then(() => {
+        this.anonAuthToken = storageTokens.accessToken
+        this.setLocalStorageAnonAuthToken(this.anonAuthToken)
+      })
     }
     if (window.localStorage.getItem('parfAnonRefreshToken')) {
       this.anonRefreshToken = this.getLocalStorageAnonRefreshToken()
     } else {
-      this.anonRefreshToken = refreshToken
-      this.setLocalStorageAnonRefreshToken(this.anonRefreshToken)
+      this.getTokens().then(() => {
+        this.anonRefreshToken = storageTokens.refreshToken
+        this.setLocalStorageAnonRefreshToken(this.anonRefreshToken)
+      })
     }
   }
 
@@ -58,5 +66,17 @@ export class AnonTokensStorage {
       }
     }
     return ''
+  }
+
+  public async getTokens(): Promise<string | Token> {
+    const tokens = await getAnonTokens()
+
+    if (typeof tokens === 'object' && 'accessToken' in tokens && 'refreshToken' in tokens) {
+      storageTokens = {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      }
+    }
+    return storageTokens
   }
 }
