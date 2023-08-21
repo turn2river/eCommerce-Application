@@ -26,4 +26,11 @@ export class CustomerTokensStorage {
     }
     return null
   }
+
+  public clearLocalStorageTokens(): void {
+    if (window.localStorage) {
+      window.localStorage.removeItem('parfcustomerAuthToken')
+      window.localStorage.removeItem('parfCustomerRefreshToken')
+    }
+  }
 }

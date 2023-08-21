@@ -24,6 +24,8 @@ import { RegistrationInputsInterface } from '../../models/RegistrationInputsInte
 import { AnonTokensStorage } from '../../models/AnonTokensStorage'
 import { createNewCustomer } from '../../utils/createNewCutomer'
 import 'react-toastify/dist/ReactToastify.css'
+import { LogInInputsInterface } from '../../models/LogInInputsInterface'
+import { singInCustomer } from '../../utils/singInCustomer'
 
 const anonTokensStorage = new AnonTokensStorage()
 export const anonUserAuthToken = anonTokensStorage.anonAuthToken
@@ -138,6 +140,29 @@ export const RegistrationForm = (): JSX.Element => {
         ...customerInfo,
       }
     })
+    const customerloginIngfo: LogInInputsInterface = {
+      email: customerInfo.email,
+      password: customerInfo.password,
+    }
+
+    try {
+      const response = await singInCustomer(customerloginIngfo)
+      if (response) {
+        setFormStatus('success')
+        setErrorMessage('')
+      } else {
+        setFormStatus('error')
+        setErrorMessage('Failed to sign in')
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setFormStatus('error')
+        if (error.message === 'Request failed with status code 400') {
+          error.message = 'Invalid credentials. Incorrect email or password'
+        }
+        setErrorMessage(error.message)
+      }
+    }
     return customerInfo
   }
 
