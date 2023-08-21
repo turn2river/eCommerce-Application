@@ -48,7 +48,7 @@ export const LoginForm = (): JSX.Element => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={login_form}>
-      <h2 className={title}>Log In</h2>
+      <h2 className={title}>Sign In</h2>
       <div className={wrapper}>
         <p className={subtitle}>Your credentials</p>
         {inputsList.map(({ id, ...inputAtributes }): JSX.Element | undefined => {
@@ -79,7 +79,7 @@ export const LoginForm = (): JSX.Element => {
       </div>
       {formStatus === 'success' && <Popup message="Congratulations, you have successfully signed in!" />}
       {formStatus === 'error' && <Popup message={errorMessage} />}
-      <MyButton>Log In</MyButton>
+      <MyButton>Sign In</MyButton>
     </form>
   )
 }

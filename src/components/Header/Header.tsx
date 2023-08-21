@@ -17,33 +17,33 @@ export const Header = (): JSX.Element => {
             </NavLink>
           </li>
           <li className={nav_item}>
-            <NavLink className={nav_link} to="/About">
+            <NavLink className={nav_link} to="/about">
               About us
             </NavLink>
           </li>
           {isAuth ? (
             <Fragment>
               <li className={nav_item}>
-                <NavLink className={nav_link} to="/Profile">
+                <NavLink className={nav_link} to="/profile">
                   Profile
                 </NavLink>
               </li>
               <li className={nav_item}>
                 <NavLink className={nav_link} to="/">
-                  Logout
+                  Log out
                 </NavLink>
               </li>
             </Fragment>
           ) : (
             <Fragment>
               <li className={nav_item}>
-                <NavLink className={nav_link} to="/Login">
-                  Login
+                <NavLink className={nav_link} to="/login">
+                  Sign in
                 </NavLink>
               </li>
               <li className={nav_item}>
-                <NavLink className={nav_link} to="/Registration">
-                  Registrarion
+                <NavLink className={nav_link} to="/registration">
+                  Sign Up
                 </NavLink>
               </li>
             </Fragment>
