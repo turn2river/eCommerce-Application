@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import * as Yup from 'yup'
+import { postcodeValidator, postcodeValidatorExistsForCountry } from 'postcode-validator'
 import { RegistrationInputsInterface } from '../models/RegistrationInputsInterface'
+import { getCountryCode } from './GetCountryCode'
 
 export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object().shape({
   email: Yup.string()
@@ -55,6 +58,19 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     .required('City is required'),
 
   billing_zipCode: Yup.string()
+    .test('custom-validation', 'Invalid ZIP code', function checkZipCode(value): boolean {
+      const { billing_country } = this.parent
+      const countryCode = getCountryCode(billing_country)
+      console.log(countryCode)
+      let result: boolean = false
+      if (!postcodeValidatorExistsForCountry(countryCode || billing_country)) {
+        return true // Skip validation if the country is not supported
+      }
+      if (value && countryCode) {
+        result = postcodeValidator(value, countryCode)
+      }
+      return result
+    })
     .test('zipCode', 'Invalid zipCode', (value) => {
       if (!value) {
         return true // Skip validation if the postalCode field is undefined
@@ -72,6 +88,19 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     .required('City is required'),
 
   shipping_zipCode: Yup.string()
+    .test('custom-validation', 'Invalid ZIP code', function checkZipCode(value): boolean {
+      const { billing_country } = this.parent
+      const countryCode = getCountryCode(billing_country)
+      console.log(countryCode)
+      let result: boolean = false
+      if (!postcodeValidatorExistsForCountry(countryCode || billing_country)) {
+        return true // Skip validation if the country is not supported
+      }
+      if (value && countryCode) {
+        result = postcodeValidator(value, countryCode)
+      }
+      return result
+    })
     .test('zipCode', 'Invalid zipCode', (value) => {
       if (!value) {
         return true // Skip validation if the postalCode field is undefined
