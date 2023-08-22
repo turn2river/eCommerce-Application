@@ -2,20 +2,15 @@
 import { getAnonymousToken } from '../services/anonUserAuth'
 import { Token } from '../models/authTypes'
 
-export async function getAnonTokens(): Promise<Token | string> {
-  try {
-    const tokenObject = await getAnonymousToken()
-    if (tokenObject !== undefined) {
-      const tokens = {
-        accessToken: tokenObject.access_token,
-        refreshToken: tokenObject.refresh_token,
-      }
-
-      return tokens
+export async function getAnonTokens(): Promise<Token | null> {
+  const tokenObject = await getAnonymousToken()
+  if (tokenObject !== undefined) {
+    const tokens = {
+      accessToken: tokenObject.access_token,
+      refreshToken: tokenObject.refresh_token,
     }
-    return ''
-  } catch (error) {
-    console.error('Failed to get the authorisation token')
-    return ''
+
+    return tokens
   }
+  throw Error('Failed to get the authorisation token')
 }
