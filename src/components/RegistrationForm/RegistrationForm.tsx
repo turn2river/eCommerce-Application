@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { schema } from '../../utils/RegistrationValidation'
@@ -26,12 +27,18 @@ import { createNewCustomer } from '../../utils/createNewCutomer'
 import 'react-toastify/dist/ReactToastify.css'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { singInCustomer } from '../../utils/singInCustomer'
+import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const auth = useAuth()
+  const { setIsAuth } = auth as AuthContextType
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -127,12 +134,13 @@ export const RegistrationForm = (): JSX.Element => {
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer
-
         const response = await createNewCustomer(anonUserAuthToken, customerInfo)
         // Check the server response and set the form status and error message accordingly
         if (response !== undefined) {
           setFormStatus('success')
           setErrorMessage('')
+          setIsAuth(true)
+          setTimeout(() => navigate('/'), 5000)
         } else {
           setFormStatus('error')
           setErrorMessage('Failed to create new customer')
@@ -302,8 +310,10 @@ export const RegistrationForm = (): JSX.Element => {
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
-        closeOnClick
+        closeButton={false}
+        closeOnClick={false}
         rtl={false}
+        draggable={false}
         pauseOnHover
         theme="light"
       />

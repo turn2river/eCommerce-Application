@@ -2,10 +2,12 @@ import { NavLink } from 'react-router-dom'
 import { Fragment } from 'react'
 import { Logo } from '../Logo/Logo.tsx'
 import { header, nav, nav_list, nav_item, nav_link } from './Header.module.scss'
-
-const isAuth = false // TODO get isAuth from api
+import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 
 export const Header = (): JSX.Element => {
+  const auth = useAuth()
+  const { isAuth, setIsAuth } = auth as AuthContextType
+
   return (
     <header className={header}>
       <Logo />
@@ -29,7 +31,7 @@ export const Header = (): JSX.Element => {
                 </NavLink>
               </li>
               <li className={nav_item}>
-                <NavLink className={nav_link} to="/">
+                <NavLink className={nav_link} to="/" onClick={(): void => setIsAuth(false)}>
                   Log out
                 </NavLink>
               </li>

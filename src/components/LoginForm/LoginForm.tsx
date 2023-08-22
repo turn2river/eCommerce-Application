@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 import { login_form, title, wrapper, subtitle } from './LoginForm.module.scss'
 import { inputsList } from '../../models/InputsList'
 import { Input } from '../Input/Input.tsx'
@@ -10,6 +11,7 @@ import { schema } from '../../utils/LogInValidation'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { singInCustomer } from '../../utils/singInCustomer'
 import 'react-toastify/dist/ReactToastify.css'
+import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 
 export const LoginForm = (): JSX.Element => {
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
@@ -24,6 +26,10 @@ export const LoginForm = (): JSX.Element => {
     mode: 'all',
   })
 
+  const auth = useAuth()
+  const { setIsAuth } = auth as AuthContextType
+  const navigate = useNavigate()
+
   const onSubmit = async (data: LogInInputsInterface): Promise<LogInInputsInterface> => {
     console.log(data)
     try {
@@ -31,9 +37,12 @@ export const LoginForm = (): JSX.Element => {
       if (response) {
         setFormStatus('success')
         setErrorMessage('')
+        setIsAuth(true)
+        setTimeout(() => navigate('/'), 5000)
       } else {
         setFormStatus('error')
         setErrorMessage('Failed to sign in')
+        setIsAuth(false)
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -97,8 +106,10 @@ export const LoginForm = (): JSX.Element => {
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
-        closeOnClick
+        closeButton={false}
+        closeOnClick={false}
         rtl={false}
+        draggable={false}
         pauseOnHover
         theme="light"
       />

@@ -8,6 +8,7 @@
 
 .permission_denied {
   background: #211e1c;
+  height: 100dvh;
 }
 
 .permission_denied a {
@@ -36,7 +37,7 @@
   text-align: center;
 }
 
-.permission_denied h3 {
+.permission_denied h2 {
   max-width: 330px;
   margin: 0 auto 30px;
 
@@ -48,13 +49,13 @@
   text-align: center;
 }
 
-.permission_denied h3 span {
+.permission_denied h2 span {
   position: relative;
   display: inline-block;
   width: 65px;
 }
 
-.permission_denied h3 span::after {
+.permission_denied h2 span::after {
   content: '';
 
   position: absolute;

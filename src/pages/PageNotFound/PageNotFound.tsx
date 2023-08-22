@@ -10,7 +10,7 @@ export const PageNotFound = (): JSX.Element => {
         <h2>
           LOST IN <span>SPACE</span> Perfumerie? Hmm, looks like that page doesn't exist.
         </h2>
-        <img className={astranout} src="public/astronaut.svg" />
+        <img className={astranout} src="./astronaut.svg" />
         <NavLink className={`${nav_link} ${link_to_main}`} to="/">
           Back To Main
         </NavLink>
