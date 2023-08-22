@@ -50,6 +50,8 @@
   }
 
   .suggestions_container {
+    scrollbar-width: none;
+
     position: absolute;
     z-index: 2;
     top: 100%;
@@ -62,6 +64,12 @@
     max-height: 270px;
 
     background: #211e1c;
+    border: 1px solid #7a7364;
+    border-radius: 4px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     &_invisible {
       display: none;
@@ -79,6 +87,11 @@
     font-style: normal;
     line-height: normal;
     color: #7a7364;
+
+    &:hover {
+      background-color: #beae97;
+      border-radius: 4px;
+    }
   }
 
   .error_message {
