@@ -25,9 +25,9 @@ export async function getAnonymousToken(): Promise<AnonUserType | undefined> {
     accessToken: response.data.access_token,
     refreshToken: response.data.refresh_token,
   }
-  const anonTokensStorage = new AnonTokensStorage()
+  const anonTokensStorage = AnonTokensStorage.getInstance()
   anonTokensStorage.setLocalStorageAnonAuthToken(tokens.accessToken)
   anonTokensStorage.setLocalStorageAnonRefreshToken(tokens.refreshToken)
-  console.log(anonTokensStorage.anonAuthToken, anonTokensStorage.anonRefreshToken)
+
   return response.data
 }

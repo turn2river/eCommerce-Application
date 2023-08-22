@@ -26,11 +26,9 @@ import { createNewCustomer } from '../../utils/createNewCutomer'
 import 'react-toastify/dist/ReactToastify.css'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { singInCustomer } from '../../utils/singInCustomer'
-import { getAnonTokens } from '../../utils/getAnonTokens'
 
 export const RegistrationForm = (): JSX.Element => {
-  getAnonTokens()
-  const anonTokensStorage = new AnonTokensStorage()
+  const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -113,26 +111,27 @@ export const RegistrationForm = (): JSX.Element => {
     }
     // TODO: remove console logging below
     console.log(JSON.stringify(customerInfo))
+    if (anonUserAuthToken) {
+      try {
+        // Make the API call to create a new customer
 
-    try {
-      // Make the API call to create a new customer
-
-      const response = await createNewCustomer(anonUserAuthToken, customerInfo)
-      // Check the server response and set the form status and error message accordingly
-      if (response !== undefined) {
-        setFormStatus('success')
-        setErrorMessage('')
-      } else {
-        setFormStatus('error')
-        setErrorMessage('Failed to create new customer')
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setFormStatus('error')
-        if (error.message === 'Request failed with status code 400') {
-          error.message = 'Account already exists. Try to sing in.'
+        const response = await createNewCustomer(anonUserAuthToken, customerInfo)
+        // Check the server response and set the form status and error message accordingly
+        if (response !== undefined) {
+          setFormStatus('success')
+          setErrorMessage('')
+        } else {
+          setFormStatus('error')
+          setErrorMessage('Failed to create new customer')
         }
-        setErrorMessage(error.message)
+      } catch (error) {
+        if (error instanceof Error) {
+          setFormStatus('error')
+          if (error.message === 'Request failed with status code 400') {
+            error.message = 'Account already exists. Try to sing in.'
+          }
+          setErrorMessage(error.message)
+        }
       }
     }
     setUserData((prevUserData) => {
