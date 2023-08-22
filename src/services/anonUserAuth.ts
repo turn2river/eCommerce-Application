@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { AnonUserType } from '../models/authTypes'
+import { AnonUserType, Token } from '../models/authTypes'
+import { AnonTokensStorage } from '../models/AnonTokensStorage'
 
 export async function getAnonymousToken(): Promise<AnonUserType | undefined> {
   const url =
@@ -20,5 +21,13 @@ export async function getAnonymousToken(): Promise<AnonUserType | undefined> {
   if (response.status !== 200) {
     throw Error('Failed to get the token')
   }
+  const tokens: Token = {
+    accessToken: response.data.access_token,
+    refreshToken: response.data.refresh_token,
+  }
+  const anonTokensStorage = new AnonTokensStorage()
+  anonTokensStorage.setLocalStorageAnonAuthToken(tokens.accessToken)
+  anonTokensStorage.setLocalStorageAnonRefreshToken(tokens.refreshToken)
+  console.log(anonTokensStorage.anonAuthToken, anonTokensStorage.anonRefreshToken)
   return response.data
 }
