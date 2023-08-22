@@ -1,22 +1,3 @@
-import { getAnonTokens } from '../utils/getAnonTokens'
-import { StorageTokens, Token } from './authTypes'
-
-let storageTokens: StorageTokens
-
-/* async function getTokens(): Promise<string | Token> {
-  const tokens = await getAnonTokens()
-
-  if (typeof tokens === 'object' && 'accessToken' in tokens && 'refreshToken' in tokens) {
-    storageTokens = {
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-    }
-  }
-  return storageTokens
-}
-
-getTokens()*/
-
 export class AnonTokensStorage {
   public anonAuthToken: string = ''
   public anonRefreshToken: string = ''
@@ -25,18 +6,14 @@ export class AnonTokensStorage {
       this.anonAuthToken = this.getLocalStorageAnonAuthToken()
       console.log('localStorage loaded')
     } else {
-      this.getTokens().then(() => {
-        this.anonAuthToken = storageTokens.accessToken
-        this.setLocalStorageAnonAuthToken(this.anonAuthToken)
-      })
+      this.anonAuthToken = ''
+      this.setLocalStorageAnonAuthToken(this.anonAuthToken)
     }
     if (window.localStorage.getItem('parfAnonRefreshToken')) {
       this.anonRefreshToken = this.getLocalStorageAnonRefreshToken()
     } else {
-      this.getTokens().then(() => {
-        this.anonRefreshToken = storageTokens.refreshToken
-        this.setLocalStorageAnonRefreshToken(this.anonRefreshToken)
-      })
+      this.anonRefreshToken = ''
+      this.setLocalStorageAnonRefreshToken(this.anonRefreshToken)
     }
   }
 
@@ -66,17 +43,5 @@ export class AnonTokensStorage {
       }
     }
     return ''
-  }
-
-  public async getTokens(): Promise<string | Token> {
-    const tokens = await getAnonTokens()
-
-    if (typeof tokens === 'object' && 'accessToken' in tokens && 'refreshToken' in tokens) {
-      storageTokens = {
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      }
-    }
-    return storageTokens
   }
 }

@@ -10,6 +10,7 @@ export async function getAnonTokens(): Promise<Token | string> {
         accessToken: tokenObject.access_token,
         refreshToken: tokenObject.refresh_token,
       }
+
       return tokens
     }
     return ''

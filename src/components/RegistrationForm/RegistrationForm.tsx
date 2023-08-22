@@ -26,11 +26,12 @@ import { createNewCustomer } from '../../utils/createNewCutomer'
 import 'react-toastify/dist/ReactToastify.css'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { singInCustomer } from '../../utils/singInCustomer'
-
-const anonTokensStorage = new AnonTokensStorage()
-export const anonUserAuthToken = anonTokensStorage.anonAuthToken
+import { getAnonTokens } from '../../utils/getAnonTokens'
 
 export const RegistrationForm = (): JSX.Element => {
+  getAnonTokens()
+  const anonTokensStorage = new AnonTokensStorage()
+  const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const {
@@ -117,7 +118,6 @@ export const RegistrationForm = (): JSX.Element => {
       // Make the API call to create a new customer
 
       const response = await createNewCustomer(anonUserAuthToken, customerInfo)
-
       // Check the server response and set the form status and error message accordingly
       if (response !== undefined) {
         setFormStatus('success')
