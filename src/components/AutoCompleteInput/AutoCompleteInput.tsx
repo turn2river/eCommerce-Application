@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { countriesList } from '../../models/CountriesList'
+import { countriesArray } from '../../models/CountriesList'
 import {
   container,
   input_label,
@@ -23,7 +23,6 @@ export const AutoCompleteInput = ({
   setCountryValue,
   visibility,
 }: AutocompleteInputProps): JSX.Element => {
-  const countriesArray = countriesList.map((country) => country.name)
   const [value, setValue] = useState('')
   return (
     <div className={container}>

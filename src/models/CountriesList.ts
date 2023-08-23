@@ -158,3 +158,5 @@ export const countriesList = [
   { name: 'Wallis and Futuna', code: 'WF' },
   { name: 'Zambia', code: 'ZM' },
 ]
+
+export const countriesArray = countriesList.map((country) => country.name)

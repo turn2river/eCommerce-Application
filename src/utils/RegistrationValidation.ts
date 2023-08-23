@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 import { postcodeValidator, postcodeValidatorExistsForCountry } from 'postcode-validator'
 import { RegistrationInputsInterface } from '../models/RegistrationInputsInterface'
 import { getCountryCode } from './GetCountryCode'
+import { countriesArray } from '../models/CountriesList'
 
 export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object().shape({
   email: Yup.string()
@@ -60,8 +61,8 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
   billing_zipCode: Yup.string()
     .required('Postal code is required')
     .test('custom-validation', 'Invalid ZIP code', function checkZipCode(value): boolean {
-      const { shipping_country } = this.parent
-      const countryCode = getCountryCode(shipping_country)
+      const { billing_country } = this.parent
+      const countryCode = getCountryCode(billing_country)
       let result: boolean = false
       if (!postcodeValidatorExistsForCountry(countryCode || shipping_country)) {
         return false // Skip validation if the country is not supported
@@ -73,7 +74,14 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     })
     .nullable() // Allow null values for the postalCode field
     .required('Postal code is required'),
-  billing_country: Yup.string().required('Country is required'),
+  billing_country: Yup.string()
+    .required('Country is required')
+    .test('country', 'invalid country, choose country from suggestion', (value) => {
+      if (countriesArray.includes(value)) {
+        return true
+      }
+      return false
+    }),
 
   shipping_street: Yup.string().required('Street is required'),
 
@@ -96,5 +104,12 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
       return result
     }),
 
-  shipping_country: Yup.string().required('Country is required'),
+  shipping_country: Yup.string()
+    .required('Country is required')
+    .test('country', 'invalid country, choose country from suggestion', (value) => {
+      if (countriesArray.includes(value)) {
+        return true
+      }
+      return false
+    }),
 })
