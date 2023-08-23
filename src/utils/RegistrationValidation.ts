@@ -64,7 +64,7 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
       const { billing_country } = this.parent
       const countryCode = getCountryCode(billing_country)
       let result: boolean = false
-      if (!postcodeValidatorExistsForCountry(countryCode || shipping_country)) {
+      if (!postcodeValidatorExistsForCountry(countryCode || billing_country)) {
         return false // Skip validation if the country is not supported
       }
       if (value && countryCode) {
