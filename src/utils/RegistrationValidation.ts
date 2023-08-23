@@ -17,7 +17,6 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     })
     .matches(/^\S+@\S+\.\S+$/, 'Please enter a valid email address'),
   password: Yup.string()
-
     .test('no-space', 'Password cannot contain spaces', (value) => {
       if (value) {
         return !value.includes(' ')
@@ -59,30 +58,25 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     .required('City is required'),
 
   billing_zipCode: Yup.string()
+    .required('Postal code is required')
     .test('custom-validation', 'Invalid ZIP code', function checkZipCode(value): boolean {
       const { billing_country } = this.parent
       const countryCode = getCountryCode(billing_country)
       let result: boolean = false
       if (!postcodeValidatorExistsForCountry(countryCode || billing_country)) {
-        return true // Skip validation if the country is not supported
+        return false // Skip validation if the country is not supported
       }
       if (value && countryCode) {
         result = postcodeValidator(value, countryCode)
       }
       return result
     })
-    .test('zipCode', 'Invalid zipCode', (value) => {
-      if (!value) {
-        return true // Skip validation if the postalCode field is undefined
-      }
-      return /^[A-Za-z0-9]{6}([- ]?[A-Za-z0-9]{4})?$/.test(value) // TODO implement the zipCode validation depending on the country
-    })
     .nullable() // Allow null values for the postalCode field
     .required('Postal code is required'),
   billing_country: Yup.string()
     .required('Country is required')
     .test('country', 'invalid country, choose country from suggestion', (value) => {
-      if (countriesArray.includes(value)) {
+      if (countriesArray.map((contry) => contry.toLowerCase()).includes(value.toLowerCase())) {
         return true
       }
       return false
@@ -95,32 +89,24 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     .required('City is required'),
 
   shipping_zipCode: Yup.string()
+    .required('Postal code is required')
     .test('custom-validation', 'Invalid ZIP code', function checkZipCode(value): boolean {
-      const { billing_country } = this.parent
-      const countryCode = getCountryCode(billing_country)
-      console.log(countryCode)
+      const { shipping_country } = this.parent
+      const countryCode = getCountryCode(shipping_country)
       let result: boolean = false
-      if (!postcodeValidatorExistsForCountry(countryCode || billing_country)) {
-        return true // Skip validation if the country is not supported
+      if (!postcodeValidatorExistsForCountry(countryCode || shipping_country)) {
+        return false // Skip validation if the country is not supported
       }
       if (value && countryCode) {
         result = postcodeValidator(value, countryCode)
       }
       return result
-    })
-    .test('zipCode', 'Invalid zipCode', (value) => {
-      if (!value) {
-        return true // Skip validation if the postalCode field is undefined
-      }
-      return /^[A-Za-z0-9]{6}([- ]?[A-Za-z0-9]{4})?$/.test(value) // TODO implement the zipCode validation depending on the country
-    })
-    .nullable() // Allow null values for the postalCode field
-    .required('Postal code is required'),
+    }),
 
   shipping_country: Yup.string()
     .required('Country is required')
     .test('country', 'invalid country, choose country from suggestion', (value) => {
-      if (countriesArray.includes(value)) {
+      if (countriesArray.map((contry) => contry.toLowerCase()).includes(value.toLowerCase())) {
         return true
       }
       return false

@@ -38,9 +38,11 @@ export const RegistrationForm = (): JSX.Element => {
     formState: { errors },
     setValue,
     getValues,
+    control,
+    trigger,
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const [userData, setUserData] = useState({})
@@ -50,11 +52,7 @@ export const RegistrationForm = (): JSX.Element => {
     billing_checkbox_default: false,
     shipping_checkbox: true,
     shipping_checkbox_default: false,
-  })
-
-  const [visibility, setVisibility] = useState({
-    billing_country: false,
-    shipping_country: false,
+    use_as_billing_address: false,
   })
 
   function checkBoxHandleClick(e: React.MouseEvent<HTMLInputElement>): void {
@@ -63,6 +61,21 @@ export const RegistrationForm = (): JSX.Element => {
       ...checkBoxState,
       [id]: checked,
     })
+    if (id === 'use_as_billing_address' && checked) {
+      setValue('billing_street', getValues('shipping_street'))
+      setValue('billing_city', getValues('shipping_city'))
+      setValue('billing_zipCode', getValues('shipping_zipCode'))
+      setValue('billing_country', getValues('shipping_country'))
+      trigger('billing_city')
+      trigger('billing_country')
+      trigger('billing_street')
+      trigger('billing_zipCode')
+    } else if (id === 'use_as_billing_address' && !checked) {
+      setValue('billing_street', '')
+      setValue('billing_city', '')
+      setValue('billing_zipCode', '')
+      setValue('billing_country', '')
+    }
   }
 
   const onSubmit = async ({
@@ -106,8 +119,8 @@ export const RegistrationForm = (): JSX.Element => {
       ],
       defaultShippingAddress: checkBoxState.shipping_checkbox_default ? 1 : null,
       defaultBillingAddress: checkBoxState.billing_checkbox_default ? 0 : null,
-      shippingAddresses: checkBoxState.shipping_checkbox ? [1] : [],
-      billingAddresses: checkBoxState.billing_checkbox ? [0] : [],
+      shippingAddresses: [1],
+      billingAddresses: [0],
     }
     // TODO: remove console logging below
     console.log(JSON.stringify(customerInfo))
@@ -212,27 +225,16 @@ export const RegistrationForm = (): JSX.Element => {
                   key={id}
                   id={id}
                   label={label}
-                  visibility={visibility}
                   {...inputAtributes}
                   validation={register(id)}
                   error={errors[id]?.message}
-                  setVisibility={setVisibility}
                   setCountryValue={setValue}
+                  controller={control}
+                  trigger={trigger}
                 />
               ) : null
             })}
             <div className={checkbox_wrapper}>
-              <div className={check_box}>
-                <input
-                  id="shipping_checkbox"
-                  value="shipping"
-                  type="checkbox"
-                  defaultChecked={checkBoxState.shipping_checkbox}
-                  onClick={(e): void => {
-                    checkBoxHandleClick(e)
-                  }}></input>
-                <label htmlFor="shipping_checkbox">Use as shipping</label>
-              </div>
               <div className={check_box}>
                 <input
                   id="shipping_checkbox_default"
@@ -243,6 +245,17 @@ export const RegistrationForm = (): JSX.Element => {
                     checkBoxHandleClick(e)
                   }}></input>
                 <label htmlFor="shipping_checkbox_default">Use as shipping default</label>
+              </div>
+              <div className={check_box}>
+                <input
+                  id="use_as_billing_address"
+                  value="use_as_billing_address"
+                  type="checkbox"
+                  defaultChecked={checkBoxState.use_as_billing_address}
+                  onClick={(e): void => {
+                    checkBoxHandleClick(e)
+                  }}></input>
+                <label htmlFor="use_as_billing_address">Use as billing address</label>
               </div>
             </div>
           </div>
@@ -259,27 +272,16 @@ export const RegistrationForm = (): JSX.Element => {
                   key={id}
                   id={id}
                   label={label}
-                  visibility={visibility}
                   {...inputAtributes}
                   validation={register(id)}
                   error={errors[id]?.message}
-                  setVisibility={setVisibility}
                   setCountryValue={setValue}
+                  controller={control}
+                  trigger={trigger}
                 />
               ) : null
             })}
             <div className={checkbox_wrapper}>
-              <div className={check_box}>
-                <input
-                  id="billing_checkbox"
-                  value="billing"
-                  type="checkbox"
-                  defaultChecked={checkBoxState.billing_checkbox}
-                  onClick={(e): void => {
-                    checkBoxHandleClick(e)
-                  }}></input>
-                <label htmlFor="billing_checkbox">Use as billing</label>
-              </div>
               <div className={check_box}>
                 <input
                   id="billing_checkbox_default"
