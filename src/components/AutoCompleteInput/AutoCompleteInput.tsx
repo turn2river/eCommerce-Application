@@ -35,7 +35,6 @@ export const AutoCompleteInput = ({
         defaultValue=""
         render={({ field }): JSX.Element => {
           const { value, ...otherAttributes } = field
-          console.log(countriesArray.map((country) => country.toLowerCase()).includes(value as string))
           return (
             <>
               <input

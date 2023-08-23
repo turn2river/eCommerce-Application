@@ -223,7 +223,7 @@ export const RegistrationForm = (): JSX.Element => {
           <div className={card_wrapper}>
             <p className={subtitle}>Shipping Address Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
-              return id === 'shipping_street' || id === 'shipping_city' || id === 'shipping_zipCode' ? (
+              return id === 'shipping_street' || id === 'shipping_city' ? (
                 <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
@@ -240,6 +240,11 @@ export const RegistrationForm = (): JSX.Element => {
                   controller={control}
                   trigger={trigger}
                 />
+              ) : null
+            })}
+            {inputsList.map(({ id, ...inputAtributes }) => {
+              return id === 'shipping_zipCode' ? (
+                <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
             <div className={checkbox_wrapper}>
@@ -270,7 +275,7 @@ export const RegistrationForm = (): JSX.Element => {
           <div className={card_wrapper}>
             <p className={subtitle}>Billing Address Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
-              return id === 'billing_street' || id === 'billing_city' || id === 'billing_zipCode' ? (
+              return id === 'billing_street' || id === 'billing_city' ? (
                 <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
@@ -287,6 +292,11 @@ export const RegistrationForm = (): JSX.Element => {
                   controller={control}
                   trigger={trigger}
                 />
+              ) : null
+            })}
+            {inputsList.map(({ id, ...inputAtributes }) => {
+              return id === 'billing_zipCode' ? (
+                <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
             <div className={checkbox_wrapper}>
