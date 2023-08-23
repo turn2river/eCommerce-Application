@@ -1,7 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { schema } from '../../utils/RegistrationValidation'
@@ -37,7 +36,6 @@ export const RegistrationForm = (): JSX.Element => {
 
   const auth = useAuth()
   const { setIsAuth } = auth as AuthContextType
-  const navigate = useNavigate()
 
   const {
     register,
@@ -139,8 +137,7 @@ export const RegistrationForm = (): JSX.Element => {
         if (response !== undefined) {
           setFormStatus('success')
           setErrorMessage('')
-          setIsAuth(true)
-          setTimeout(() => navigate('/'), 5000)
+          setTimeout(() => setIsAuth(true), 5000)
         } else {
           setFormStatus('error')
           setErrorMessage('Failed to create new customer')

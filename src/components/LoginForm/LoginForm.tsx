@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
 import { login_form, title, wrapper, subtitle } from './LoginForm.module.scss'
 import { inputsList } from '../../models/InputsList'
 import { Input } from '../Input/Input.tsx'
@@ -28,7 +27,6 @@ export const LoginForm = (): JSX.Element => {
 
   const auth = useAuth()
   const { setIsAuth } = auth as AuthContextType
-  const navigate = useNavigate()
 
   const onSubmit = async (data: LogInInputsInterface): Promise<LogInInputsInterface> => {
     console.log(data)
@@ -37,12 +35,10 @@ export const LoginForm = (): JSX.Element => {
       if (response) {
         setFormStatus('success')
         setErrorMessage('')
-        setIsAuth(true)
-        setTimeout(() => navigate('/'), 5000)
+        setTimeout(() => setIsAuth(true), 5000)
       } else {
         setFormStatus('error')
         setErrorMessage('Failed to sign in')
-        setIsAuth(false)
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -59,6 +55,7 @@ export const LoginForm = (): JSX.Element => {
         ...data,
       }
     })
+    console.log('data', data)
     return data
   }
 
