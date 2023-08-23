@@ -1,4 +1,5 @@
-import { useState } from 'react'
+// import { useState } from 'react'
+import { Controller } from 'react-hook-form'
 import { countriesArray } from '../../models/CountriesList'
 import {
   container,
@@ -19,75 +20,71 @@ export const AutoCompleteInput = ({
   error,
   placeholder,
   validation,
-  setVisibility,
   setCountryValue,
-  visibility,
+  controller,
+  trigger,
 }: AutocompleteInputProps): JSX.Element => {
-  const [value, setValue] = useState('')
   return (
     <div className={container}>
       <label htmlFor={id} className={input_label}>
         {label}
       </label>
-      <input
-        type={type}
-        className={error ? `${input} ${input_invalid}` : input}
-        id={id}
-        placeholder={placeholder}
-        {...validation}
-        onChange={(e): void => {
-          if (e.target.value && Number.isNaN(+e.target.value)) {
-            setVisibility((prevVisibility) => {
-              return {
-                ...prevVisibility,
-                [id]: true,
-              }
-            })
-          } else {
-            setVisibility((prevVisibility) => {
-              return {
-                ...prevVisibility,
-                [id]: false,
-              }
-            })
-          }
-          setValue(e.target.value)
+      <Controller
+        control={controller}
+        name={id}
+        defaultValue=""
+        render={({ field }): JSX.Element => {
+          const { value, ...otherAttributes } = field
+          console.log(countriesArray.map((country) => country.toLowerCase()).includes(value as string))
+          return (
+            <>
+              <input
+                type={type}
+                className={error ? `${input} ${input_invalid}` : input}
+                id={id}
+                placeholder={placeholder}
+                {...validation}
+                value={value instanceof Date ? value.toISOString() : value}
+                {...otherAttributes}
+              />
+              <span className={error_message}>{error}</span>
+              <div
+                className={
+                  value &&
+                  !countriesArray.map((country) => country.toLowerCase()).includes(value.toString().toLowerCase())
+                    ? suggestions_container
+                    : `${suggestions_container} ${suggestions_container_invisible}`
+                }>
+                {value
+                  ? countriesArray.map((country): JSX.Element | undefined => {
+                      let result
+                      if (typeof value === 'string') {
+                        if (country.toLowerCase().startsWith(value.toLowerCase())) {
+                          result = (
+                            <div
+                              className={suggestions}
+                              key={country}
+                              onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
+                                const { textContent, parentElement } = e.currentTarget
+                                if (textContent) {
+                                  setCountryValue(id, textContent)
+                                  trigger(id)
+                                }
+                                parentElement?.classList.add(suggestions_container_invisible)
+                              }}>
+                              {country}
+                            </div>
+                          )
+                        }
+                      }
+                      return result
+                    })
+                  : null}
+              </div>
+            </>
+          )
         }}
       />
-      <span className={error_message}>{error}</span>
-      <div
-        className={
-          visibility[id] ? suggestions_container : `${suggestions_container} ${suggestions_container_invisible}`
-        }>
-        {value
-          ? countriesArray.map((country): JSX.Element | undefined => {
-              let result
-              if (country.toLocaleLowerCase().startsWith(value.toLocaleLowerCase())) {
-                result = (
-                  <div
-                    className={suggestions}
-                    key={country}
-                    onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
-                      const { textContent } = e.currentTarget
-                      console.log()
-                      if (textContent) {
-                        setCountryValue(id, textContent)
-                      }
-                      setVisibility((prevVisibility) => {
-                        return {
-                          ...prevVisibility,
-                          [id]: false,
-                        }
-                      })
-                    }}>
-                    {country}
-                  </div>
-                )
-              }
-              return result
-            })
-          : null}
-      </div>
     </div>
   )
 }

@@ -17,7 +17,6 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
     })
     .matches(/^\S+@\S+\.\S+$/, 'Please enter a valid email address'),
   password: Yup.string()
-
     .test('no-space', 'Password cannot contain spaces', (value) => {
       if (value) {
         return !value.includes(' ')
@@ -77,7 +76,7 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
   billing_country: Yup.string()
     .required('Country is required')
     .test('country', 'invalid country, choose country from suggestion', (value) => {
-      if (countriesArray.includes(value)) {
+      if (countriesArray.map((contry) => contry.toLowerCase()).includes(value.toLowerCase())) {
         return true
       }
       return false
@@ -107,7 +106,7 @@ export const schema: Yup.ObjectSchema<RegistrationInputsInterface> = Yup.object(
   shipping_country: Yup.string()
     .required('Country is required')
     .test('country', 'invalid country, choose country from suggestion', (value) => {
-      if (countriesArray.includes(value)) {
+      if (countriesArray.map((contry) => contry.toLowerCase()).includes(value.toLowerCase())) {
         return true
       }
       return false

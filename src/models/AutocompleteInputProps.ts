@@ -1,5 +1,6 @@
-import { UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form'
+import { Control, UseFormRegisterReturn, UseFormSetValue, UseFormTrigger } from 'react-hook-form'
 import { InputValues } from './yupType'
+import { RegistrationInputsInterface } from './RegistrationInputsInterface'
 
 export interface AutocompleteInputProps {
   id:
@@ -18,10 +19,10 @@ export interface AutocompleteInputProps {
     | 'shipping_country'
   label: string
   placeholder: string
-  visibility: { [key: string]: boolean }
   type: string
   validation: UseFormRegisterReturn<'billing_country'> | UseFormRegisterReturn<'shipping_country'>
   error: string | undefined
-  setVisibility: React.Dispatch<React.SetStateAction<{ billing_country: boolean; shipping_country: boolean }>>
+  controller: Control<RegistrationInputsInterface>
+  trigger: UseFormTrigger<RegistrationInputsInterface>
   setCountryValue: UseFormSetValue<InputValues>
 }

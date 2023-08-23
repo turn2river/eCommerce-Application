@@ -38,9 +38,11 @@ export const RegistrationForm = (): JSX.Element => {
     formState: { errors },
     setValue,
     getValues,
+    control,
+    trigger,
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const [userData, setUserData] = useState({})
@@ -51,11 +53,6 @@ export const RegistrationForm = (): JSX.Element => {
     shipping_checkbox: true,
     shipping_checkbox_default: false,
     use_as_billing_address: false,
-  })
-
-  const [visibility, setVisibility] = useState({
-    billing_country: false,
-    shipping_country: false,
   })
 
   function checkBoxHandleClick(e: React.MouseEvent<HTMLInputElement>): void {
@@ -69,7 +66,11 @@ export const RegistrationForm = (): JSX.Element => {
       setValue('billing_city', getValues('shipping_city'))
       setValue('billing_zipCode', getValues('shipping_zipCode'))
       setValue('billing_country', getValues('shipping_country'))
-    } else {
+      trigger('billing_city')
+      trigger('billing_country')
+      trigger('billing_street')
+      trigger('billing_zipCode')
+    } else if (id === 'use_as_billing_address' && !checked) {
       setValue('billing_street', '')
       setValue('billing_city', '')
       setValue('billing_zipCode', '')
@@ -224,12 +225,12 @@ export const RegistrationForm = (): JSX.Element => {
                   key={id}
                   id={id}
                   label={label}
-                  visibility={visibility}
                   {...inputAtributes}
                   validation={register(id)}
                   error={errors[id]?.message}
-                  setVisibility={setVisibility}
                   setCountryValue={setValue}
+                  controller={control}
+                  trigger={trigger}
                 />
               ) : null
             })}
@@ -271,12 +272,12 @@ export const RegistrationForm = (): JSX.Element => {
                   key={id}
                   id={id}
                   label={label}
-                  visibility={visibility}
                   {...inputAtributes}
                   validation={register(id)}
                   error={errors[id]?.message}
-                  setVisibility={setVisibility}
                   setCountryValue={setValue}
+                  controller={control}
+                  trigger={trigger}
                 />
               ) : null
             })}
