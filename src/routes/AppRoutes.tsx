@@ -4,15 +4,33 @@ import { About } from '../pages/About/About.tsx'
 import { Login } from '../pages/Login/Login.tsx'
 import { Registration } from '../pages/Registration/Registration.tsx'
 import { PageNotFound } from '../pages/PageNotFound/PageNotFound.tsx'
+import { ProtectedRoutes } from './ProtectedRoutes.tsx'
+import { Profile } from '../pages/Profile/Profile.tsx'
+import { AuthContextType, useAuth } from '../store/AuthContext.tsx'
 
-const isAuth = false // TODO get isAuth from api
+export const AppRoutes = (): JSX.Element => {
+  const auth = useAuth()
+  const { isAuth } = auth as AuthContextType
 
-export const AppRoutes = (): JSX.Element => (
-  <Routes>
-    <Route path="/" element={<Main />} />
-    <Route path="/about" element={<About />} />
-    {isAuth ? <Route path="/login" element={<Navigate to="/" />} /> : <Route path="/login" element={<Login />} />}
-    <Route path="/registration" element={<Registration />} />
-    <Route path="/*" element={<PageNotFound />}></Route>
-  </Routes>
-)
+  return (
+    <Routes>
+      <Route path="/" element={<Main />} />
+      <Route path="/about" element={<About />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoutes>
+            <Profile />
+          </ProtectedRoutes>
+        }
+      />
+      {isAuth ? <Route path="/login" element={<Navigate to="/" />} /> : <Route path="/login" element={<Login />} />}
+      {isAuth ? (
+        <Route path="/registration" element={<Navigate to="/" />} />
+      ) : (
+        <Route path="/login" element={<Registration />} />
+      )}
+      <Route path="/*" element={<PageNotFound />}></Route>
+    </Routes>
+  )
+}

@@ -26,12 +26,17 @@ import { createNewCustomer } from '../../utils/createNewCutomer'
 import 'react-toastify/dist/ReactToastify.css'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { singInCustomer } from '../../utils/singInCustomer'
+import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const auth = useAuth()
+  const { setIsAuth } = auth as AuthContextType
+
   const {
     register,
     handleSubmit,
@@ -127,12 +132,12 @@ export const RegistrationForm = (): JSX.Element => {
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer
-
         const response = await createNewCustomer(anonUserAuthToken, customerInfo)
         // Check the server response and set the form status and error message accordingly
         if (response !== undefined) {
           setFormStatus('success')
           setErrorMessage('')
+          setTimeout(() => setIsAuth(true), 5000)
         } else {
           setFormStatus('error')
           setErrorMessage('Failed to create new customer')
@@ -215,7 +220,7 @@ export const RegistrationForm = (): JSX.Element => {
           <div className={card_wrapper}>
             <p className={subtitle}>Shipping Address Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
-              return id === 'shipping_street' || id === 'shipping_city' || id === 'shipping_zipCode' ? (
+              return id === 'shipping_street' || id === 'shipping_city' ? (
                 <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
@@ -232,6 +237,11 @@ export const RegistrationForm = (): JSX.Element => {
                   controller={control}
                   trigger={trigger}
                 />
+              ) : null
+            })}
+            {inputsList.map(({ id, ...inputAtributes }) => {
+              return id === 'shipping_zipCode' ? (
+                <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
             <div className={checkbox_wrapper}>
@@ -262,7 +272,7 @@ export const RegistrationForm = (): JSX.Element => {
           <div className={card_wrapper}>
             <p className={subtitle}>Billing Address Information:*</p>
             {inputsList.map(({ id, ...inputAtributes }) => {
-              return id === 'billing_street' || id === 'billing_city' || id === 'billing_zipCode' ? (
+              return id === 'billing_street' || id === 'billing_city' ? (
                 <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
@@ -279,6 +289,11 @@ export const RegistrationForm = (): JSX.Element => {
                   controller={control}
                   trigger={trigger}
                 />
+              ) : null
+            })}
+            {inputsList.map(({ id, ...inputAtributes }) => {
+              return id === 'billing_zipCode' ? (
+                <Input key={id} id={id} {...inputAtributes} validation={register(id)} error={errors[id]?.message} />
               ) : null
             })}
             <div className={checkbox_wrapper}>
@@ -302,8 +317,10 @@ export const RegistrationForm = (): JSX.Element => {
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
-        closeOnClick
+        closeButton={false}
+        closeOnClick={false}
         rtl={false}
+        draggable={false}
         pauseOnHover
         theme="light"
       />

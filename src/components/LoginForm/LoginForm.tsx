@@ -10,6 +10,7 @@ import { schema } from '../../utils/LogInValidation'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { singInCustomer } from '../../utils/singInCustomer'
 import 'react-toastify/dist/ReactToastify.css'
+import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 
 export const LoginForm = (): JSX.Element => {
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
@@ -24,6 +25,9 @@ export const LoginForm = (): JSX.Element => {
     mode: 'all',
   })
 
+  const auth = useAuth()
+  const { setIsAuth } = auth as AuthContextType
+
   const onSubmit = async (data: LogInInputsInterface): Promise<LogInInputsInterface> => {
     console.log(data)
     try {
@@ -31,6 +35,7 @@ export const LoginForm = (): JSX.Element => {
       if (response) {
         setFormStatus('success')
         setErrorMessage('')
+        setTimeout(() => setIsAuth(true), 5000)
       } else {
         setFormStatus('error')
         setErrorMessage('Failed to sign in')
@@ -50,6 +55,7 @@ export const LoginForm = (): JSX.Element => {
         ...data,
       }
     })
+    console.log('data', data)
     return data
   }
 
@@ -97,8 +103,10 @@ export const LoginForm = (): JSX.Element => {
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
-        closeOnClick
+        closeButton={false}
+        closeOnClick={false}
         rtl={false}
+        draggable={false}
         pauseOnHover
         theme="light"
       />
