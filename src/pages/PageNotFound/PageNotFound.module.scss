@@ -1,0 +1,176 @@
+@import 'https://fonts.googleapis.com/css?family=Dosis:300,400,700,800';
+
+.particle-error,
+.permission_denied {
+  width: 100%;
+  height: 100%;
+}
+
+.permission_denied {
+  height: 100dvh;
+  background: #211e1c;
+}
+
+.permission_denied a {
+  text-decoration: none;
+}
+
+.denied__wrapper {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  max-width: 390px;
+  height: 390px;
+  margin: 0 auto;
+  margin-top: 8vh;
+}
+
+.permission_denied h1 {
+  margin-bottom: 0;
+
+  font-family: Dosis, sans-serif;
+  font-size: 100px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+}
+
+.permission_denied h2 {
+  max-width: 330px;
+  margin: 0 auto 30px;
+
+  font-family: Dosis, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #fff;
+  text-align: center;
+}
+
+.permission_denied h2 span {
+  position: relative;
+  display: inline-block;
+  width: 65px;
+}
+
+.permission_denied h2 span::after {
+  content: '';
+
+  position: absolute;
+  top: 43%;
+  left: 0;
+
+  width: 100%;
+
+  border-bottom: 3px solid #ffbb39;
+}
+
+.denied__link {
+  display: block;
+
+  width: 150px;
+  margin: 0 auto;
+  margin-top: 25px;
+  margin-bottom: 40px;
+  padding: 12px 0 10px;
+
+  font-family: Dosis, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+
+  background: none;
+  border: 1px solid #fff;
+  border-radius: 7px;
+  outline: none;
+}
+
+.denied__link:hover {
+  cursor: pointer;
+  color: #ffbb39;
+  opacity: 1;
+  border-color: #ffbb39;
+}
+
+.permission_denied .stars {
+  animation: sparkle 1.6s infinite ease-in-out alternate;
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.3;
+  }
+}
+
+.astranout {
+  position: absolute;
+  top: 210px;
+  right: 20px;
+
+  width: 43px;
+
+  animation: spin 4.5s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+@media (width <= 600px) {
+  .permission_denied h1 {
+    font-size: 75px;
+  }
+
+  .permission_denied h3 {
+    width: 200px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 23px;
+  }
+
+  .permission_denied h3 span {
+    width: 60px;
+  }
+
+  #astronaut {
+    top: 170px;
+    right: 40px;
+    width: 35px;
+  }
+}
+
+.saturn,
+.saturn-2,
+.hover {
+  animation: hover 2s infinite ease-in-out alternate;
+}
+
+@keyframes hover {
+  0% {
+    transform: translateY(3px);
+  }
+
+  100% {
+    transform: translateY(-3px);
+  }
+}
+
+.link_to_main {
+  margin-bottom: 0;
+  font-family: Dosis, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+}

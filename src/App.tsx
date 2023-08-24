@@ -1,12 +1,15 @@
-import React from 'react'
-import './App.scss'
+import { Fragment } from 'react'
 import { Header } from './components'
+import './App.scss'
+import { AppRoutes } from './routes/AppRoutes.tsx'
+import { getAnonTokens } from './utils/getAnonTokens'
 
 export function App(): JSX.Element {
   return (
-    <React.Fragment>
+    <Fragment>
       <Header />
-      <div className="app">This is our react application</div>
-    </React.Fragment>
+      <AppRoutes />
+    </Fragment>
   )
 }
+getAnonTokens()

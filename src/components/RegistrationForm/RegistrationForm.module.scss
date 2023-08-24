@@ -1,0 +1,88 @@
+.registration_form {
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+
+  width: 100%;
+  height: 100%;
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 20px 0;
+
+    & > div:nth-child(1) {
+      min-height: 340px;
+    }
+  }
+
+  .title {
+    font-family: Montserrat, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: normal;
+    color: transparent;
+    color: #beae97;
+    text-align: center;
+
+    background-color: linear-gradient(118deg, #c09e6c 0%, #ffebcc 42.62%, #bf936b 100%);
+    background-clip: text;
+
+    transition: 0.5s linear;
+  }
+
+  .card_wrapper {
+    position: relative;
+
+    min-width: 310px;
+    margin: 20px;
+    padding: 10px;
+
+    font-family: Montserrat, sans-serif;
+
+    border: 1px solid #565147;
+    border-radius: 4px;
+
+    .subtitle {
+      position: absolute;
+      top: -10px;
+      left: 12px;
+
+      padding: 0 8px;
+
+      font-family: Montserrat, serif;
+      font-size: 16px;
+      font-weight: 400;
+      font-style: normal;
+      line-height: normal;
+      color: #beae97;
+
+      background-color: #211e1c;
+    }
+
+    .check_box {
+      display: flex;
+      flex-direction: row;
+      margin: 0 20px;
+
+      input {
+        margin-right: 10px;
+        background: none;
+      }
+    }
+  }
+}
+
+.checkbox_wrapper {
+  margin-top: 10px;
+}
+
+.cards_row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  min-height: 420px;
+}

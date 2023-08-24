@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 100px;
+
+  .sign_in_link {
+    display: block;
+
+    margin: 0 auto;
+    margin-top: 10px;
+
+    color: #beae97;
+    text-align: center;
+  }
+}

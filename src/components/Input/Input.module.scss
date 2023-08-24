@@ -1,0 +1,78 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+
+  .type_toggler {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 85%;
+    transform: translateY(30%);
+
+    width: 20px;
+    height: 20px;
+
+    background-color: #beae97;
+    background-image: url('../../assets/image/png/lamp-off.png');
+    background-size: contain;
+    border-radius: 50%;
+
+    &_active {
+      background-image: url('../../assets/image/png/lamp-on.png');
+    }
+  }
+
+  .input {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+
+    padding: 16px 14px;
+
+    font-family: Montserrat, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+    color: #7a7364;
+
+    background: none;
+    border: 1px solid #565147;
+    border-radius: 4px;
+    outline: none;
+
+    &:focus {
+      color: #beae97;
+      border: 1px solid #beae97;
+    }
+
+    &_label {
+      margin: 6px 0;
+
+      font-family: Montserrat, serif;
+      font-size: 16px;
+      font-weight: 400;
+      font-style: normal;
+      line-height: normal;
+      color: #beae97;
+    }
+
+    &_invalid {
+      border: 1px solid #b04a4a;
+
+      &:focus {
+        border: 1px solid #b04a4a;
+      }
+    }
+  }
+
+  .error_message {
+    max-width: 250px;
+    font-family: Montserrat, sans-serif;
+    font-size: 10px;
+    color: #b04a4a;
+  }
+}

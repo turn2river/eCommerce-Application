@@ -1,0 +1,80 @@
+export const inputsList = [
+  {
+    id: 'email',
+    type: 'text',
+    placeholder: '<Email>',
+    label: 'Enter valid email address:*',
+  },
+  {
+    id: 'password',
+    type: 'password',
+    placeholder: '<Password>',
+    label: 'Create strong password:*',
+  },
+  {
+    id: 'firstName',
+    type: 'text',
+    placeholder: '<First name>',
+    label: 'Enter your name:*',
+  },
+  {
+    id: 'lastName',
+    type: 'text',
+    placeholder: '<Last name>',
+    label: 'Enter your last name:*',
+  },
+  {
+    id: 'dateOfBirth',
+    type: 'date',
+    placeholder: '',
+    label: 'Enter your date of birth:*',
+  },
+  {
+    id: 'billing_street',
+    type: 'text',
+    placeholder: '<Street>',
+    label: '',
+  },
+  {
+    id: 'billing_city',
+    type: 'text',
+    placeholder: '<City>',
+    label: '',
+  },
+  {
+    id: 'billing_zipCode',
+    type: 'text',
+    placeholder: '<Postal code>',
+    label: '',
+  },
+  {
+    id: 'billing_country',
+    type: 'text',
+    placeholder: '<Country>',
+    label: '',
+  },
+  {
+    id: 'shipping_street',
+    type: 'text',
+    placeholder: '<Street>',
+    label: '',
+  },
+  {
+    id: 'shipping_city',
+    type: 'text',
+    placeholder: '<City>',
+    label: '',
+  },
+  {
+    id: 'shipping_zipCode',
+    type: 'text',
+    placeholder: '<Postal code>',
+    label: '',
+  },
+  {
+    id: 'shipping_country',
+    type: 'text',
+    placeholder: '<Country>',
+    label: '',
+  },
+]
