@@ -28,7 +28,7 @@ export const AppRoutes = (): JSX.Element => {
       {isAuth ? (
         <Route path="/registration" element={<Navigate to="/" />} />
       ) : (
-        <Route path="/login" element={<Registration />} />
+        <Route path="/registration" element={<Registration />} />
       )}
       <Route path="/*" element={<PageNotFound />}></Route>
     </Routes>
