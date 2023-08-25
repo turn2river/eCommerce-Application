@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
@@ -8,9 +9,10 @@ import { Input } from '../Input/Input.tsx'
 import { MyButton } from '../index'
 import { schema } from '../../utils/LogInValidation'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
-import { singInCustomer } from '../../utils/singInCustomer'
+// import { singInCustomer } from '../../utils/singInCustomer'
 import 'react-toastify/dist/ReactToastify.css'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
+import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
 
 export const LoginForm = (): JSX.Element => {
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
@@ -29,18 +31,18 @@ export const LoginForm = (): JSX.Element => {
   const { setIsAuth } = auth as AuthContextType
 
   const onSubmit = async (data: LogInInputsInterface): Promise<LogInInputsInterface> => {
+    setErrorMessage('')
+    const customerService = new CustomerSignInService()
     console.log(data)
     try {
-      const response = await singInCustomer(data)
-      if (response) {
-        setFormStatus('success')
-        setErrorMessage('')
-        setTimeout(() => setIsAuth(true), 5000)
-      } else {
-        setFormStatus('error')
-        setErrorMessage('Failed to sign in')
-      }
+      await customerService.signInCustomer(data)
+      setFormStatus('success')
+
+      setTimeout(() => setIsAuth(true), 5000)
     } catch (error) {
+      setFormStatus('error')
+      setErrorMessage('Failed to sign in')
+
       if (error instanceof Error) {
         setFormStatus('error')
         if (error.message === 'Request failed with status code 400') {
