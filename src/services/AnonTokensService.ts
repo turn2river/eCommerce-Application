@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { AnonTokensStorage } from '../store/AnonTokensStorage'
 
-export class GetAnonTokens {
+export class AnonTokensService {
   public async getAnonymousTokens(): Promise<AnonUserType> {
     const url =
       'https://auth.europe-west1.gcp.commercetools.com/oauth/parfumerie/anonymous/token?grant_type=client_credentials'

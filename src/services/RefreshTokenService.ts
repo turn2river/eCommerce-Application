@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export class GetRefreshToken {
+export class RefreshTokenService {
   public async getRefreshToken(token: string): Promise<RefreshToken> {
     const url = `https://auth.europe-west1.gcp.commercetools.com/oauth/parfumerie/anonymous/token?grant_type=refresh_token&refresh_token=${token}`
 

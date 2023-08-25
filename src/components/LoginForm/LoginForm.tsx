@@ -12,7 +12,7 @@ import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 // import { singInCustomer } from '../../utils/singInCustomer'
 import 'react-toastify/dist/ReactToastify.css'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
-import { CustomerServiceSignIn } from '../../services/CustomerServiceSignIn.ts'
+import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
 
 export const LoginForm = (): JSX.Element => {
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
@@ -32,7 +32,7 @@ export const LoginForm = (): JSX.Element => {
 
   const onSubmit = async (data: LogInInputsInterface): Promise<LogInInputsInterface> => {
     setErrorMessage('')
-    const customerService = new CustomerServiceSignIn()
+    const customerService = new CustomerSignInService()
     console.log(data)
     try {
       await customerService.signInCustomer(data)

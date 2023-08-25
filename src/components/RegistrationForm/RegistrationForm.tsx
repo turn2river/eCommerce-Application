@@ -25,8 +25,8 @@ import { RegistrationInputsInterface } from '../../models/RegistrationInputsInte
 import { AnonTokensStorage } from '../../store/AnonTokensStorage'
 import 'react-toastify/dist/ReactToastify.css'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
-import { CustomerServiceSignIn } from '../../services/CustomerServiceSignIn'
-import { CustomerServiceSignUp } from '../../services/CustomerServiceSignUp'
+import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
+import { CustomerSignUpService } from '../../services/CustomerSignUpService.ts'
 import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
@@ -34,8 +34,8 @@ export const RegistrationForm = (): JSX.Element => {
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const customerService = new CustomerServiceSignIn()
-  const customerServiceSignUp = new CustomerServiceSignUp()
+  const customerService = new CustomerSignInService()
+  const customerServiceSignUp = new CustomerSignUpService()
   const auth = useAuth()
   const { setIsAuth } = auth as AuthContextType
 
@@ -134,7 +134,7 @@ export const RegistrationForm = (): JSX.Element => {
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer
-        const response = await customerServiceSignUp.createCustomer(anonUserAuthToken, customerInfo)
+        const response = await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
         // Check the server response and set the form status and error message accordingly
         if (response !== undefined) {
           setFormStatus('success')
