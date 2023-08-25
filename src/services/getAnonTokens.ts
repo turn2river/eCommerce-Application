@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { AnonUserType, Token } from '../models/authTypes'
-import { AnonTokensStorage } from '../models/AnonTokensStorage'
+import { AnonTokensStorage } from '../store/anonTokensStorage'
 
-export async function getAnonymousToken(): Promise<AnonUserType | undefined> {
+export async function getAnonymousTokens(): Promise<AnonUserType | undefined> {
   const url =
     'https://auth.europe-west1.gcp.commercetools.com/oauth/parfumerie/anonymous/token?grant_type=client_credentials'
 
@@ -30,4 +29,17 @@ export async function getAnonymousToken(): Promise<AnonUserType | undefined> {
   anonTokensStorage.setLocalStorageAnonRefreshToken(tokens.refreshToken)
 
   return response.data
+}
+
+type AnonUserType = {
+  access_token: string
+  expires_in: number
+  token_type: string
+  scope: string
+  refresh_token: string
+}
+
+type Token = {
+  accessToken: string
+  refreshToken: string
 }

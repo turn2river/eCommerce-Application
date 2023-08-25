@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { RefreshToken } from '../models/authTypes'
 
 export async function getRefreshToken(token: string): Promise<RefreshToken | undefined> {
   const url = `https://auth.europe-west1.gcp.commercetools.com/oauth/parfumerie/anonymous/token?grant_type=refresh_token&refresh_token=${token}`
@@ -17,4 +16,11 @@ export async function getRefreshToken(token: string): Promise<RefreshToken | und
     throw Error('Failed to get the token')
   }
   return response.data
+}
+
+type RefreshToken = {
+  access_token: string
+  token_type: string
+  expires_in: number
+  scope: string
 }

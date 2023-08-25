@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable max-lines-per-function */
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -21,11 +22,11 @@ import { AutoCompleteInput } from '../AutoCompleteInput/AutoCompleteInput.tsx'
 import { getCountryCode } from '../../utils/GetCountryCode'
 import { SignUpDataInterface } from '../../models/SignUpDataInterface'
 import { RegistrationInputsInterface } from '../../models/RegistrationInputsInterface'
-import { AnonTokensStorage } from '../../models/AnonTokensStorage'
-import { createNewCustomer } from '../../utils/createNewCutomer'
+import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import 'react-toastify/dist/ReactToastify.css'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
-import { singInCustomer } from '../../utils/singInCustomer'
+import { CustomerServiceSignIn } from '../../services/customerServiceSignIn'
+import { CustomerServiceSignUp } from '../../services/customerServiceSignUp.ts'
 import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
@@ -33,7 +34,8 @@ export const RegistrationForm = (): JSX.Element => {
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>('')
-
+  const customerService = new CustomerServiceSignIn()
+  const customerServiceSignUp = new CustomerServiceSignUp()
   const auth = useAuth()
   const { setIsAuth } = auth as AuthContextType
 
@@ -132,7 +134,7 @@ export const RegistrationForm = (): JSX.Element => {
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer
-        const response = await createNewCustomer(anonUserAuthToken, customerInfo)
+        const response = await customerServiceSignUp.createCustomer(anonUserAuthToken, customerInfo)
         // Check the server response and set the form status and error message accordingly
         if (response !== undefined) {
           setFormStatus('success')
@@ -146,7 +148,7 @@ export const RegistrationForm = (): JSX.Element => {
         if (error instanceof Error) {
           setFormStatus('error')
           if (error.message === 'Request failed with status code 400') {
-            error.message = 'Account already exists. Try to sing in.'
+            error.message = 'Account already exists. Try to sign in.'
           }
           setErrorMessage(error.message)
         }
@@ -164,14 +166,13 @@ export const RegistrationForm = (): JSX.Element => {
     }
 
     try {
-      const response = await singInCustomer(customerloginIngfo)
-      if (response) {
-        setFormStatus('success')
-        setErrorMessage('')
-      } else {
-        setFormStatus('error')
-        setErrorMessage('Failed to sign in')
-      }
+      await customerService.signInCustomer(customerloginIngfo)
+
+      setFormStatus('success')
+      setErrorMessage('')
+
+      setFormStatus('error')
+      setErrorMessage('Failed to sign in')
     } catch (error) {
       if (error instanceof Error) {
         setFormStatus('error')

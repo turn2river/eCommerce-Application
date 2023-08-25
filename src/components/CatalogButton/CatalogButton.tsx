@@ -10,7 +10,7 @@ import {
 import { item, item_active } from '../CatalogItem/CatalogItem.module.scss'
 import { CatalogItem } from '../CatalogItem/CatalogItem.tsx'
 import { ICatalogButton } from '../../models/CatalogButtonInterface'
-import { MainCategories } from '../../models/MainCatecories'
+import { MainCategories } from '../../models/MainCategories'
 
 export const CatalogButton = ({ children, ...props }: ICatalogButton): JSX.Element => {
   const [catalogButtonStatus, setCatalogButtonStatus] = useState(false)
