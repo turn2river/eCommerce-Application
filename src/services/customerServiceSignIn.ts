@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { LogInInputsInterface } from '../models/LogInInputsInterface'
-import { CustomerTokensStorage } from '../store/customerTokensStorage'
+import { CustomerTokensStorage } from '../store/CustomerTokensStorage'
 
 export class CustomerServiceSignIn {
   private customerStorage = new CustomerTokensStorage()

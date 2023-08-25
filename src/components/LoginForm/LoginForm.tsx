@@ -12,7 +12,7 @@ import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 // import { singInCustomer } from '../../utils/singInCustomer'
 import 'react-toastify/dist/ReactToastify.css'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
-import { CustomerServiceSignIn } from '../../services/customerServiceSignIn'
+import { CustomerServiceSignIn } from '../../services/CustomerServiceSignIn.ts'
 
 export const LoginForm = (): JSX.Element => {
   const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
