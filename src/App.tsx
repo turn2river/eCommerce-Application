@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Header } from './components'
 import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.tsx'
-import { getAnonymousTokens } from './services/getAnonTokens'
+import { GetAnonTocken } from './services/getAnonTokens'
 
 export function App(): JSX.Element {
   return (
@@ -12,4 +12,5 @@ export function App(): JSX.Element {
     </Fragment>
   )
 }
-getAnonymousTokens()
+const anonTokens = new GetAnonTocken()
+anonTokens.getAnonymousTokens()
