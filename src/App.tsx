@@ -3,14 +3,14 @@ import { Header } from './components'
 import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.tsx'
 import { AnonTokensService } from './services/AnonTokensService'
-import { Notificator } from './components/ToastContainer/Notificator.tsx'
+import { ToastPopUp } from './components/ToastPopUp/ToastPopUp.tsx'
 
 export function App(): JSX.Element {
   return (
     <Fragment>
       <Header />
       <AppRoutes />
-      <Notificator />
+      <ToastPopUp />
     </Fragment>
   )
 }

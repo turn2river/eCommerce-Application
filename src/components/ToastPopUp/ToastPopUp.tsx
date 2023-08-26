@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-export const Notificator = (): JSX.Element => {
+export const ToastPopUp = (): JSX.Element => {
   return (
     <ToastContainer
       position="top-right"
