@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AnonTokensStorage } from '../store/AnonTokensStorage'
+import { AnonTokensStorage } from '../store/anonTokensStorage'
 
 export class AnonTokensService {
   public async getAnonymousTokens(): Promise<AnonUserType> {

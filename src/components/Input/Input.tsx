@@ -7,6 +7,7 @@ import {
   error_message,
   type_toggler,
   type_toggler_active,
+  input_wrapper,
 } from './Input.module.scss'
 import { InputPropsInterface } from '../../models/InputProps'
 
@@ -19,6 +20,8 @@ export const Input = ({ id, label, type, error, validation, placeholder }: Input
     <div className={container}>
       <label htmlFor={id} className={input_label}>
         {label}
+      </label>
+      <div className={input_wrapper}>
         {type === 'password' ? (
           <div
             className={togglerState.active ? `${type_toggler} ${type_toggler_active}` : type_toggler}
@@ -32,13 +35,13 @@ export const Input = ({ id, label, type, error, validation, placeholder }: Input
               })
             }}></div>
         ) : null}
-      </label>
-      <input
-        type={togglerState.inputType}
-        className={error ? `${input} ${input_invalid}` : input}
-        {...validation}
-        placeholder={placeholder}
-      />
+        <input
+          type={togglerState.inputType}
+          className={error ? `${input} ${input_invalid}` : input}
+          {...validation}
+          placeholder={placeholder}
+        />
+      </div>
       <span className={error_message}>{error}</span>
     </div>
   )

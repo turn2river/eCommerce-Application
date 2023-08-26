@@ -1,9 +1,8 @@
-/* eslint-disable import/extensions */
 /* eslint-disable max-lines-per-function */
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useEffect, useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
 import { schema } from '../../utils/RegistrationValidation'
 import { Input } from '../Input/Input.tsx'
 import {
@@ -22,18 +21,15 @@ import { AutoCompleteInput } from '../AutoCompleteInput/AutoCompleteInput.tsx'
 import { getCountryCode } from '../../utils/GetCountryCode'
 import { SignUpDataInterface } from '../../models/SignUpDataInterface'
 import { RegistrationInputsInterface } from '../../models/RegistrationInputsInterface'
-import { AnonTokensStorage } from '../../store/AnonTokensStorage'
-import 'react-toastify/dist/ReactToastify.css'
+import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
-import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
-import { CustomerSignUpService } from '../../services/CustomerSignUpService.ts'
+import { CustomerSignInService } from '../../services/CustomerSignInService'
+import { CustomerSignUpService } from '../../services/CustomerSignUpService'
 import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
-  const [formStatus, setFormStatus] = useState<'success' | 'error' | null>(null)
-  const [errorMessage, setErrorMessage] = useState<string>('')
   const customerService = new CustomerSignInService()
   const customerServiceSignUp = new CustomerSignUpService()
   const auth = useAuth()
@@ -51,8 +47,6 @@ export const RegistrationForm = (): JSX.Element => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   })
-
-  const [userData, setUserData] = useState({})
 
   const [checkBoxState, setCheckBoxState] = useState({
     billing_checkbox: true,
@@ -83,6 +77,7 @@ export const RegistrationForm = (): JSX.Element => {
       setValue('billing_zipCode', '')
       setValue('billing_country', '')
     }
+    console.log(id, checked)
   }
 
   const onSubmit = async ({
@@ -99,6 +94,8 @@ export const RegistrationForm = (): JSX.Element => {
     lastName: currentLastName,
     password: currentCityPassword,
   }: RegistrationInputsInterface): Promise<SignUpDataInterface> => {
+    const shippingAddressInArray = 1
+    const billingAddressInArray = 0
     const customerInfo = {
       email: currentEmail,
       password: currentCityPassword,
@@ -124,10 +121,10 @@ export const RegistrationForm = (): JSX.Element => {
           city: currentShippingCity,
         },
       ],
-      defaultShippingAddress: checkBoxState.shipping_checkbox_default ? 1 : null,
-      defaultBillingAddress: checkBoxState.billing_checkbox_default ? 0 : null,
-      shippingAddresses: [1],
-      billingAddresses: [0],
+      defaultShippingAddress: checkBoxState.shipping_checkbox_default ? shippingAddressInArray : null,
+      defaultBillingAddress: checkBoxState.billing_checkbox_default ? billingAddressInArray : null,
+      shippingAddresses: [shippingAddressInArray],
+      billingAddresses: [billingAddressInArray],
     }
     // TODO: remove console logging below
     console.log(JSON.stringify(customerInfo))
@@ -137,29 +134,19 @@ export const RegistrationForm = (): JSX.Element => {
         const response = await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
         // Check the server response and set the form status and error message accordingly
         if (response !== undefined) {
-          setFormStatus('success')
-          setErrorMessage('')
-          setTimeout(() => setIsAuth(true), 5000)
+          toast.success('Congratulations, you have successfully signed up!')
+          setIsAuth(true)
         } else {
-          setFormStatus('error')
-          setErrorMessage('Failed to create new customer')
+          toast.error('Failed to create new customer')
         }
       } catch (error) {
         if (error instanceof Error) {
-          setFormStatus('error')
           if (error.message === 'Request failed with status code 400') {
-            error.message = 'Account already exists. Try to sign in.'
+            toast.error('Account already exists. Try to sign in.')
           }
-          setErrorMessage(error.message)
         }
       }
     }
-    setUserData((prevUserData) => {
-      return {
-        ...prevUserData,
-        ...customerInfo,
-      }
-    })
     const customerloginIngfo: LogInInputsInterface = {
       email: customerInfo.email,
       password: customerInfo.password,
@@ -167,31 +154,15 @@ export const RegistrationForm = (): JSX.Element => {
 
     try {
       await customerService.signInCustomer(customerloginIngfo)
-
-      setFormStatus('success')
-      setErrorMessage('')
-
-      setFormStatus('error')
-      setErrorMessage('Failed to sign in')
     } catch (error) {
       if (error instanceof Error) {
-        setFormStatus('error')
         if (error.message === 'Request failed with status code 400') {
-          error.message = 'Invalid credentials. Incorrect email or password'
+          toast.error('Invalid credentials. Incorrect email or password')
         }
-        setErrorMessage(error.message)
       }
     }
     return customerInfo
   }
-
-  useEffect(() => {
-    if (formStatus === 'success') {
-      toast.success('Congratulations, you have successfully signed up!')
-    } else if (formStatus === 'error') {
-      toast.error(errorMessage)
-    }
-  }, [userData])
 
   return (
     <form className={registration_form} onSubmit={handleSubmit(onSubmit)}>
@@ -313,18 +284,6 @@ export const RegistrationForm = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeButton={false}
-        closeOnClick={false}
-        rtl={false}
-        draggable={false}
-        pauseOnHover
-        theme="light"
-      />
       <MyButton>Sign Up</MyButton>
     </form>
   )
