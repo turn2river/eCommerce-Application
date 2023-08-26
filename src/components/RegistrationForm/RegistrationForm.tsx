@@ -131,33 +131,28 @@ export const RegistrationForm = (): JSX.Element => {
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer
-        const response = await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
+        await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
         // Check the server response and set the form status and error message accordingly
-        if (response !== undefined) {
-          toast.success('Congratulations, you have successfully signed up!')
-          setIsAuth(true)
-        } else {
-          toast.error('Failed to create new customer')
+        toast.success('Congratulations, you have successfully signed up!')
+        setIsAuth(true)
+        const customerloginIngfo: LogInInputsInterface = {
+          email: customerInfo.email,
+          password: customerInfo.password,
+        }
+        try {
+          await customerService.signInCustomer(customerloginIngfo)
+        } catch (error) {
+          if (error instanceof Error) {
+            if (error.message === 'Request failed with status code 400') {
+              toast.error('Invalid credentials. Incorrect email or password')
+            }
+          }
         }
       } catch (error) {
         if (error instanceof Error) {
           if (error.message === 'Request failed with status code 400') {
             toast.error('Account already exists. Try to sign in.')
           }
-        }
-      }
-    }
-    const customerloginIngfo: LogInInputsInterface = {
-      email: customerInfo.email,
-      password: customerInfo.password,
-    }
-
-    try {
-      await customerService.signInCustomer(customerloginIngfo)
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === 'Request failed with status code 400') {
-          toast.error('Invalid credentials. Incorrect email or password')
         }
       }
     }
