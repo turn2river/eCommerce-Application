@@ -8,7 +8,6 @@ import { Input } from '../Input/Input.tsx'
 import { MyButton } from '../index'
 import { schema } from '../../utils/LogInValidation'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
-// import { singInCustomer } from '../../utils/singInCustomer'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
 
@@ -34,7 +33,6 @@ export const LoginForm = (): JSX.Element => {
       setIsAuth(true)
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error)
         if (error.message === 'Request failed with status code 400') {
           toast.error('Invalid credentials. Incorrect email or password')
         }

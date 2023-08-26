@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 /* eslint-disable max-lines-per-function */
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -24,8 +23,8 @@ import { SignUpDataInterface } from '../../models/SignUpDataInterface'
 import { RegistrationInputsInterface } from '../../models/RegistrationInputsInterface'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
-import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
-import { CustomerSignUpService } from '../../services/CustomerSignUpService.ts'
+import { CustomerSignInService } from '../../services/CustomerSignInService'
+import { CustomerSignUpService } from '../../services/CustomerSignUpService'
 import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
@@ -78,6 +77,7 @@ export const RegistrationForm = (): JSX.Element => {
       setValue('billing_zipCode', '')
       setValue('billing_country', '')
     }
+    console.log(id, checked)
   }
 
   const onSubmit = async ({
@@ -142,9 +142,8 @@ export const RegistrationForm = (): JSX.Element => {
       } catch (error) {
         if (error instanceof Error) {
           if (error.message === 'Request failed with status code 400') {
-            error.message = 'Account already exists. Try to sign in.'
+            toast.error('Account already exists. Try to sign in.')
           }
-          toast.error('Account already exists. Try to sign in.')
         }
       }
     }
