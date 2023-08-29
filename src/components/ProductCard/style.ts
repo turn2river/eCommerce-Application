@@ -3,7 +3,7 @@ import { SxProps, Theme } from '@mui/material'
 export const cardStyle: SxProps<Theme> = {
   'padding': '30px',
   'maxWidth': '305px',
-  'margin': '20px 10px',
+  'margin': '10px',
   'backgroundColor': '#36332E',
   'cursor': 'pointer',
   'transition': '0.3s linear',

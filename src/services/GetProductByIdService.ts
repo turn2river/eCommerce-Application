@@ -9,13 +9,8 @@ export class GetProductByIdService {
       'Authorization': `Bearer ${token}`,
     }
     const response = await axios.get(url, { headers })
-    console.log(
-      response.data.masterData.current.name,
-      response.data.masterData.current.masterVariant.images,
-      response.data.masterData.current.description,
-      response.data.masterData.current.masterVariant.prices,
-    )
-    return response.data.masterData.current
+    // console.log(response.data.masterData.current)
+    return response.data
   }
 }
 
