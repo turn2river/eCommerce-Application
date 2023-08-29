@@ -14,13 +14,20 @@ export const customTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#e2ac5d',
+      main: '#ffc107',
+      dark: '#fb8c00',
     },
     secondary: {
-      main: '#e05b49',
+      main: '#ff4507',
     },
     text: {
-      primary: '#beae97',
+      primary: '#BEAE97',
+    },
+    background: {
+      default: '#211e1c',
+    },
+    info: {
+      main: '#0288d1',
     },
   },
   components: {
