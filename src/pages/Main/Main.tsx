@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
 import { Box } from '@mui/system'
-import { GetProductByIdService } from '../../services/GetProductByIdService'
+import { GetProductByIdService, Product } from '../../services/GetProductByIdService'
 import { SelectionProductsQueryService } from '../../services/SelectionProductsQueryService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
@@ -10,7 +9,7 @@ export const Main = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const selectionsID = new SelectionProductsQueryService()
-  const [productsData, setProductsData] = useState<unknown[]>([])
+  const [productsData, setProductsData] = useState<Product[]>([])
   // const [price, setPrice] = useState()
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export const Main = (): JSX.Element => {
           const productService = new GetProductByIdService()
           const data = await productService.getProductById(anonUserAuthToken, id)
           if (loading) {
-            setProductsData((prevData: unknown[]) => {
+            setProductsData((prevData: Product[]) => {
               return [...prevData, data]
             })
           }
@@ -41,12 +40,15 @@ export const Main = (): JSX.Element => {
 
   return (
     <Box sx={{ display: 'flex', maxWidth: '995px', flexWrap: 'wrap', margin: '10px' }}>
-      {productsData.map(({ id, masterData }: any) => {
+      {productsData.map(({ id, masterData }) => {
         return (
           <ProductCard
             key={id}
             imageSource={masterData.current.masterVariant.images[0].url}
             title={masterData.current.name['en-US']}
+            variants={
+              masterData.current.variants.length ? masterData.current.variants : masterData.current.masterVariant
+            }
             price={
               !(masterData.current.masterVariant.prices[0].value.centAmount % 100)
                 ? `${masterData.current.masterVariant.prices[0].value.centAmount / 100}.00`

@@ -14,7 +14,7 @@ export class GetProductByIdService {
   }
 }
 
-type Product = {
+export type Product = {
   versionModifiedAt: string
   lastMessageSequenceNumber: number
   createdAt: string
@@ -64,29 +64,8 @@ type Product = {
         'en-US': string
         'ru': string
       }
-      masterVariant: {
-        id: number
-        prices: {
-          id: string
-          value: {
-            type: string
-            currencyCode: string
-            centAmount: number
-            fractionDigits: number
-          }
-          key: string
-        }[]
-        images: {
-          url: string
-          dimensions: {
-            w: number
-            h: number
-          }
-        }[]
-        attributes: []
-        assets: []
-      }
-      variants: []
+      masterVariant: MasterVariant
+      variants: Variants[]
       searchKeywords: {}
     }
     staged: {
@@ -115,28 +94,7 @@ type Product = {
         'en-US': string
         'ru': string
       }
-      masterVariant: {
-        id: number
-        prices: {
-          id: string
-          value: {
-            type: string
-            currencyCode: string
-            centAmount: number
-            fractionDigits: number
-          }
-          key: string
-        }[]
-        images: {
-          url: string
-          dimensions: {
-            w: number
-            h: number
-          }
-        }[]
-        attributes: []
-        assets: []
-      }
+      masterVariant: MasterVariant
       variants: []
       searchKeywords: {}
     }
@@ -146,4 +104,43 @@ type Product = {
   key: string
   priceMode: string
   lastVariantId: number
+  id: string
+}
+
+export type MasterVariant = {
+  id: number
+  prices: {
+    id: string
+    value: {
+      type: string
+      currencyCode: string
+      centAmount: number
+      fractionDigits: number
+    }
+    key: string
+  }[]
+  images: {
+    url: string
+    dimensions: {
+      w: number
+      h: number
+    }
+  }[]
+  attributes: []
+  assets: []
+}
+
+export type Variants = {
+  id: number
+  key: string
+  prices: {
+    id: string
+    key: string
+    value: {
+      centAmount: number
+      currencyCode: string
+      fractionDigits: number
+      type: string
+    }
+  }[]
 }
