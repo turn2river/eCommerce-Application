@@ -1,5 +1,8 @@
+import { MasterVariant, Variants } from '../services/GetProductByIdService'
+
 export interface ProductCardPropsInterface {
   imageSource: string
   title: string
-  price: string
+  description: string
+  variants: Variants[] | MasterVariant
 }
