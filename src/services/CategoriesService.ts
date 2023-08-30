@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export class CategoriesService {
-  public async getCategories(token: string): Promise<CategoryData> {
+  public async getCategories(token: string): Promise<CategoryData[]> {
     const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/categories'
     const headers = {
       'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ export class CategoriesService {
     return response.data.results
   }
 }
-type CategoryData = {
+export type CategoryData = {
   id: string
   version: number
   versionModifiedAt: string
