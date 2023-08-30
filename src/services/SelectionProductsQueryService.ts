@@ -9,7 +9,7 @@ export class SelectionProductsQueryService {
     }
     const response = await axios.get(url, { headers })
     const ids = await response.data.results.map((result: ResultData) => result.product.id)
-    // console.log(ids)
+
     return ids
   }
 }
