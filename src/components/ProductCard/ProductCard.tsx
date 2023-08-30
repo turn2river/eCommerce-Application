@@ -53,18 +53,18 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
     <Card variant="outlined" sx={cardStyle}>
       <CardMedia
         component={'div'}
-        sx={{ width: '220px', height: '220px', backgroundColor: 'white' }}
+        sx={{ width: '220px', height: '220px', backgroundColor: 'white', margin: '0 auto', borderRadius: '5px' }}
         image={imageSource}
       />
       <CardContent sx={{ margin: '0', padding: '0' }}>
-        <Typography component={'div'} sx={titleStyle}>
+        <Typography variant="body1" component={'div'} sx={titleStyle}>
           {title}
         </Typography>
-        <Typography variant="body2" sx={{ minHeight: '100px', textAlign: 'justify' }}>
+        <Typography variant="body2" sx={{ minHeight: '80px', textAlign: 'justify' }}>
           {description}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography component="span" sx={{ fontSize: '16px', fontFamily: 'Open Sans, sanserif' }}>
+          <Typography variant="h6" component="span" sx={{ fontFamily: 'Open Sans, sanserif' }}>
             Volume (ml)
           </Typography>
           <ToggleButtonGroup
@@ -90,8 +90,8 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
           </ToggleButtonGroup>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '20px 0' }}>
-          <Typography sx={{ fontSize: '18px' }}>Price:</Typography>
-          <Typography sx={{ fontSize: '18px', fontWeight: '700' }}>{`€ ${price}`}</Typography>
+          <Typography variant="h6">Price:</Typography>
+          <Typography variant="h6" sx={{ fontWeight: '700' }}>{`€ ${price}`}</Typography>
         </Box>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
