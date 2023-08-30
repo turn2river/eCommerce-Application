@@ -15,7 +15,7 @@ import { ProductCardPropsInterface } from '../../models/ProductCardPropsInterfac
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { convertPrice } from '../../utils/convertPrice'
 
-export const ProductCard = ({ imageSource, title, variants }: ProductCardPropsInterface): JSX.Element => {
+export const ProductCard = ({ imageSource, title, variants, description }: ProductCardPropsInterface): JSX.Element => {
   const [volume, setVolume] = useState(variants instanceof Array ? variants[0].prices[0].key : variants.prices[0].key)
 
   const [price, setPrice] = useState(() => {
@@ -51,10 +51,17 @@ export const ProductCard = ({ imageSource, title, variants }: ProductCardPropsIn
 
   return (
     <Card variant="outlined" sx={cardStyle}>
-      <CardMedia component={'img'} sx={{ width: '220px', height: '220px' }} image={imageSource} />
+      <CardMedia
+        component={'div'}
+        sx={{ width: '220px', height: '220px', backgroundColor: 'white' }}
+        image={imageSource}
+      />
       <CardContent sx={{ margin: '0', padding: '0' }}>
         <Typography component={'div'} sx={titleStyle}>
           {title}
+        </Typography>
+        <Typography variant="body2" sx={{ minHeight: '100px', textAlign: 'justify' }}>
+          {description}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography component="span" sx={{ fontSize: '16px', fontFamily: 'Open Sans, sanserif' }}>

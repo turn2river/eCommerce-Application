@@ -46,6 +46,7 @@ export const Main = (): JSX.Element => {
             key={id}
             imageSource={masterData.current.masterVariant.images[0].url}
             title={masterData.current.name['en-US']}
+            description={masterData.current.metaDescription['en-US']}
             variants={
               masterData.current.variants.length ? masterData.current.variants : masterData.current.masterVariant
             }
