@@ -36,10 +36,8 @@ export const Main = (): JSX.Element => {
     }
   }, [])
 
-  console.log(productsData)
-
   return (
-    <Box sx={{ display: 'flex', maxWidth: '995px', flexWrap: 'wrap', margin: '10px' }}>
+    <Box sx={{ display: 'flex', maxWidth: '995px', flexWrap: 'wrap', margin: '10px', justifyContent: 'center' }}>
       {productsData.map(({ id, masterData }) => {
         return (
           <ProductCard
@@ -49,11 +47,6 @@ export const Main = (): JSX.Element => {
             description={masterData.current.metaDescription['en-US']}
             variants={
               masterData.current.variants.length ? masterData.current.variants : masterData.current.masterVariant
-            }
-            price={
-              !(masterData.current.masterVariant.prices[0].value.centAmount % 100)
-                ? `${masterData.current.masterVariant.prices[0].value.centAmount / 100}.00`
-                : `${masterData.current.masterVariant.prices[0].value.centAmount / 100}`
             }
           />
         )

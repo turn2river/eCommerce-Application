@@ -15,7 +15,6 @@ export const cardStyle: SxProps<Theme> = {
 
 export const titleStyle: SxProps<Theme> = {
   margin: '20px 0',
-  fontSize: '16px',
   fontFamily: 'Open Sans, sanserif',
   width: '100%',
   textAlign: 'center',
