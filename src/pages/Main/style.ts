@@ -42,3 +42,8 @@ export const gridContainerProps = {
 export const skeletonProps = {
   sx: { margin: '10px', height: '600px', width: '305px' },
 }
+
+export const paginationProps = {
+  count: '10',
+  sx: { '& > ul': { justifyContent: 'center' } },
+}

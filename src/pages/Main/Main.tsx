@@ -7,6 +7,7 @@ import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
 import { gridContainerProps, gridItemProps, mainImage, mainImageCaption, skeletonProps } from './style'
+import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 
 export const Main = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -67,7 +68,7 @@ export const Main = (): JSX.Element => {
               ))
           : productsData.map(({ id, masterData }) => {
               return (
-                <Grid {...gridItemProps}>
+                <Grid key={id} {...gridItemProps}>
                   <ProductCard
                     key={id}
                     imageSource={masterData.current.masterVariant.images[0].url}
@@ -82,8 +83,8 @@ export const Main = (): JSX.Element => {
                 </Grid>
               )
             })}
-        {}
       </Grid>
+      <CustomPaginationBar count={10} />
     </Container>
   )
 }
