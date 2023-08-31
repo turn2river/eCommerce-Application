@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Box, Container } from '@mui/system'
-import { TextField } from '@mui/material'
+import { TextField, Typography } from '@mui/material'
 import { GetProductByIdService, Product } from '../../services/GetProductByIdService'
 import { SelectionProductsQueryService } from '../../services/SelectionProductsQueryService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
@@ -13,7 +13,6 @@ export const Main = (): JSX.Element => {
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const selectionsID = new SelectionProductsQueryService()
   const [productsData, setProductsData] = useState<Product[]>([])
-  // const [price, setPrice] = useState()
 
   useEffect(() => {
     let loading = true
@@ -40,10 +39,10 @@ export const Main = (): JSX.Element => {
   }, [])
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Box sx={{ display: 'flex', margin: '10px 0' }}>
         <DropdownButton />
-        <TextField fullWidth variant="outlined" label="search parfume"></TextField>
+        <TextField fullWidth variant="outlined" label="search parfume" type="search"></TextField>
       </Box>
       <Box
         sx={{
@@ -52,29 +51,40 @@ export const Main = (): JSX.Element => {
           height: '500px',
           backgroundPositionX: 'center',
           backgroundPositionY: '60%',
-        }}></Box>
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Typography
+          variant="h4"
+          sx={{ width: '100%', backgroundColor: 'rgb(0 0 0 / 54%)', lineHeight: '100px', textAlign: 'center' }}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        </Typography>
+      </Box>
       <Box
         sx={{
           display: 'flex',
           width: '100%',
-          flexWrap: 'wrap',
           margin: '10px auto',
           justifyContent: 'space-evenly',
           border: '1px solid',
+          padding: '20px',
         }}>
-        {productsData.map(({ id, masterData }) => {
-          return (
-            <ProductCard
-              key={id}
-              imageSource={masterData.current.masterVariant.images[0].url}
-              title={masterData.current.name['en-US']}
-              description={masterData.current.metaDescription['en-US']}
-              variants={
-                masterData.current.variants.length ? masterData.current.variants : masterData.current.masterVariant
-              }
-            />
-          )
-        })}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', maxWidth: '1300px' }}>
+          {productsData.map(({ id, masterData }) => {
+            return (
+              <ProductCard
+                key={id}
+                imageSource={masterData.current.masterVariant.images[0].url}
+                title={masterData.current.name['en-US']}
+                description={masterData.current.metaDescription['en-US']}
+                variants={
+                  masterData.current.variants.length ? masterData.current.variants : masterData.current.masterVariant
+                }
+              />
+            )
+          })}
+        </Box>
       </Box>
     </Container>
   )
