@@ -1,23 +1,3 @@
-import MainPicture from '../../assets/image/jpg/luxurious-perfume-bottle-adds-elegance-domestic-decor-generative-ai.jpg'
-
-export const mainImage = {
-  backgroundImage: `url(${MainPicture})`,
-  backgroundSize: 'cover',
-  height: '500px',
-  backgroundPositionX: 'center',
-  backgroundPositionY: '60%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-
-export const mainImageCaption = {
-  width: '100%',
-  backgroundColor: 'rgb(0 0 0 / 54%)',
-  lineHeight: '100px',
-  textAlign: 'center',
-}
-
 export const gridItemProps = {
   item: true,
   xs: 12,

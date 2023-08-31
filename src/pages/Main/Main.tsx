@@ -6,8 +6,13 @@ import { SelectionProductsQueryService } from '../../services/SelectionProductsQ
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
-import { gridContainerProps, gridItemProps, mainImage, mainImageCaption, skeletonProps } from './style'
+import { gridContainerProps, gridItemProps, skeletonProps } from './style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
+import { ImageAndCaption } from '../../components/ImageAndCaption/ImageAndCaption.tsx'
+import MainImage from '../../assets/image/jpg/luxurious-perfume-bottle-adds-elegance-domestic-decor-generative-ai.jpg'
+import MansCategoryImage from '../../assets/image/jpg/groom-meeting-details-jacket-shoes-watches-buttons-wedding-day.jpg'
+import WomensCategoryImage from '../../assets/image/jpg/attractive-seductive-sensual-stylish-woman-boho-dress-sitting-vintage-retro-cafe-holding-perfume.jpg'
+import AllCategoryImage from '../../assets/image/jpg/still-life-cosmetic-products.jpg'
 
 export const Main = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -44,15 +49,48 @@ export const Main = (): JSX.Element => {
 
   return (
     <Container maxWidth="xl">
-      {loadingStatus ? <div>pending</div> : <div>complete</div>}
       <Box sx={{ display: 'flex', margin: '20px 0' }}>
         <DropdownButton />
         <TextField fullWidth variant="outlined" label="search parfume" type="search"></TextField>
       </Box>
-      <Box sx={mainImage}>
-        <Typography variant="h4" sx={mainImageCaption}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </Typography>
+      <ImageAndCaption width={'100%'} height={'500px'} verticalPosition={'60%'} image={MainImage}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </ImageAndCaption>
+      <Typography variant="h3" margin={'20px'}>
+        Categories
+      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          border: '1px solid',
+          borderRadius: '5px',
+          padding: '20px',
+        }}>
+        <ImageAndCaption
+          width={'300px'}
+          height={'300px'}
+          verticalPosition={'center'}
+          image={MansCategoryImage}
+          scale="1.05">
+          For him
+        </ImageAndCaption>
+        <ImageAndCaption
+          width={'300px'}
+          height={'300px'}
+          verticalPosition={'center'}
+          image={WomensCategoryImage}
+          scale="1.05">
+          For her
+        </ImageAndCaption>
+        <ImageAndCaption
+          width={'300px'}
+          height={'300px'}
+          verticalPosition={'center'}
+          image={AllCategoryImage}
+          scale="1.05">
+          All products
+        </ImageAndCaption>
       </Box>
       <Typography variant="h3" margin={'20px'}>
         Popular Aromats
