@@ -6,7 +6,7 @@ export class CustomerSignUpService {
     const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/customers'
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`, // 0FNIXxVr1UIJIIxQdYIH_l-cvsQyYxgA`, sKKZQGFpmsbsTdCpUNhUeUI6pOU2Sp0g
+      'Authorization': `Bearer ${token}`,
     }
     const body = customerData
 

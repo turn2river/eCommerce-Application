@@ -5,12 +5,13 @@ export class ProductsService {
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/products?limit=${limit}&offset=${
       page * limit
     }`
+
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
     const response = await axios.get(url, { headers })
-    console.log(response.data)
+    console.log(response.data.results)
 
     return response.data
   }
