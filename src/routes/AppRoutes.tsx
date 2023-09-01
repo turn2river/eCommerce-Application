@@ -7,6 +7,7 @@ import { PageNotFound } from '../pages/PageNotFound/PageNotFound.tsx'
 import { ProtectedRoutes } from './ProtectedRoutes.tsx'
 import { Profile } from '../pages/Profile/Profile.tsx'
 import { AuthContextType, useAuth } from '../store/AuthContext.tsx'
+import { ProductPage } from '../pages/ProductPage/ProductPage.tsx'
 
 export const AppRoutes = (): JSX.Element => {
   const auth = useAuth()
@@ -30,6 +31,7 @@ export const AppRoutes = (): JSX.Element => {
       ) : (
         <Route path="/registration" element={<Registration />} />
       )}
+      <Route path="/product" element={<ProductPage />} />
       <Route path="/*" element={<PageNotFound />}></Route>
     </Routes>
   )

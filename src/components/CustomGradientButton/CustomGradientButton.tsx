@@ -22,7 +22,7 @@ const GradientButton = styled(Button)`
 export const CustomGradientButton = ({ children }: IMyButton): JSX.Element => {
   return (
     <>
-      <GradientButton variant="contained">{children}</GradientButton>
+      <GradientButton variant="outlined">{children}</GradientButton>
     </>
   )
 }
