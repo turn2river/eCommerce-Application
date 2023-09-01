@@ -1,9 +1,11 @@
 import {
   Box,
+  // Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Link,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -57,9 +59,16 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
         image={imageSource}
       />
       <CardContent sx={{ margin: '0', padding: '0' }}>
-        <Typography variant="body1" component={'div'} sx={titleStyle}>
+        <Link href={`/product`} sx={titleStyle} textAlign={'center'} display={'block'}>
           {title}
-        </Typography>
+        </Link>
+        {/* <Button
+          onClick={(): void => {
+            console.log('title ', title)
+            console.log('imageSource ', imageSource)
+          }}>
+          123
+        </Button> */}
         <Typography variant="body2" sx={{ minHeight: '80px', textAlign: 'justify' }}>
           {description}
         </Typography>
