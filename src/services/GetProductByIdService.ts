@@ -125,7 +125,10 @@ export type MasterVariant = {
       h: number
     }
   }[]
-  attributes: []
+  attributes: {
+    name: string
+    value: number[]
+  }[]
   assets: []
 }
 
