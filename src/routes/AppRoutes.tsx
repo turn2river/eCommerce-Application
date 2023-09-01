@@ -31,7 +31,7 @@ export const AppRoutes = (): JSX.Element => {
       ) : (
         <Route path="/registration" element={<Registration />} />
       )}
-      <Route path="/product" element={<ProductPage />} />
+      <Route path="/catalog/:name" element={<ProductPage />} />
       <Route path="/*" element={<PageNotFound />}></Route>
     </Routes>
   )
