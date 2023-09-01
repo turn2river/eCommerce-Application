@@ -64,7 +64,7 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
           {description}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6" component="span" sx={{ fontFamily: 'Open Sans, sanserif' }}>
+          <Typography variant="h6" component="span">
             Volume (ml)
           </Typography>
           <ToggleButtonGroup
