@@ -6,7 +6,7 @@ import { AnonTokensService } from './services/AnonTokensService'
 import { ToastPopUp } from './components/ToastPopUp/ToastPopUp.tsx'
 import { ProductsService } from './services/ProductsQueryService'
 import { AnonTokensStorage } from './store/anonTokensStorage'
-import { GetCustomerByTokenService } from './services/GetCustomerByToken'
+import { GetCustomerByTokenService } from './services/GetCustomerByTokenService'
 import { CustomerTokensStorage } from './store/customerTokensStorage'
 
 export function App(): JSX.Element {
