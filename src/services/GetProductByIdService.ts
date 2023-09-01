@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import axios from 'axios'
 
 export class GetProductByIdService {
@@ -51,7 +50,7 @@ export type Product = {
         typeId: string
         id: string
       }[]
-      categoryOrderHints: {}
+      categoryOrderHints: unknown
       slug: {
         'en-US': string
         'ru': string
@@ -66,7 +65,7 @@ export type Product = {
       }
       masterVariant: MasterVariant
       variants: Variants[]
-      searchKeywords: {}
+      searchKeywords: unknown
     }
     staged: {
       name: {
@@ -81,7 +80,7 @@ export type Product = {
         typeId: string
         id: string
       }[]
-      categoryOrderHints: {}
+      categoryOrderHints: unknown
       slug: {
         'en-US': string
         'ru': string
@@ -96,7 +95,7 @@ export type Product = {
       }
       masterVariant: MasterVariant
       variants: []
-      searchKeywords: {}
+      searchKeywords: unknown
     }
     published: boolean
     hasStagedChanges: boolean

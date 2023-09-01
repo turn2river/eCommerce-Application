@@ -14,12 +14,6 @@ export class SelectionProductsQueryService {
   }
 }
 
-// type SelectionData = {
-//   limit: number
-//   offset: number
-//   count: number
-//   results: ResultData[]
-// }
 type ResultData = {
   product: {
     typeId: string
