@@ -4,11 +4,12 @@ import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, Ou
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { CheckCircleOutline, Edit } from '@mui/icons-material'
-import { CustomerProfile } from '../../services/GetCustomerByTokenService'
 import { validationScheme } from './validationScheme'
-import { ProfilePersonalDataPropsInterface, PersonalDataFieldsInterface, PersonalDataFieldsIds } from './types'
+import { PersonalDataFieldsInterface, PersonalDataFieldsIds } from './types'
+import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
+import { ProfileDataPropsInterface } from '../../models/ProfileDataPropsInterface'
 
-export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDataPropsInterface): JSX.Element => {
+export const ProfilePersonalData = ({ userData }: ProfileDataPropsInterface): JSX.Element => {
   const fields: PersonalDataFieldsInterface[] = [
     { id: 'firstName', title: 'First name' },
     { id: 'lastName', title: 'Last name' },
@@ -17,7 +18,6 @@ export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDa
 
   const {
     register,
-    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationScheme),
@@ -40,24 +40,15 @@ export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDa
         }
       })
     }
-
-    setUserData((prevData): CustomerProfile | null => {
-      return prevData
-        ? {
-            ...prevData,
-            [id]: getValues(id),
-          }
-        : null
-    })
   }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {fields.map(({ id, title }) => {
         let result
         if (id !== 'dateOfBirth') {
           result = (
-            <FormControl variant="outlined" sx={{ margin: '30px' }}>
+            <FormControl key={id} variant="outlined" sx={{ margin: '30px', width: '80%' }}>
               <InputLabel htmlFor={id}>{title}</InputLabel>
               <OutlinedInput
                 id={id}
@@ -82,7 +73,7 @@ export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDa
           )
         } else if (userData) {
           result = (
-            <FormControl variant="outlined" sx={{ margin: '30px' }}>
+            <FormControl key={id} variant="outlined" sx={{ margin: '30px', width: '80%' }}>
               <InputLabel htmlFor={id}>{title}</InputLabel>
               <OutlinedInput
                 id={id}
@@ -109,6 +100,7 @@ export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDa
         }
         return result
       })}
+      <CustomGradientButton>Submit</CustomGradientButton>
     </Box>
   )
 }
