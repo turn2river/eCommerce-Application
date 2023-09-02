@@ -8,6 +8,9 @@ import { ProductsService } from './services/ProductsQueryService'
 import { AnonTokensStorage } from './store/anonTokensStorage'
 import { GetCustomerByTokenService } from './services/GetCustomerByTokenService'
 import { CustomerTokensStorage } from './store/customerTokensStorage'
+import { GetProductsByCategoryIdService } from './services/GetProductsByCategoryIdService'
+import { GetProductsFilteredByCategoryIdAndAttributeService } from './services/GetProductsFilteredByCategoryIdAndAttributeService'
+import { GetFilteredProductsService } from './services/GetFilteredProductsService'
 
 export function App(): JSX.Element {
   return (
@@ -25,9 +28,27 @@ const anonTokensStorage = AnonTokensStorage.getInstance()
 const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
 const customerTokensStorage = new CustomerTokensStorage()
 const customerToken = customerTokensStorage.getLocalStorageCustomerAuthToken()
+
+const categoryProducts = new GetProductsByCategoryIdService()
+const filteredProducts = new GetProductsFilteredByCategoryIdAndAttributeService()
+const filteredProd = new GetFilteredProductsService()
+
 if (anonUserAuthToken) {
   const catalogue = new ProductsService()
   catalogue.getProducts(anonUserAuthToken, 6, 2)
+  const id = 'c3bbd3e2-ba78-4a21-9de1-e5c0ccdefc38' // это женские нишевые ароматы, просто пример
+  const id1 = '95f20a5a-77e8-4469-a7af-0167888d5ef5' // это женские ароматы
+  categoryProducts.getProductsByCategoryId(anonUserAuthToken, id)
+  const volume = '50'
+  const volume1 = '30'
+  const attribute = 'VolumeEDP'
+  const attribute1 = 'VolumeEDT'
+  const params = {
+    categoriesList: [id, id1],
+    attributesList: [{ [attribute]: volume }, { [attribute1]: volume1 }] as { [key: string]: string }[],
+  }
+  filteredProducts.getProductsFilteredByCategoryIdAndAttribute(anonUserAuthToken, id, attribute, volume)
+  filteredProd.getFilteredProducts(anonUserAuthToken, params)
 }
 
 if (customerToken) {
