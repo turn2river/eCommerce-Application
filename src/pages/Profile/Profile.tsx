@@ -29,7 +29,8 @@ export const Profile = (): JSX.Element => {
   return (
     <Container>
       <ProfileNavBar tab={tab} setTab={setTab} />
-      {userData ? <ProfilePersonalData userData={userData} setUserData={setUserData} /> : null}
+      {userData && tab === 'personal' ? <ProfilePersonalData userData={userData} setUserData={setUserData} /> : null}
+      {userData && tab === 'security' ? null : null}
     </Container>
   )
 }

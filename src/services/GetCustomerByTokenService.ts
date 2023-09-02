@@ -57,4 +57,5 @@ export type CustomerProfile = {
   title: string
   version: number
   versionModifiedAt: string
+  dateOfBirth: string
 }

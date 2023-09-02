@@ -1,38 +1,18 @@
-import * as Yup from 'yup'
 import { Box } from '@mui/system'
-import { Dispatch, SetStateAction, useState, MouseEvent } from 'react'
+import { useState, MouseEvent } from 'react'
 import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { CheckCircleOutline, Edit } from '@mui/icons-material'
 import { CustomerProfile } from '../../services/GetCustomerByTokenService'
-
-type FieldId = 'firstName' | 'lastName'
-
-interface FieldsInterface {
-  id: FieldId
-  title: string
-}
-
-interface ProfilePersonalDataPropsInterface {
-  userData: CustomerProfile | null
-  setUserData: Dispatch<SetStateAction<CustomerProfile | null>>
-}
+import { validationScheme } from './validationScheme'
+import { ProfilePersonalDataPropsInterface, PersonalDataFieldsInterface, PersonalDataFieldsIds } from './types'
 
 export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDataPropsInterface): JSX.Element => {
-  const schema = Yup.object().shape({
-    firstName: Yup.string()
-      .required('First name is required')
-      .matches(/^[a-zA-Z]+$/, 'First name should only contain letters'),
-
-    lastName: Yup.string()
-      .required('Last name is required')
-      .matches(/^[a-zA-Z]+$/, 'Last name should only contain letters'),
-  })
-
-  const fields: FieldsInterface[] = [
+  const fields: PersonalDataFieldsInterface[] = [
     { id: 'firstName', title: 'First name' },
     { id: 'lastName', title: 'Last name' },
+    { id: 'dateOfBirth', title: 'Date of Birth' },
   ]
 
   const {
@@ -40,18 +20,19 @@ export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDa
     getValues,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(validationScheme),
     mode: 'all',
   })
 
   const [editableField, setEditableField] = useState({
     firstName: false,
     lastName: false,
+    dateOfBirth: false,
   })
 
   function onTogglerButtonClick(event: MouseEvent<HTMLButtonElement>): void {
-    const id = event.currentTarget.id as FieldId
-    if (!errors.firstName) {
+    const id = event.currentTarget.id as PersonalDataFieldsIds
+    if (!errors[id]) {
       setEditableField((prevState) => {
         return {
           ...prevState,
@@ -73,26 +54,60 @@ export const ProfilePersonalData = ({ userData, setUserData }: ProfilePersonalDa
   return (
     <Box>
       {fields.map(({ id, title }) => {
-        return (
-          <FormControl variant="outlined" sx={{ margin: '30px' }}>
-            <InputLabel htmlFor={id}>{title}</InputLabel>
-            <OutlinedInput
-              id={id}
-              label={title}
-              defaultValue={userData ? userData[id as keyof typeof userData] : null}
-              disabled={!editableField[id as keyof typeof editableField]}
-              {...register(`${id}`)}
-              error={!!errors[id]?.message}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton edge="end" aria-label={`${id}-toggler`} id={id} onClick={onTogglerButtonClick.bind(this)}>
-                    {editableField[id as keyof typeof editableField] ? <CheckCircleOutline /> : <Edit />}
-                  </IconButton>
-                </InputAdornment>
-              }></OutlinedInput>
-            {errors[id] ? <FormHelperText error>{errors[id]?.message}</FormHelperText> : null}
-          </FormControl>
-        )
+        let result
+        if (id !== 'dateOfBirth') {
+          result = (
+            <FormControl variant="outlined" sx={{ margin: '30px' }}>
+              <InputLabel htmlFor={id}>{title}</InputLabel>
+              <OutlinedInput
+                id={id}
+                label={title}
+                defaultValue={userData ? userData[id] : null}
+                disabled={!editableField[id]}
+                {...register(id)}
+                error={!!errors[id]?.message}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      aria-label={`${id}-toggler`}
+                      id={id}
+                      onClick={onTogglerButtonClick.bind(this)}>
+                      {editableField[id] ? <CheckCircleOutline /> : <Edit />}
+                    </IconButton>
+                  </InputAdornment>
+                }></OutlinedInput>
+              {errors[id] ? <FormHelperText error>{errors[id]?.message}</FormHelperText> : null}
+            </FormControl>
+          )
+        } else if (userData) {
+          result = (
+            <FormControl variant="outlined" sx={{ margin: '30px' }}>
+              <InputLabel htmlFor={id}>{title}</InputLabel>
+              <OutlinedInput
+                id={id}
+                label={title}
+                defaultValue={userData[id]}
+                disabled={!editableField[id]}
+                type="date"
+                {...register(id)}
+                error={!!errors[id]?.message}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      aria-label={`${id}-toggler`}
+                      id={id}
+                      onClick={onTogglerButtonClick.bind(this)}>
+                      {editableField[id] ? <CheckCircleOutline /> : <Edit />}
+                    </IconButton>
+                  </InputAdornment>
+                }></OutlinedInput>
+              {errors[id] ? <FormHelperText error>{errors[id]?.message}</FormHelperText> : null}
+            </FormControl>
+          )
+        }
+        return result
       })}
     </Box>
   )
