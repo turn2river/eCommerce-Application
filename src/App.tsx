@@ -1,7 +1,5 @@
 import { Fragment } from 'react'
-import { Header } from './components'
 import './App.scss'
-import { AppRoutes } from './routes/AppRoutes.tsx'
 import { AnonTokensService } from './services/AnonTokensService'
 import { ToastPopUp } from './components/ToastPopUp/ToastPopUp.tsx'
 import { ProductsService } from './services/ProductsQueryService'
@@ -11,11 +9,11 @@ import { CustomerTokensStorage } from './store/customerTokensStorage'
 import { GetProductsByCategoryIdService } from './services/GetProductsByCategoryIdService'
 import { GetProductsFilteredByCategoryIdAndAttributeService } from './services/GetProductsFilteredByCategoryIdAndAttributeService'
 import { GetFilteredProductsService } from './services/GetFilteredProductsService'
+import { AppRoutes } from './routes/AppRoutes.tsx'
 
 export function App(): JSX.Element {
   return (
     <Fragment>
-      <Header />
       <AppRoutes />
       <ToastPopUp />
     </Fragment>

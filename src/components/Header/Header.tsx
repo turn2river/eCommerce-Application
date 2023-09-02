@@ -15,8 +15,11 @@ export const Header = (): JSX.Element => {
       }}>
       <Toolbar
         sx={{
+          margin: '0 auto',
+          maxWidth: '1488px',
+          width: '100%',
           display: 'flex',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
         }}>
         <Logo />
         <Box>
