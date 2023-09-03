@@ -26,7 +26,7 @@ export const LoginForm = (): JSX.Element => {
 
   const onSubmit = async (data: LogInInputsInterface): Promise<LogInInputsInterface> => {
     const customerService = new CustomerSignInService()
-    console.log(data)
+    // console.log(data)
     try {
       await customerService.signInCustomer(data)
       toast.success('Congratulations, you have successfully signed in!')
@@ -38,7 +38,7 @@ export const LoginForm = (): JSX.Element => {
         }
       }
     }
-    console.log('data', data)
+    // console.log('data', data)
     return data
   }
 

@@ -10,13 +10,19 @@ import {
   Typography,
 } from '@mui/material'
 import { useState, MouseEvent } from 'react'
-import { cardStyle, titleStyle } from './style'
+import { cardStyle } from './style'
 import { VolumeVariants } from '../../models/VolumeVariants'
 import { ProductCardPropsInterface } from '../../models/ProductCardPropsInterface'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { convertPrice } from '../../utils/convertPrice'
 
-export const ProductCard = ({ imageSource, title, variants, description }: ProductCardPropsInterface): JSX.Element => {
+export const ProductCard = ({
+  productKey,
+  imageSource,
+  title,
+  variants,
+  description,
+}: ProductCardPropsInterface): JSX.Element => {
   const [volume, setVolume] = useState(variants instanceof Array ? variants[0].prices[0].key : variants.prices[0].key)
 
   const [price, setPrice] = useState(() => {
@@ -50,6 +56,8 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
     })
   }
 
+  // console.log(productKey)
+
   return (
     <Card variant="outlined" sx={cardStyle}>
       <CardMedia
@@ -58,7 +66,7 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
         image={imageSource}
       />
       <CardContent sx={{ margin: '0', padding: '0' }}>
-        <Link href={`/catalog/:${title}`} sx={titleStyle} display={'block'}>
+        <Link href={`${productKey}`} display={'block'} margin={'10px 0'} textAlign={'center'} noWrap={true}>
           {title}
         </Link>
         <Typography variant="body2" sx={{ minHeight: '80px', textAlign: 'justify' }}>

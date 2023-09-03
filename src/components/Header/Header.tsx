@@ -14,7 +14,6 @@ export const Header = (): JSX.Element => {
       sx={{
         py: 2,
       }}>
-<<<<<<< HEAD
       <Toolbar
         sx={{
           margin: '0 auto',
@@ -28,49 +27,32 @@ export const Header = (): JSX.Element => {
           <Button href="/" color="inherit">
             Home
           </Button>
+          <Button href="/catalog" color="inherit">
+            Catalog
+          </Button>
           <Button href="/about" color="inherit">
             About us
           </Button>
           {isAuth ? (
             <Button href="/profile" color="inherit">
               Profile
-=======
-      <Container>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}>
-          <Logo />
-          <Box>
-            <Button href="/" color="inherit">
-              Home
->>>>>>> 3b753c5 (feat: add product detail page)
             </Button>
-            <Button href="/about" color="inherit">
-              About us
+          ) : (
+            <Button href="/login" color="inherit">
+              Sign in
             </Button>
-            {isAuth ? (
-              <Button href="/profile" color="inherit">
-                Profile
-              </Button>
-            ) : (
-              <Button href="/login" color="inherit">
-                Sign in
-              </Button>
-            )}
-            {isAuth ? (
-              <Button component="button" href="/" color="inherit" onClick={(): void => setIsAuth(false)}>
-                logout
-              </Button>
-            ) : (
-              <Button href="/registration" color="inherit">
-                Sign up
-              </Button>
-            )}
-          </Box>
-        </Toolbar>
-      </Container>
+          )}
+          {isAuth ? (
+            <Button component="button" href="/" color="inherit" onClick={(): void => setIsAuth(false)}>
+              logout
+            </Button>
+          ) : (
+            <Button href="/registration" color="inherit">
+              Sign up
+            </Button>
+          )}
+        </Box>
+      </Toolbar>
     </AppBar>
   )
 }

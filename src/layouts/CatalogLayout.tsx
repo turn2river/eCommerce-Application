@@ -2,7 +2,7 @@ import { Breadcrumbs, Link } from '@mui/material'
 import { Container } from '@mui/system'
 import { Outlet } from 'react-router-dom'
 
-export const MainLayout = (): JSX.Element => {
+export const CatalogLayout = (): JSX.Element => {
   return (
     <Container maxWidth="xl">
       <Breadcrumbs aria-label="breadcrumb" sx={{ fontSize: '12px', marginTop: '20px', ml: 3 }}>

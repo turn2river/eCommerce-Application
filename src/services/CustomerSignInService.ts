@@ -24,6 +24,6 @@ export class CustomerSignInService {
     this.customerStorage.setLocalStorageCustomerAuthToken(response.data.access_token)
     this.customerStorage.setLocalStorageCustomerRefreshToken(response.data.refresh_token)
 
-    console.log(response.data)
+    // console.log(response.data)
   }
 }

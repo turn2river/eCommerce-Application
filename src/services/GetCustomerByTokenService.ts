@@ -8,7 +8,11 @@ export class GetCustomerByTokenService {
       'Authorization': `Bearer ${token}`,
     }
     const response = await axios.get(url, { headers })
+<<<<<<< HEAD
     console.log('Anna', response.data)
+=======
+    // console.log(response.data)
+>>>>>>> 0a4e402 (feat: add routes for product page)
     return response.data
   }
 }
