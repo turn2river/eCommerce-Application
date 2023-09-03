@@ -1,5 +1,4 @@
 import { AppBar, Box, Toolbar, Button } from '@mui/material'
-import { Container } from '@mui/system'
 import { Logo } from '../Logo/Logo.tsx'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 
