@@ -35,7 +35,7 @@ import {
 import { addressFormFields } from '../../models/addressFormFields'
 import { checkBoxTitle } from '../../utils/createTitleForCheckBox'
 import { defaultAddressValues } from '../../models/defaultAddressValues'
-import { GetCustomerByTokenService } from '../../services/GetCustomerByTokenService'
+import { checkStateOfCheckBox } from '../../utils/checkStateOfCheckBox'
 
 export const EditAdressForm = ({
   userData,
@@ -60,10 +60,10 @@ export const EditAdressForm = ({
   })
 
   const [checkBox, setCheckBox] = useState<CheckBoxStateInterface>({
-    billingAddress: userData?.billingAddressIds.includes(addressID),
     defaultBillingAddress: addressID === userData?.defaultBillingAddressId,
-    shippingAddress: userData?.shippingAddressIds.includes(addressID),
     defaultShippingAddress: addressID === userData?.defaultShippingAddressId,
+    billingAddress: userData?.billingAddressIds.includes(addressID),
+    shippingAddress: userData?.shippingAddressIds.includes(addressID),
   })
 
   function handleOnCheckBoxClick(event: ChangeEvent<HTMLInputElement>): void {
@@ -74,7 +74,7 @@ export const EditAdressForm = ({
         [id]: !prevState[id],
       }
     })
-    console.log(checkBox)
+    // console.log(checkBox)
   }
 
   const [editableField, setEditableField] = useState<EditableFieldInterface>({
@@ -96,8 +96,9 @@ export const EditAdressForm = ({
     })
   }
 
+  const updateUserInfoService = new UpdateUserInfoService()
+
   async function onSubmit(): Promise<void> {
-    const updateUserInfoService = new UpdateUserInfoService()
     if (addressID && token) {
       const body: CustomerUpdatedAddressData = {
         version: userData?.version,
@@ -121,122 +122,10 @@ export const EditAdressForm = ({
       if (Object.values(editableField).every((el) => el === false)) {
         try {
           await updateUserInfoService.updateUserAddressInfo(token, body)
-          if (checkBox.shippingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'addShippingAddressId',
-                addressID,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          } else {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'removeShippingAddressId',
-                addressID,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          }
-          if (checkBox.billingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'addBillingAddressId',
-                addressID,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          } else {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'removeBillingAddressId',
-                addressID,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          }
-          if (checkBox.defaultShippingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'setDefaultShippingAddress',
-                addressID,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          } else {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'setDefaultShippingAddress',
-                undefined,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          }
-          if (checkBox.defaultBillingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'setDefaultBillingAddress',
-                addressID,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          } else {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'setDefaultBillingAddress',
-                undefined,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          }
+          await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'shippingAddress', addressID)
+          await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'billingAddress', addressID)
+          await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'defaultShippingAddress', addressID)
+          await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'defaultBillingAddress', addressID)
           updateData((prevValue) => {
             const newValue = prevValue + 1
             return newValue
@@ -272,65 +161,17 @@ export const EditAdressForm = ({
         }
         try {
           await updateUserInfoService.addUserAddressInfo(token, body)
-          if (checkBox.shippingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'addShippingAddressId',
-                customerData.addresses[customerData.addresses.length - 1].id,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          }
           if (checkBox.billingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'addBillingAddressId',
-                customerData.addresses[customerData.addresses.length - 1].id,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
+            await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'billingAddress')
+          }
+          if (checkBox.shippingAddress) {
+            await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'shippingAddress')
+          }
+          if (checkBox.defaultBillingAddress) {
+            await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'defaultBillingAddress')
           }
           if (checkBox.defaultShippingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'setDefaultShippingAddress',
-                customerData.addresses[customerData.addresses.length - 1].id,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
-          }
-          if (checkBox.defaultShippingAddress) {
-            const customer = new GetCustomerByTokenService()
-            const customerData = await customer.getCustomerByToken(token)
-            try {
-              await updateUserInfoService.modifyUserAddressInfo(
-                token,
-                customerData.version,
-                'setDefaultBillingAddress',
-                customerData.addresses[customerData.addresses.length - 1].id,
-              )
-            } catch (error) {
-              console.error(error)
-              toast.error('Something went wrong')
-            }
+            await checkStateOfCheckBox(token, updateUserInfoService, checkBox, 'defaultShippingAddress')
           }
           toast.success('Address added successfully')
 
