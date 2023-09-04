@@ -24,6 +24,7 @@ export const ProductCard = ({
   description,
 }: ProductCardPropsInterface): JSX.Element => {
   const [volume, setVolume] = useState(
+    // @ts-expect-error why
     variants instanceof Array ? variants?.[0]?.attributes?.[1]?.value[0] : variants?.[0]?.attributes?.[1]?.value[0],
   )
 
@@ -33,8 +34,8 @@ export const ProductCard = ({
     setVolume(newVolume)
   }
 
-  const handleVolumeSelect = (price): void => {
-    const priceInEuro = convertPrice(price)
+  const handleVolumeSelect = (selectedPrice: number): void => {
+    const priceInEuro = convertPrice(selectedPrice)
     setPrice(priceInEuro)
   }
 

@@ -30,23 +30,22 @@ export const ProductPage = (): JSX.Element => {
       loading = false
     }
   }, [])
-  // console.log(productsData?.[0]?.masterData?.current.variants)
   const productTitle = productsData?.[0]?.masterData?.current.name['en-US']
   const productImage = productsData?.[0]?.masterData.current.masterVariant.images[0].url
   const productDescription = productsData?.[0]?.masterData.current.description['en-US']
   const variants = productsData?.[0]?.masterData?.current.variants
-
   const [volume, setVolume] = useState(
+    // @ts-expect-error why
     variants instanceof Array ? variants?.[0]?.attributes?.[1]?.value[0] : variants?.[0]?.attributes?.[1]?.value[0],
   )
-  const [price, setPrice] = useState(convertPrice(variants?.[0].prices[0].value.centAmount))
-
+  const [price, setPrice] = useState<string>(convertPrice(variants?.[0].prices[0].value.centAmount))
+  // @ts-expect-error why
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(newVolume)
   }
 
-  const handleVolumeSelect = (price): void => {
-    const priceInEuro = convertPrice(price)
+  const handleVolumeSelect = (selectedPrice: number): void => {
+    const priceInEuro = convertPrice(selectedPrice)
     setPrice(priceInEuro)
   }
   return (
@@ -93,7 +92,7 @@ export const ProductPage = (): JSX.Element => {
                             }}
                             key={variant?.prices[0].key}
                             // @ts-expect-error why
-                            value={variant?.attributes && variant?.attributes[1]?.value[0]}>
+                            value={variant?.attributes[1]?.value[0]}>
                             {variant?.attributes?.[1]?.value?.[0]}
                           </ToggleButton>
                         )
