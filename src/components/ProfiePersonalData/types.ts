@@ -1,4 +1,4 @@
-export type PersonalDataFieldsIds = 'firstName' | 'lastName' | 'dateOfBirth'
+export type PersonalDataFieldsIds = 'firstName' | 'lastName' | 'dateOfBirth' | 'email'
 
 export interface PersonalDataFieldsInterface {
   id: PersonalDataFieldsIds

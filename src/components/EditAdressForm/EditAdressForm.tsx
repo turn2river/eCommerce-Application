@@ -1,0 +1,215 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { CheckCircleOutline, Edit } from '@mui/icons-material'
+import {
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
+  FormHelperText,
+  Autocomplete,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material'
+import { Box } from '@mui/system'
+import { useState, MouseEvent, ChangeEvent } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import { countriesList } from '../../models/CountriesList'
+import { validationScheme } from './validationScheme'
+import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
+import { getCountryCode } from '../../utils/GetCountryCode'
+import { CustomerUpdatedAddressData, UpdateUserInfoService } from '../../services/UpdateUserInfoData'
+import {
+  AddressDataFieldsInterface,
+  CheckBoxStateInterface,
+  EditAdressFormPropsInterface,
+  EditableFieldInterface,
+} from './type'
+import { addressFormFields } from '../../models/addressFormFields'
+import { checkBoxTitle } from '../../utils/createTitleForCheckBox'
+
+export const EditAdressForm = ({
+  userData,
+  addressID,
+  token,
+  updateData,
+}: EditAdressFormPropsInterface): JSX.Element => {
+  const currentCardAddress = userData?.addresses.filter((address) => address.id === addressID)[0]
+
+  const {
+    register,
+    getValues,
+    setValue,
+    handleSubmit,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationScheme),
+    defaultValues: {
+      state: currentCardAddress?.state,
+      region: currentCardAddress?.region,
+      apartment: currentCardAddress?.apartment,
+      streetName: currentCardAddress?.streetName,
+      city: currentCardAddress?.city,
+      building: currentCardAddress?.building,
+      postalCode: currentCardAddress?.postalCode,
+    },
+    mode: 'all',
+  })
+
+  const [checkBox, setCheckBox] = useState<CheckBoxStateInterface>({
+    billingAddress: userData?.billingAddressIds.includes(addressID),
+    defaultBillingAddress: addressID === userData?.defaultBillingAddressId,
+    shippingAddress: userData?.shippingAddressIds.includes(addressID),
+    defaultShippingAddress: addressID === userData?.defaultShippingAddressId,
+  })
+
+  function handleOnCheckBoxClick(event: ChangeEvent<HTMLInputElement>): void {
+    const id = event.currentTarget.id as keyof CheckBoxStateInterface
+    setCheckBox((prevState: CheckBoxStateInterface) => {
+      return {
+        ...prevState,
+        [id]: !prevState[id],
+      }
+    })
+  }
+
+  const [editableField, setEditableField] = useState<EditableFieldInterface>({
+    state: false,
+    region: false,
+    apartment: false,
+    streetName: false,
+    city: false,
+    postalCode: false,
+  })
+
+  function onTogglerButtonClick(event: MouseEvent<HTMLButtonElement>): void {
+    const id = event.currentTarget.id as keyof EditableFieldInterface
+    setEditableField((prevState: EditableFieldInterface) => {
+      return {
+        ...prevState,
+        [id]: !prevState[id],
+      }
+    })
+  }
+
+  async function onSubmit(): Promise<void> {
+    const body: CustomerUpdatedAddressData = {
+      version: userData?.version,
+      actions: [
+        {
+          action: 'changeAddress',
+          addressId: addressID,
+          address: {
+            streetName: getValues('streetName'),
+            postalCode: getValues('postalCode'),
+            city: getValues('city'),
+            country: getCountryCode(getValues('country')),
+            building: getValues('building'),
+            apartment: getValues('apartment'),
+            region: getValues('region'),
+            state: getValues('state'),
+          },
+        },
+      ],
+    }
+    const updateUserInfoService = new UpdateUserInfoService()
+    if (Object.values(editableField).every((el) => el === false)) {
+      console.log(Object.values(editableField).every((el) => el === false))
+      try {
+        await updateUserInfoService.updateUserAddressInfo(token, body)
+        updateData((prevValue) => {
+          const newValue = prevValue + 1
+          return newValue
+        })
+        toast.success('User info updated successfully')
+      } catch (error) {
+        console.error(error)
+        toast.error('Something went wrong')
+      }
+    } else {
+      toast.error('Please save changes in fields')
+    }
+  }
+
+  return (
+    <form
+      style={{ width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
+      onSubmit={handleSubmit(onSubmit)}>
+      {addressFormFields.map(({ id, title }: AddressDataFieldsInterface) => {
+        let result
+        if (id !== 'country') {
+          result = (
+            <FormControl sx={{ margin: '20px', width: '250px' }} key={id}>
+              <InputLabel htmlFor={id}>{title}</InputLabel>
+              <OutlinedInput
+                id={id}
+                label={title}
+                disabled={!editableField[id as keyof EditableFieldInterface]}
+                {...register(id)}
+                error={!!errors[id]?.message}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      aria-label={`${id}-toggler`}
+                      id={id}
+                      onClick={onTogglerButtonClick.bind(this)}>
+                      {editableField[id as keyof EditableFieldInterface] ? <CheckCircleOutline /> : <Edit />}
+                    </IconButton>
+                  </InputAdornment>
+                }></OutlinedInput>
+              {errors[id] ? <FormHelperText error>{errors[id]?.message}</FormHelperText> : null}
+            </FormControl>
+          )
+        } else {
+          result = (
+            <FormControl sx={{ margin: '20px', width: '250px' }} key={id}>
+              <Autocomplete
+                id={id}
+                options={countriesList}
+                onInputChange={(event): void => {
+                  if (event.currentTarget.textContent) {
+                    setValue(id, event.currentTarget.textContent)
+                    trigger('country')
+                  }
+                }}
+                renderInput={(props): JSX.Element => {
+                  return (
+                    <TextField
+                      {...register(id)}
+                      {...props}
+                      label={title}
+                      error={!!errors[id]?.message}
+                      helperText={errors[id]?.message}
+                    />
+                  )
+                }}></Autocomplete>
+            </FormControl>
+          )
+        }
+        return result
+      })}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+        {Object.keys(checkBox).map((key) => {
+          return (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  id={key}
+                  checked={checkBox[key as keyof CheckBoxStateInterface]}
+                  onChange={handleOnCheckBoxClick.bind(this)}
+                />
+              }
+              sx={{ color: '#beae97' }}
+              label={checkBoxTitle(key)}
+            />
+          )
+        })}
+      </Box>
+      <CustomGradientButton type="submit">Submit</CustomGradientButton>
+    </form>
+  )
+}

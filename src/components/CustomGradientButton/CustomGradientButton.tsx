@@ -20,10 +20,12 @@ const GradientButton = styled(Button)`
   max-width: fit-content;
 `
 
-export const CustomGradientButton = ({ children }: IMyButton): JSX.Element => {
+export const CustomGradientButton = ({ children, ...props }: IMyButton): JSX.Element => {
   return (
     <>
-      <GradientButton variant="contained">{children}</GradientButton>
+      <GradientButton {...props} variant="contained">
+        {children}
+      </GradientButton>
     </>
   )
 }

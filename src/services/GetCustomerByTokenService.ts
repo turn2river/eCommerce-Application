@@ -13,17 +13,7 @@ export class GetCustomerByTokenService {
   }
 }
 export type CustomerProfile = {
-  addresses: {
-    apartment: string
-    building: string
-    city: string
-    country: string
-    id: string
-    postalCode: string
-    region: string
-    state: string
-    streetName: string
-  }[]
+  addresses: Address[]
   authenticationMode: string
   billingAddressIds: string[]
   createdAt: string
@@ -57,5 +47,19 @@ export type CustomerProfile = {
   title: string
   version: number
   versionModifiedAt: string
-  dateOfBirth: string
+  dateOfBirth: Date
+  defaultBillingAddressId: string
+  defaultShippingAddressId: string
+}
+
+export interface Address {
+  apartment: string
+  building: string
+  city: string
+  country: string
+  id: string
+  postalCode: string
+  region: string
+  state: string
+  streetName: string
 }
