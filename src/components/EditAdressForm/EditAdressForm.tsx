@@ -35,6 +35,7 @@ import {
 import { addressFormFields } from '../../models/addressFormFields'
 import { checkBoxTitle } from '../../utils/createTitleForCheckBox'
 import { defaultAddressValues } from '../../models/defaultAddressValues'
+import { GetCustomerByTokenService } from '../../services/GetCustomerByTokenService'
 
 export const EditAdressForm = ({
   userData,
@@ -73,6 +74,7 @@ export const EditAdressForm = ({
         [id]: !prevState[id],
       }
     })
+    console.log(checkBox)
   }
 
   const [editableField, setEditableField] = useState<EditableFieldInterface>({
@@ -96,7 +98,7 @@ export const EditAdressForm = ({
 
   async function onSubmit(): Promise<void> {
     const updateUserInfoService = new UpdateUserInfoService()
-    if (addressID) {
+    if (addressID && token) {
       const body: CustomerUpdatedAddressData = {
         version: userData?.version,
         actions: [
@@ -116,23 +118,21 @@ export const EditAdressForm = ({
           },
         ],
       }
-      if (token) {
-        if (Object.values(editableField).every((el) => el === false)) {
-          try {
-            await updateUserInfoService.updateUserAddressInfo(token, body)
-            updateData((prevValue) => {
-              const newValue = prevValue + 1
-              return newValue
-            })
-            toast.success('Address updated successfully')
-            closeModal(false)
-          } catch (error) {
-            console.error(error)
-            toast.error('Something went wrong')
-          }
-        } else {
-          toast.error('Please save changes in fields')
+      if (Object.values(editableField).every((el) => el === false)) {
+        try {
+          await updateUserInfoService.updateUserAddressInfo(token, body)
+          updateData((prevValue) => {
+            const newValue = prevValue + 1
+            return newValue
+          })
+          toast.success('Address updated successfully')
+          closeModal(false)
+        } catch (error) {
+          console.error(error)
+          toast.error('Something went wrong')
         }
+      } else {
+        toast.error('Please save changes in fields')
       }
     } else if (token) {
       if (Object.values(editableField).every((el) => el === false)) {
@@ -156,11 +156,72 @@ export const EditAdressForm = ({
         }
         try {
           await updateUserInfoService.addUserAddressInfo(token, body)
+          if (checkBox.shippingAddress) {
+            const customer = new GetCustomerByTokenService()
+            const customerData = await customer.getCustomerByToken(token)
+            try {
+              await updateUserInfoService.modifyUserAddressInfo(
+                token,
+                customerData.version,
+                'addShippingAddressId',
+                customerData.addresses[customerData.addresses.length - 1].id,
+              )
+            } catch (error) {
+              console.error(error)
+              toast.error('Something went wrong')
+            }
+          }
+          if (checkBox.billingAddress) {
+            const customer = new GetCustomerByTokenService()
+            const customerData = await customer.getCustomerByToken(token)
+            try {
+              await updateUserInfoService.modifyUserAddressInfo(
+                token,
+                customerData.version,
+                'addBillingAddressId',
+                customerData.addresses[customerData.addresses.length - 1].id,
+              )
+            } catch (error) {
+              console.error(error)
+              toast.error('Something went wrong')
+            }
+          }
+          if (checkBox.defaultShippingAddress) {
+            const customer = new GetCustomerByTokenService()
+            const customerData = await customer.getCustomerByToken(token)
+            try {
+              await updateUserInfoService.modifyUserAddressInfo(
+                token,
+                customerData.version,
+                'setDefaultShippingAddress',
+                customerData.addresses[customerData.addresses.length - 1].id,
+              )
+            } catch (error) {
+              console.error(error)
+              toast.error('Something went wrong')
+            }
+          }
+          if (checkBox.defaultShippingAddress) {
+            const customer = new GetCustomerByTokenService()
+            const customerData = await customer.getCustomerByToken(token)
+            try {
+              await updateUserInfoService.modifyUserAddressInfo(
+                token,
+                customerData.version,
+                'setDefaultBillingAddress',
+                customerData.addresses[customerData.addresses.length - 1].id,
+              )
+            } catch (error) {
+              console.error(error)
+              toast.error('Something went wrong')
+            }
+          }
+          toast.success('Address added successfully')
+
           updateData((prevValue) => {
             const newValue = prevValue + 1
             return newValue
           })
-          toast.success('Address added successfully')
           closeModal(false)
         } catch (error) {
           console.error(error)
