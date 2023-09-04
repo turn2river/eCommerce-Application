@@ -2,40 +2,86 @@
 import axios from 'axios'
 
 export class GetFilteredProductsService {
-  public async getFilteredProducts(token: string, params: IFilteredProducts): Promise<FilteredProductsData> {
-    let url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=categories.id:"c3bbd3e2-ba78-4a21-9de1-e5c0ccdefc38"`
+  public async getFilteredProducts(
+    token: string,
+    { categoriesList = [], attributesList = [], priceList }: IFilteredProducts,
+  ): Promise<FilteredProductsData> {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
-    if (params.categoriesList && params.attributesList) {
-      const categoryFilters = params.categoriesList.map((id) => `categories.id:"${id}"`).join('&')
-      const attributeFilters = params.attributesList.reduce((acc, element) => {
-        const values = Object.entries(element).flat()
-        acc += `variants.attributes.${values[0]}:${values[1]}&`
-        return acc
-      }, '')
-      url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=${categoryFilters}&filter=${attributeFilters}`
-    } else if (params.categoriesList) {
-      const categoryFilters = params.categoriesList.map((id) => `categories.id:"${id}"`).join('&')
-      url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=${categoryFilters}`
-    } else if (params.attributesList) {
-      const attributeFilters = params.attributesList.reduce((acc, element) => {
-        const values = Object.entries(element).flat()
-        acc += `variants.attributes.${values[0]}:${values[1]}&`
-        return acc
-      }, '')
-      url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=${attributeFilters}`
-    }
+
+    const categoriesFilters = this.getCategoriesListFilters(categoriesList)
+    const attributesFilters = this.getAttributeListFilters(attributesList)
+    const pricesFilters = this.getPriceFilters(priceList)
+
+    const allParams: string[] = [categoriesFilters, attributesFilters, pricesFilters]
+    const removeEmpty = allParams.filter((param) => !!param)
+
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${removeEmpty.join(
+      '&',
+    )}`
+
     const response = await axios.get(url, { headers })
-    console.log(response.data.results)
+    console.log(url, response.data.results)
     return response.data.results
+  }
+
+  private getCategoriesListFilters(categoriesList: string[]): string {
+    if (!categoriesList.length) {
+      return ''
+    }
+
+    const idList = categoriesList.map((id) => `"${id}"`)
+    const categoryFilters = `categories.id: ${idList.join(', ')}`
+
+    return `filter=${categoryFilters}`
+  }
+
+  private getAttributeListFilters(attributeRecordList: Record<string, string>[]): string {
+    if (!attributeRecordList.length) {
+      return ''
+    }
+
+    const attributeFilters = attributeRecordList.reduce((acc, element, index) => {
+      const values = Object.entries(element).flat()
+
+      if (index === attributeRecordList.length - 1) {
+        acc += `${values[0]}:${values[1]}`
+
+        return acc
+      }
+
+      acc += `${values[0]}:${values[1]}&`
+
+      return acc
+    }, '')
+
+    return `filter=variants.attributes.${attributeFilters}`
+  }
+
+  private getPriceFilters(pricesFilter?: PriceType): string {
+    if (!pricesFilter) {
+      return ''
+    }
+
+    if (!pricesFilter.max || !pricesFilter.min) {
+      return ''
+    }
+
+    return `filter=variants.price.centAmount:range(${pricesFilter.min} to ${pricesFilter.max})`
   }
 }
 
 interface IFilteredProducts {
   categoriesList?: string[]
   attributesList?: { [key: string]: string }[]
+  priceList?: PriceType
+}
+
+type PriceType = {
+  min: number
+  max: number
 }
 
 interface FilteredProductsData {
