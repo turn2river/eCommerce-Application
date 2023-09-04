@@ -9,6 +9,8 @@ import { Main } from '../pages/Main/Main.tsx'
 import { ProductPage } from '../pages/ProductPage/ProductPage.tsx'
 import { Catalog } from '../pages/Catalog/Catalog.tsx'
 import { CatalogLayout } from '../layouts/CatalogLayout.tsx'
+import { Profile } from '../pages/Profile/Profile.tsx'
+import { ProtectedRoutes } from './ProtectedRoutes.tsx'
 
 export const AppRoutes = (): JSX.Element => {
   const auth = useAuth()
@@ -18,7 +20,7 @@ export const AppRoutes = (): JSX.Element => {
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Main />} />
-        <Route path="catalog" element={<CatalogLayout />}>
+        <Route path="catalogue" element={<CatalogLayout />}>
           <Route index element={<Catalog />} />
           <Route path=":id" element={<ProductPage />} />
         </Route>
@@ -29,6 +31,14 @@ export const AppRoutes = (): JSX.Element => {
         ) : (
           <Route path="registration" element={<Registration />} />
         )}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoutes>
+              <Profile />
+            </ProtectedRoutes>
+          }
+        />
         <Route path="/*" element={<PageNotFound />}></Route>
       </Route>,
     ),

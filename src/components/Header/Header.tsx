@@ -26,7 +26,7 @@ export const Header = (): JSX.Element => {
           <Button href="/" color="inherit">
             Home
           </Button>
-          <Button variant="outlined" href="/catalog" color="inherit">
+          <Button variant="outlined" href="/catalogue" color="inherit">
             Catalogue
           </Button>
           <Button href="/about" color="inherit">

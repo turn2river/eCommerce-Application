@@ -58,16 +58,14 @@ export const Catalog = (): JSX.Element => {
       </Typography>
       <Grid {...gridContainerProps}>
         {loadingStatus
-          ? Array(8)
-              .fill('')
-              .map(() => (
-                <Grid {...gridItemProps}>
-                  <Skeleton variant="rectangular" {...skeletonProps}></Skeleton>
-                </Grid>
-              ))
+          ? productsData.map(({ id }) => (
+              <Grid key={id} {...gridItemProps}>
+                <Skeleton variant="rectangular" {...skeletonProps}></Skeleton>
+              </Grid>
+            ))
           : productsData.map(({ id, key, masterData }) => {
               return (
-                <Grid key={id} {...gridItemProps}>
+                <Grid {...gridItemProps}>
                   <ProductCard
                     key={id}
                     productKey={key}
