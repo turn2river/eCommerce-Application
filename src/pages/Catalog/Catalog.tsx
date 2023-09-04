@@ -9,8 +9,7 @@ import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const dataLoader = () => {
+export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const selectionsID = new SelectionProductsQueryService()
@@ -22,7 +21,7 @@ export const dataLoader = () => {
     if (anonUserAuthToken) {
       const productIDs = async (): Promise<string[]> => {
         setLoadingstatus(true)
-        const result = await selectionsID.getSectionProductsIDs(anonUserAuthToken, 'popular')
+        const result = await selectionsID.getSectionProductsIDs(anonUserAuthToken, 'catalogue')
         return result
       }
       ;(async (): Promise<void> => {
@@ -38,17 +37,10 @@ export const dataLoader = () => {
         })
       })()
     }
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    return () => {
+    return (): void => {
       loading = false
     }
   }, [])
-
-  return { productsData, loadingStatus }
-}
-
-export const Catalog = (): JSX.Element => {
-  const { productsData, loadingStatus } = dataLoader()
 
   return (
     <Fragment>
@@ -62,7 +54,7 @@ export const Catalog = (): JSX.Element => {
           type="search"></TextField>
       </Box>
       <Typography variant="h4" margin={'20px 0'}>
-        Popular Aromats
+        Catalogue
       </Typography>
       <Grid {...gridContainerProps}>
         {loadingStatus
@@ -75,7 +67,7 @@ export const Catalog = (): JSX.Element => {
               ))
           : productsData.map(({ id, key, masterData }) => {
               return (
-                <Grid {...gridItemProps}>
+                <Grid key={id} {...gridItemProps}>
                   <ProductCard
                     key={id}
                     productKey={key}

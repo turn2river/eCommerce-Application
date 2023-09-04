@@ -23,7 +23,7 @@ export class GetFilteredProductsService {
     )}`
 
     const response = await axios.get(url, { headers })
-    console.log(url, response.data.results)
+    // console.log(response.data.results)
     return response.data.results
   }
 

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Product } from '../models/ProductType'
 
 export class GetProductByIdService {
-  public async getProductById(token: string, id: string): Promise<Product> {
+  public async getProductById(token: string, id: string | undefined): Promise<Product> {
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/products/${id}`
     const headers = {
       'Content-Type': 'application/json',

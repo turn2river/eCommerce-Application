@@ -23,40 +23,20 @@ export const ProductCard = ({
   variants,
   description,
 }: ProductCardPropsInterface): JSX.Element => {
-  const [volume, setVolume] = useState(variants instanceof Array ? variants[0].prices[0].key : variants.prices[0].key)
+  const [volume, setVolume] = useState(
+    variants instanceof Array ? variants?.[0]?.attributes?.[1]?.value[0] : variants?.[0]?.attributes?.[1]?.value[0],
+  )
 
-  const [price, setPrice] = useState(() => {
-    let result
-    if (variants instanceof Array) {
-      variants.map((variant) => {
-        if (variant.prices[0].key === volume) {
-          result = convertPrice(variant.prices[0].value.centAmount)
-        }
-        return null
-      })
-    } else {
-      result = convertPrice(variants.prices[0].value.centAmount)
-    }
-    return result
-  })
+  const [price, setPrice] = useState(convertPrice(variants?.[0].prices[0].value.centAmount))
 
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(newVolume)
-    setPrice(() => {
-      let result
-      if (variants instanceof Array) {
-        variants.map((variant) => {
-          if (variant.prices[0].key === newVolume) {
-            result = convertPrice(variant.prices[0].value.centAmount)
-          }
-          return null
-        })
-      }
-      return result
-    })
   }
 
-  // console.log(productKey)
+  const handleVolumeSelect = (price): void => {
+    const priceInEuro = convertPrice(price)
+    setPrice(priceInEuro)
+  }
 
   return (
     <Card variant="outlined" sx={cardStyle}>
@@ -86,8 +66,15 @@ export const ProductCard = ({
             {variants instanceof Array ? (
               variants.map((variant) => {
                 return (
-                  <ToggleButton key={variant?.prices[0].key} value={variant?.prices[0].key}>
-                    {VolumeVariants[variant?.prices[0].key.toUpperCase() as keyof typeof VolumeVariants]}
+                  <ToggleButton
+                    onClick={(): void => {
+                      const centPrice = variant.prices[0].value.centAmount
+                      handleVolumeSelect(centPrice)
+                    }}
+                    key={variant?.prices[0].key}
+                    // @ts-expect-error why
+                    value={variant?.attributes && variant?.attributes[1]?.value[0]}>
+                    {variant?.attributes?.[1]?.value?.[0]}
                   </ToggleButton>
                 )
               })

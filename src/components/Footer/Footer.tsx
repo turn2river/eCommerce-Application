@@ -12,7 +12,7 @@ export const Footer = (): JSX.Element => {
       <Toolbar
         sx={{
           margin: '0 auto',
-          maxWidth: '1488px',
+          maxWidth: '1536px',
           width: '100%',
           display: 'flex',
           justifyContent: 'space-between',

@@ -16,7 +16,7 @@ export const Header = (): JSX.Element => {
       <Toolbar
         sx={{
           margin: '0 auto',
-          maxWidth: '1488px',
+          maxWidth: '1536px',
           width: '100%',
           display: 'flex',
           justifyContent: 'space-between',
@@ -26,8 +26,8 @@ export const Header = (): JSX.Element => {
           <Button href="/" color="inherit">
             Home
           </Button>
-          <Button href="/catalog" color="inherit">
-            Catalog
+          <Button variant="outlined" href="/catalog" color="inherit">
+            Catalogue
           </Button>
           <Button href="/about" color="inherit">
             About us
