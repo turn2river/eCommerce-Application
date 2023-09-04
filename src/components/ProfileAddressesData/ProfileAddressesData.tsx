@@ -2,16 +2,31 @@ import { Typography, Chip, Modal, Fab } from '@mui/material'
 import { Box } from '@mui/system'
 import { useState, MouseEvent } from 'react'
 import { Add, Delete } from '@mui/icons-material'
+import { toast } from 'react-toastify'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { adressCardStyle, typographyBoxStyle, contentStyle, titleStyle, popUpStyle } from './style'
 import { EditAdressForm } from '../EditAdressForm/EditAdressForm.tsx'
 import { ProfileDataPropsInterface } from '../../models/ProfileDataPropsInterface'
 import { Address } from '../../services/GetCustomerByTokenService'
 import { addressCardFields } from '../../utils/addressCardFields'
+import { UpdateUserInfoService } from '../../services/UpdateUserInfoData'
 
 export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDataPropsInterface): JSX.Element => {
-  const handleDelete = (event: MouseEvent<HTMLElement>): void => {
-    console.log(event?.currentTarget?.parentElement?.id)
+  const handleDelete = async (event: MouseEvent<HTMLElement>): Promise<void> => {
+    const updateUserInfoService = new UpdateUserInfoService()
+    const id = event.currentTarget.parentElement?.id
+    if (token && userData && id) {
+      try {
+        await updateUserInfoService.modifyUserAddressInfo(token, userData.version, 'removeAddress', id)
+        updateData((prevValue) => {
+          const newValue = prevValue + 1
+          return newValue
+        })
+        toast.success('Address removed successfully')
+      } catch (error) {
+        toast.error('Something went wrong!')
+      }
+    }
   }
 
   const [openEditModal, setOpenEditModal] = useState<boolean>(false)

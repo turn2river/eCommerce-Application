@@ -118,14 +118,13 @@ export const EditAdressForm = ({
       }
       if (token) {
         if (Object.values(editableField).every((el) => el === false)) {
-          console.log(Object.values(editableField).every((el) => el === false))
           try {
             await updateUserInfoService.updateUserAddressInfo(token, body)
             updateData((prevValue) => {
               const newValue = prevValue + 1
               return newValue
             })
-            toast.success('User info updated successfully')
+            toast.success('Address updated successfully')
             closeModal(false)
           } catch (error) {
             console.error(error)
@@ -161,7 +160,7 @@ export const EditAdressForm = ({
             const newValue = prevValue + 1
             return newValue
           })
-          toast.success('User info updated successfully')
+          toast.success('Address added successfully')
           closeModal(false)
         } catch (error) {
           console.error(error)
