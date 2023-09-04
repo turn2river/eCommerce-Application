@@ -196,6 +196,7 @@ export const EditAdressForm = ({
         {Object.keys(checkBox).map((key) => {
           return (
             <FormControlLabel
+              key={key}
               control={
                 <Checkbox
                   id={key}

@@ -24,7 +24,7 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
             <Box sx={{ width: '100%' }}>
               {addressCardFields(address).map(({ title, value }) => {
                 return (
-                  <Box sx={typographyBoxStyle}>
+                  <Box sx={typographyBoxStyle} key={title.split(' ').join()}>
                     <Typography sx={titleStyle}>{title}</Typography>
                     <Typography sx={contentStyle}>{`${value || '-'}`}</Typography>
                   </Box>
