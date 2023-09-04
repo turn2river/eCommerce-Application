@@ -11,7 +11,7 @@ export class ProductsService {
       'Authorization': `Bearer ${token}`,
     }
     const response = await axios.get(url, { headers })
-    console.log(response.data.results)
+    // console.log(response.data.results)
 
     return response.data
   }

@@ -11,17 +11,23 @@ export const Header = (): JSX.Element => {
       component="nav"
       position="static"
       sx={{
-        p: 2,
+        py: 2,
       }}>
       <Toolbar
         sx={{
+          margin: '0 auto',
+          maxWidth: '1536px',
+          width: '100%',
           display: 'flex',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
         }}>
         <Logo />
         <Box>
           <Button href="/" color="inherit">
             Home
+          </Button>
+          <Button variant="outlined" href="/catalog" color="inherit">
+            Catalogue
           </Button>
           <Button href="/about" color="inherit">
             About us

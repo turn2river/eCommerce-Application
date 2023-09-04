@@ -55,7 +55,7 @@ export function DropdownButton(): JSX.Element {
         variant="contained"
         startIcon={<FormatListBulletedIcon />}
         sx={{ height: '100%' }}>
-        Catalog
+        Categories
       </Button>
       <Menu id="dropdown-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         {categoies?.map((category) => (

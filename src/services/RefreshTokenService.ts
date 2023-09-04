@@ -12,7 +12,7 @@ export class RefreshTokenService {
         password: 'wBkMaGx7k8lGflmkfPMt0OZe-Bhj9jy5',
       },
     })
-    console.log(response.data)
+    // console.log(response.data)
 
     return response.data
   }

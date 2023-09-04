@@ -32,7 +32,7 @@ export const ImageAndCaption = ({
   }
 
   return (
-    <Box sx={mainImage}>
+    <Box mt={'20px'} sx={mainImage}>
       <Typography variant="h4" sx={mainImageCaption}>
         {children}
       </Typography>

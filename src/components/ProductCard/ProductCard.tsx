@@ -4,49 +4,39 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Link,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from '@mui/material'
 import { useState, MouseEvent } from 'react'
-import { cardStyle, titleStyle } from './style'
+import { cardStyle } from './style'
 import { VolumeVariants } from '../../models/VolumeVariants'
 import { ProductCardPropsInterface } from '../../models/ProductCardPropsInterface'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { convertPrice } from '../../utils/convertPrice'
 
-export const ProductCard = ({ imageSource, title, variants, description }: ProductCardPropsInterface): JSX.Element => {
-  const [volume, setVolume] = useState(variants instanceof Array ? variants[0].prices[0].key : variants.prices[0].key)
+export const ProductCard = ({
+  productKey,
+  imageSource,
+  title,
+  variants,
+  description,
+}: ProductCardPropsInterface): JSX.Element => {
+  const [volume, setVolume] = useState(
+    // @ts-expect-error why
+    variants instanceof Array ? variants?.[0]?.attributes?.[1]?.value[0] : variants?.[0]?.attributes?.[1]?.value[0],
+  )
 
-  const [price, setPrice] = useState(() => {
-    let result
-    if (variants instanceof Array) {
-      variants.map((variant) => {
-        if (variant.prices[0].key === volume) {
-          result = convertPrice(variant.prices[0].value.centAmount)
-        }
-        return null
-      })
-    } else {
-      result = convertPrice(variants.prices[0].value.centAmount)
-    }
-    return result
-  })
+  const [price, setPrice] = useState(convertPrice(variants?.[0].prices[0].value.centAmount))
 
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(newVolume)
-    setPrice(() => {
-      let result
-      if (variants instanceof Array) {
-        variants.map((variant) => {
-          if (variant.prices[0].key === newVolume) {
-            result = convertPrice(variant.prices[0].value.centAmount)
-          }
-          return null
-        })
-      }
-      return result
-    })
+  }
+
+  const handleVolumeSelect = (selectedPrice: number): void => {
+    const priceInEuro = convertPrice(selectedPrice)
+    setPrice(priceInEuro)
   }
 
   return (
@@ -57,9 +47,9 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
         image={imageSource}
       />
       <CardContent sx={{ margin: '0', padding: '0' }}>
-        <Typography variant="body1" component={'div'} sx={titleStyle}>
+        <Link href={`${productKey}`} display={'block'} margin={'10px 0'} textAlign={'center'} noWrap={true}>
           {title}
-        </Typography>
+        </Link>
         <Typography variant="body2" sx={{ minHeight: '80px', textAlign: 'justify' }}>
           {description}
         </Typography>
@@ -77,8 +67,15 @@ export const ProductCard = ({ imageSource, title, variants, description }: Produ
             {variants instanceof Array ? (
               variants.map((variant) => {
                 return (
-                  <ToggleButton key={variant?.prices[0].key} value={variant?.prices[0].key}>
-                    {VolumeVariants[variant?.prices[0].key.toUpperCase() as keyof typeof VolumeVariants]}
+                  <ToggleButton
+                    onClick={(): void => {
+                      const centPrice = variant.prices[0].value.centAmount
+                      handleVolumeSelect(centPrice)
+                    }}
+                    key={variant?.prices[0].key}
+                    // @ts-expect-error why
+                    value={variant?.attributes && variant?.attributes[1]?.value[0]}>
+                    {variant?.attributes?.[1]?.value?.[0]}
                   </ToggleButton>
                 )
               })

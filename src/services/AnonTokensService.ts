@@ -17,7 +17,7 @@ export class AnonTokensService {
         password: 'itUuiiHan_5t0wwKkkslnPXc_jIjV3VI',
       },
     })
-    console.log(response.data)
+    // console.log(response.data)
 
     const tokens: Token = {
       accessToken: response.data.access_token,

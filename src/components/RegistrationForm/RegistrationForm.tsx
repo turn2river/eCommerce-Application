@@ -77,7 +77,7 @@ export const RegistrationForm = (): JSX.Element => {
       setValue('billing_zipCode', '')
       setValue('billing_country', '')
     }
-    console.log(id, checked)
+    // console.log(id, checked)
   }
 
   const onSubmit = async ({
@@ -127,7 +127,7 @@ export const RegistrationForm = (): JSX.Element => {
       billingAddresses: [billingAddressInArray],
     }
     // TODO: remove console logging below
-    console.log(JSON.stringify(customerInfo))
+    // console.log(JSON.stringify(customerInfo))
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer

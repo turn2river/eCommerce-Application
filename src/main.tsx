@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material'
 import { App } from './App.tsx'
 import { AuthProvider } from './store/AuthContext.tsx'
@@ -10,14 +9,12 @@ import { customTheme } from './utils/CustomTheme.tsx'
 if (document.getElementById('root') !== null) {
   const root = document.getElementById('root') as Element
   ReactDOM.createRoot(root).render(
-    <BrowserRouter>
-      <React.StrictMode>
-        <ThemeProvider theme={customTheme}>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </ThemeProvider>
-      </React.StrictMode>
-    </BrowserRouter>,
+    <React.StrictMode>
+      <ThemeProvider theme={customTheme}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ThemeProvider>
+    </React.StrictMode>,
   )
 }
