@@ -35,7 +35,7 @@ const filteredProd = new GetFilteredProductsService()
 
 if (anonUserAuthToken) {
   const catalogue = new ProductsService()
-  catalogue.getProducts(anonUserAuthToken, 6, 2)
+  catalogue.getProducts(anonUserAuthToken, 8, 1)
   const id = 'c3bbd3e2-ba78-4a21-9de1-e5c0ccdefc38' // это женские нишевые ароматы, просто пример
   const id1 = '95f20a5a-77e8-4469-a7af-0167888d5ef5' // это женские ароматы
   categoryProducts.getProductsByCategoryId(anonUserAuthToken, id)
@@ -43,9 +43,14 @@ if (anonUserAuthToken) {
   const volume1 = '30'
   const attribute = 'VolumeEDP'
   const attribute1 = 'VolumeEDT'
+  const priceRange = {
+    min: 5500,
+    max: 10000,
+  }
   const params = {
     categoriesList: [id, id1],
     attributesList: [{ [attribute]: volume }, { [attribute1]: volume1 }] as { [key: string]: string }[],
+    priceList: priceRange,
   }
   filteredProducts.getProductsFilteredByCategoryIdAndAttribute(anonUserAuthToken, id, attribute, volume)
   filteredProd.getFilteredProducts(anonUserAuthToken, params)
