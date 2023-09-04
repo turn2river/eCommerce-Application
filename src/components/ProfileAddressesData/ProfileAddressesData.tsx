@@ -18,7 +18,10 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
   const [openNewAddressModal, setOpenNewAsdressModal] = useState<boolean>(false)
   const [addressID, setAddressID] = useState<string>('')
 
-  const closeEditAddress = (): void => setOpenEditModal(false)
+  const closeEditAddress = (): void => {
+    setOpenEditModal(false)
+    setAddressID('')
+  }
   const closeNewEditAddress = (): void => setOpenNewAsdressModal(false)
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -78,7 +81,7 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                   sx={{ margin: '5px 0' }}
                   size="medium"
                   variant="outlined"
-                  label="Remove address"
+                  label="Remove"
                 />
               </Box>
             </Box>

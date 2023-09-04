@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { yupResolver } from '@hookform/resolvers/yup'
 import { CheckCircleOutline, Edit } from '@mui/icons-material'
 import {
@@ -20,7 +21,11 @@ import { countriesList } from '../../models/CountriesList'
 import { validationScheme } from './validationScheme'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { getCountryCode } from '../../utils/GetCountryCode'
-import { CustomerUpdatedAddressData, UpdateUserInfoService } from '../../services/UpdateUserInfoData'
+import {
+  CustomerUpdatedAddressData,
+  CustomerUpdatedData,
+  UpdateUserInfoService,
+} from '../../services/UpdateUserInfoData'
 import {
   AddressDataFieldsInterface,
   CheckBoxStateInterface,
@@ -29,6 +34,7 @@ import {
 } from './type'
 import { addressFormFields } from '../../models/addressFormFields'
 import { checkBoxTitle } from '../../utils/createTitleForCheckBox'
+import { defaultAddressValues } from '../../models/defaultAddressValues'
 
 export const EditAdressForm = ({
   userData,
@@ -48,15 +54,7 @@ export const EditAdressForm = ({
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationScheme),
-    defaultValues: {
-      state: currentCardAddress?.state,
-      region: currentCardAddress?.region,
-      apartment: currentCardAddress?.apartment,
-      streetName: currentCardAddress?.streetName,
-      city: currentCardAddress?.city,
-      building: currentCardAddress?.building,
-      postalCode: currentCardAddress?.postalCode,
-    },
+    defaultValues: defaultAddressValues(currentCardAddress, addressID),
     mode: 'all',
   })
 
@@ -97,6 +95,7 @@ export const EditAdressForm = ({
   }
 
   async function onSubmit(): Promise<void> {
+    const updateUserInfoService = new UpdateUserInfoService()
     if (addressID) {
       const body: CustomerUpdatedAddressData = {
         version: userData?.version,
@@ -117,11 +116,47 @@ export const EditAdressForm = ({
           },
         ],
       }
-      const updateUserInfoService = new UpdateUserInfoService()
+      if (token) {
+        if (Object.values(editableField).every((el) => el === false)) {
+          console.log(Object.values(editableField).every((el) => el === false))
+          try {
+            await updateUserInfoService.updateUserAddressInfo(token, body)
+            updateData((prevValue) => {
+              const newValue = prevValue + 1
+              return newValue
+            })
+            toast.success('User info updated successfully')
+            closeModal(false)
+          } catch (error) {
+            console.error(error)
+            toast.error('Something went wrong')
+          }
+        } else {
+          toast.error('Please save changes in fields')
+        }
+      }
+    } else if (token) {
       if (Object.values(editableField).every((el) => el === false)) {
-        console.log(Object.values(editableField).every((el) => el === false))
+        const body: CustomerUpdatedData = {
+          version: userData?.version,
+          actions: [
+            {
+              action: 'addAddress',
+              address: {
+                state: getValues('state'),
+                region: getValues('region'),
+                apartment: getValues('apartment'),
+                streetName: getValues('streetName'),
+                city: getValues('city'),
+                building: getValues('building'),
+                postalCode: getValues('postalCode'),
+                country: getCountryCode(getValues('country')),
+              },
+            },
+          ],
+        }
         try {
-          await updateUserInfoService.updateUserAddressInfo(token, body)
+          await updateUserInfoService.addUserAddressInfo(token, body)
           updateData((prevValue) => {
             const newValue = prevValue + 1
             return newValue
@@ -135,8 +170,6 @@ export const EditAdressForm = ({
       } else {
         toast.error('Please save changes in fields')
       }
-    } else {
-      console.log(111)
     }
   }
 

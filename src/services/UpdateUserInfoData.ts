@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export class UpdateUserInfoService {
   public async updateUserAddressInfo(
-    token: string | null | undefined,
+    token: string,
     customerUpdatedData: CustomerUpdatedAddressData,
   ): Promise<CustomerUpdatedProfile> {
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/`
@@ -11,40 +11,7 @@ export class UpdateUserInfoService {
       'Authorization': `Bearer ${token}`,
     }
     const body = customerUpdatedData
-    /* const body =
-      {
-  "version" : 16,
-  "actions": [ {
-    "action" : "changeAddress",
-    "addressId": "{{addressId}}",
-    "address": {
-      "key": "exampleKey",
-      "title": "My Address",
-      "salutation": "Mr.",
-      "firstName": "Example",
-      "lastName": "Person",
-      "streetName": "Example Street",
-      "streetNumber": "4711",
-      "additionalStreetInfo": "Backhouse",
-      "postalCode": "80933",
-      "city": "Exemplary City",
-      "region": "Exemplary Region",
-      "state": "Exemplary State",
-      "country": "DE",
-      "company": "My Company Name",
-      "department": "Sales",
-      "building": "Hightower 1",
-      "apartment": "247",
-      "pOBox": "2471",
-      "phone": "+49 89 12345678",
-      "mobile": "+49 171 2345678",
-      "email": "email@example.com",
-      "fax": "+49 89 12345679",
-      "additionalAddressInfo": "no additional Info",
-      "externalId": "Information not needed"
-    }
-  }]
-} */
+
     const response = await axios.post(url, body, { headers })
     console.log('Updated address', response.data)
     return response.data
@@ -59,20 +26,32 @@ export class UpdateUserInfoService {
       'Authorization': `Bearer ${token}`,
     }
     const body = customerUpdatedData
-    /* const body =
-      {
-  "version" : 3,
-  "actions" : [ {
-    "action" : "addAddress",
-    "address" : {
-      "streetName" : "Any Street",
-      "streetNumber" : "1337",
-      "postalCode" : "11111",
-      "city" : "Any City",
-      "country" : "US"
+
+    const response = await axios.post(url, body, { headers })
+    console.log('Updated address', response.data)
+    return response.data
+  }
+
+  public async modifyUserAddressInfo(
+    token: string,
+    version: number,
+    actionKey: string,
+    addressId: string,
+  ): Promise<CustomerUpdatedProfile> {
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/`
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     }
-  } ]
-    } */
+    const body: ModifyAddressData = {
+      version,
+      actions: [
+        {
+          action: actionKey,
+          addressId,
+        },
+      ],
+    }
     const response = await axios.post(url, body, { headers })
     console.log('Updated address', response.data)
     return response.data
@@ -88,28 +67,7 @@ export class UpdateUserInfoService {
       'Authorization': `Bearer ${token}`,
     }
     const body = customerUpdatedPersonalData
-    /* const body = {
-      version: 3,
-      actions: [
-         {
-    "action": "setFirstName",
-    "firstName": "NewFirstName"
-  },
-  {
-    "action": "setLastName",
-    "lastName": "NewLastName"
-  },
-  {
-      "action": "setDateOfBirth",
-      "dateOfBirth": "1990-01-01"
-    },
 
-    {
-  "action": "changeEmail",
-  "email": "email@example.com"
-}
-],
-    } */
     const response = await axios.post(url, body, { headers })
     console.log('Updated name', response.data)
     return response.data
@@ -124,12 +82,6 @@ export class UpdateUserInfoService {
       'Authorization': `Bearer ${token}`,
     }
     const body = customerUpdatedPasswordlData
-
-    /* const body = {
-  "version" : 1,
-  "currentPassword" : "secret123",
-  "newPassword" : "newSecret456"
-    } */
 
     const response = await axios.post(url, body, { headers })
     console.log(1, response.data)
@@ -163,7 +115,7 @@ interface UpdatedAddress {
   externalId?: string
 }
 
-export interface CustomerUpdatedAddressData {
+export type CustomerUpdatedAddressData = {
   version: number | undefined
   actions: {
     action: string
@@ -192,17 +144,28 @@ interface Action {
 
 export interface Address {
   streetName: string
-  streetNumber: string
+  building: string
   postalCode: string
   city: string
-  country: string
+  country: string | null
+  state: string
+  region: string
+  apartment: string
 }
 
 export type CustomerUpdatedData = {
-  version: number
+  version: number | undefined
   actions: {
     action: string
     address: Address
+  }[]
+}
+
+export type ModifyAddressData = {
+  version: number
+  actions: {
+    action: string
+    addressId: string
   }[]
 }
 
@@ -229,4 +192,11 @@ interface CustomerUpdatedProfile {
   isEmailVerified: boolean
   stores: string[]
   authenticationMode: string
+}
+export enum ActionKey {
+  RemoveAddress = 'removeAddress',
+  SetDefaultShippingAddress = 'setDefaultShippingAddress',
+  SetDefaultBillingAddress = 'setDefaultBillingAddress',
+  AddBillingAddressId = 'addBillingAddressId',
+  AddShippingAddressId = 'addShippingAddressId',
 }
