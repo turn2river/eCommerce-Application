@@ -54,18 +54,12 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
               })}
               <Box sx={{ marginBottom: '10px' }}>
                 {userData.billingAddressIds.includes(address.id) ? (
-                  <Chip
-                    id={address.id}
-                    label="Billing Adress"
-                    sx={{ margin: '5px 0' }}
-                    size="small"
-                    variant="outlined"
-                  />
+                  <Chip id={address.id} label="Billing Adress" sx={{ margin: '5px' }} size="small" variant="outlined" />
                 ) : null}
                 {userData.shippingAddressIds.includes(address.id) ? (
                   <Chip
                     id={address.id}
-                    sx={{ margin: '5px 0' }}
+                    sx={{ margin: '5px' }}
                     size="small"
                     variant="outlined"
                     label="Shipping Adress"
@@ -74,7 +68,7 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                 {address.id === userData.defaultBillingAddressId ? (
                   <Chip
                     id={address.id}
-                    sx={{ margin: '5px 0' }}
+                    sx={{ margin: '5px' }}
                     size="small"
                     variant="outlined"
                     label="Default billing Adress"
@@ -83,7 +77,7 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                 {address.id === userData.defaultShippingAddressId ? (
                   <Chip
                     id={address.id}
-                    sx={{ margin: '5px 0' }}
+                    sx={{ margin: '5px' }}
                     size="small"
                     variant="outlined"
                     label="Default shipping Adress"
@@ -93,8 +87,8 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                   id={address.id}
                   onDelete={handleDelete.bind(this)}
                   deleteIcon={<Delete />}
-                  sx={{ margin: '5px 0' }}
-                  size="medium"
+                  sx={{ margin: '5px' }}
+                  size="small"
                   variant="outlined"
                   label="Remove"
                 />

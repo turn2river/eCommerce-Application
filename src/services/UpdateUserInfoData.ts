@@ -36,7 +36,7 @@ export class UpdateUserInfoService {
     token: string,
     version: number,
     actionKey: string,
-    addressId: string,
+    addressId: string | undefined,
   ): Promise<CustomerUpdatedProfile> {
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/`
     const headers = {
@@ -165,7 +165,7 @@ export type ModifyAddressData = {
   version: number
   actions: {
     action: string
-    addressId: string
+    addressId: string | undefined
   }[]
 }
 
