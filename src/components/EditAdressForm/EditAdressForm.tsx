@@ -35,6 +35,7 @@ export const EditAdressForm = ({
   addressID,
   token,
   updateData,
+  closeModal,
 }: EditAdressFormPropsInterface): JSX.Element => {
   const currentCardAddress = userData?.addresses.filter((address) => address.id === addressID)[0]
 
@@ -96,41 +97,46 @@ export const EditAdressForm = ({
   }
 
   async function onSubmit(): Promise<void> {
-    const body: CustomerUpdatedAddressData = {
-      version: userData?.version,
-      actions: [
-        {
-          action: 'changeAddress',
-          addressId: addressID,
-          address: {
-            streetName: getValues('streetName'),
-            postalCode: getValues('postalCode'),
-            city: getValues('city'),
-            country: getCountryCode(getValues('country')),
-            building: getValues('building'),
-            apartment: getValues('apartment'),
-            region: getValues('region'),
-            state: getValues('state'),
+    if (addressID) {
+      const body: CustomerUpdatedAddressData = {
+        version: userData?.version,
+        actions: [
+          {
+            action: 'changeAddress',
+            addressId: addressID,
+            address: {
+              streetName: getValues('streetName'),
+              postalCode: getValues('postalCode'),
+              city: getValues('city'),
+              country: getCountryCode(getValues('country')),
+              building: getValues('building'),
+              apartment: getValues('apartment'),
+              region: getValues('region'),
+              state: getValues('state'),
+            },
           },
-        },
-      ],
-    }
-    const updateUserInfoService = new UpdateUserInfoService()
-    if (Object.values(editableField).every((el) => el === false)) {
-      console.log(Object.values(editableField).every((el) => el === false))
-      try {
-        await updateUserInfoService.updateUserAddressInfo(token, body)
-        updateData((prevValue) => {
-          const newValue = prevValue + 1
-          return newValue
-        })
-        toast.success('User info updated successfully')
-      } catch (error) {
-        console.error(error)
-        toast.error('Something went wrong')
+        ],
+      }
+      const updateUserInfoService = new UpdateUserInfoService()
+      if (Object.values(editableField).every((el) => el === false)) {
+        console.log(Object.values(editableField).every((el) => el === false))
+        try {
+          await updateUserInfoService.updateUserAddressInfo(token, body)
+          updateData((prevValue) => {
+            const newValue = prevValue + 1
+            return newValue
+          })
+          toast.success('User info updated successfully')
+          closeModal(false)
+        } catch (error) {
+          console.error(error)
+          toast.error('Something went wrong')
+        }
+      } else {
+        toast.error('Please save changes in fields')
       }
     } else {
-      toast.error('Please save changes in fields')
+      console.log(111)
     }
   }
 
@@ -174,6 +180,7 @@ export const EditAdressForm = ({
                   if (event.currentTarget.textContent) {
                     setValue(id, event.currentTarget.textContent)
                     trigger('country')
+                    trigger('postalCode')
                   }
                 }}
                 renderInput={(props): JSX.Element => {

@@ -1,7 +1,9 @@
+import { Dispatch, SetStateAction } from 'react'
 import { ProfileDataPropsInterface } from '../../models/ProfileDataPropsInterface'
 
 export interface EditAdressFormPropsInterface extends ProfileDataPropsInterface {
   addressID: string
+  closeModal: Dispatch<SetStateAction<boolean>>
 }
 
 export type AddressDataFieldsIds =

@@ -1,6 +1,7 @@
-import { Typography, Chip, Modal } from '@mui/material'
+import { Typography, Chip, Modal, Fab } from '@mui/material'
 import { Box } from '@mui/system'
 import { useState, MouseEvent } from 'react'
+import { Add, Delete } from '@mui/icons-material'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { adressCardStyle, typographyBoxStyle, contentStyle, titleStyle, popUpStyle } from './style'
 import { EditAdressForm } from '../EditAdressForm/EditAdressForm.tsx'
@@ -10,14 +11,17 @@ import { addressCardFields } from '../../utils/addressCardFields'
 
 export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDataPropsInterface): JSX.Element => {
   const handleDelete = (event: MouseEvent<HTMLElement>): void => {
-    console.info(event?.currentTarget?.parentElement?.id)
+    console.log(event?.currentTarget?.parentElement?.id)
   }
-  const [openModal, setOpenModal] = useState<boolean>(false)
+
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false)
+  const [openNewAddressModal, setOpenNewAsdressModal] = useState<boolean>(false)
   const [addressID, setAddressID] = useState<string>('')
 
-  const handleClose = (): void => setOpenModal(false)
+  const closeEditAddress = (): void => setOpenEditModal(false)
+  const closeNewEditAddress = (): void => setOpenNewAsdressModal(false)
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
       {userData?.addresses.map((address: Address) => {
         return (
           <Box key={address.id} id={`address-${address.id}`} sx={adressCardStyle}>
@@ -35,7 +39,6 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                   <Chip
                     id={address.id}
                     label="Billing Adress"
-                    onDelete={handleDelete.bind(this)}
                     sx={{ margin: '5px 0' }}
                     size="small"
                     variant="outlined"
@@ -44,7 +47,6 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                 {userData.shippingAddressIds.includes(address.id) ? (
                   <Chip
                     id={address.id}
-                    onDelete={handleDelete.bind(this)}
                     sx={{ margin: '5px 0' }}
                     size="small"
                     variant="outlined"
@@ -54,7 +56,6 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                 {address.id === userData.defaultBillingAddressId ? (
                   <Chip
                     id={address.id}
-                    onDelete={handleDelete.bind(this)}
                     sx={{ margin: '5px 0' }}
                     size="small"
                     variant="outlined"
@@ -64,19 +65,27 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
                 {address.id === userData.defaultShippingAddressId ? (
                   <Chip
                     id={address.id}
-                    onDelete={handleDelete.bind(this)}
                     sx={{ margin: '5px 0' }}
                     size="small"
                     variant="outlined"
                     label="Default shipping Adress"
                   />
                 ) : null}
+                <Chip
+                  id={address.id}
+                  onDelete={handleDelete.bind(this)}
+                  deleteIcon={<Delete />}
+                  sx={{ margin: '5px 0' }}
+                  size="medium"
+                  variant="outlined"
+                  label="Remove address"
+                />
               </Box>
             </Box>
             <CustomGradientButton
               onClick={(event: MouseEvent<HTMLElement>): void => {
                 const id = event.currentTarget.parentElement?.id.split('-')[1]
-                setOpenModal(true)
+                setOpenEditModal(true)
                 if (id) {
                   setAddressID(id)
                 }
@@ -86,11 +95,37 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
           </Box>
         )
       })}
-      <Modal open={openModal} onClose={handleClose}>
+      <Modal open={openEditModal} onClose={closeEditAddress}>
         <Box sx={popUpStyle}>
-          <EditAdressForm userData={userData} addressID={addressID} token={token} updateData={updateData} />
+          <EditAdressForm
+            userData={userData}
+            addressID={addressID}
+            token={token}
+            updateData={updateData}
+            closeModal={setOpenEditModal}
+          />
         </Box>
       </Modal>
+      <Modal open={openNewAddressModal} onClose={closeNewEditAddress}>
+        <Box sx={popUpStyle}>
+          <EditAdressForm
+            userData={userData}
+            addressID={addressID}
+            token={token}
+            updateData={updateData}
+            closeModal={closeNewEditAddress}
+          />
+        </Box>
+      </Modal>
+      <Fab
+        sx={{ position: 'sticky', top: '100%', left: '100%' }}
+        color="primary"
+        aria-label="add"
+        onClick={(): void => {
+          setOpenEditModal(true)
+        }}>
+        <Add />
+      </Fab>
     </Box>
   )
 }
