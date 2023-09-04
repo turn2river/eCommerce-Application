@@ -2,10 +2,12 @@ import { Button, Chip, ToggleButton, ToggleButtonGroup, Typography } from '@mui/
 import { Box } from '@mui/system'
 import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Carousel } from 'react-responsive-carousel'
 import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { convertPrice } from '../../utils/convertPrice'
 import { Product } from '../../models/ProductType'
+import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
 
 export const ProductPage = (): JSX.Element => {
   const { id } = useParams()
@@ -32,32 +34,32 @@ export const ProductPage = (): JSX.Element => {
       loading = false
     }
   }, [])
-  console.log(productsData)
   const productTitle = productsData?.masterData?.current.name['en-US']
-  const productImage = productsData?.masterData.current.masterVariant.images[0].url
   const productDescription = productsData?.masterData.current.description['en-US']
   const variants = productsData?.masterData?.current.variants
 
   // @ts-expect-error why
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
-    setVolume(newVolume)
+    setVolume(Number.parseFloat(newVolume))
   }
-
-  console.log(price)
   const handleVolumeSelect = (selectedPrice: number): void => {
     const priceInEuro = convertPrice(selectedPrice)
     setPrice(priceInEuro)
   }
-  console.log(price)
   return (
     <Fragment>
       <Box sx={{ display: 'flex', justifyContent: 'start' }} mt={'20px'}>
-        <Box
-          maxHeight={300}
-          component={'img'}
-          src={productImage}
-          title={id}
-          sx={{ backgroundColor: 'white', borderRadius: '5px' }}></Box>
+        <Box sx={{ maxWidth: '500px' }}>
+          <Carousel useKeyboardArrows showArrows selectedItem={0}>
+            {productsData?.masterData.current.masterVariant.images.map((image, index) => {
+              return (
+                <Box key={index} sx={{ backgroundColor: 'white' }}>
+                  <img src={image.url} />
+                </Box>
+              )
+            })}
+          </Carousel>
+        </Box>
         <Box
           px={4}
           minWidth={500}
@@ -93,8 +95,7 @@ export const ProductPage = (): JSX.Element => {
                             }}
                             key={variant?.prices[0].key}
                             // @ts-expect-error why
-                            value={variant?.attributes[1]?.value[0]}>
-                            {/* {variant?.attributes?.[1]?.value?.[0]} */}
+                            value={variant?.attributes[0]?.value[0]}>
                             {variant.attributes[0].value[0]}
                           </ToggleButton>
                         )
