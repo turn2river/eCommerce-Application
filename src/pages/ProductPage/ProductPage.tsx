@@ -2,52 +2,53 @@ import { Button, Chip, ToggleButton, ToggleButtonGroup, Typography } from '@mui/
 import { Box } from '@mui/system'
 import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Product, GetProductByIdService } from '../../services/GetProductByIdService'
+import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { convertPrice } from '../../utils/convertPrice'
+import { Product } from '../../models/ProductType'
 
 export const ProductPage = (): JSX.Element => {
   const { id } = useParams()
 
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
-  const [productsData, setProductsData] = useState<Product[]>([])
+  const [productsData, setProductsData] = useState<Product | null>(null)
+  const [price, setPrice] = useState<string>('')
+  const [volume, setVolume] = useState<number>(0)
 
   useEffect(() => {
     let loading = true
     if (anonUserAuthToken) {
-      ;(async (): Promise<void> => {
-        const productService = new GetProductByIdService()
-        const data = await productService.getProductById(anonUserAuthToken, `key=${id}`)
+      const productService = new GetProductByIdService()
+      productService.getProductById(anonUserAuthToken, `key=${id}`).then((response) => {
         if (loading) {
-          setProductsData((prevData: Product[]) => {
-            return [...prevData, data]
-          })
+          setProductsData(response)
+          setPrice(convertPrice(response.masterData.current.variants[0].prices[0].value.centAmount))
+          setVolume(response.masterData.current.variants[0].attributes[0].value[0])
         }
-      })()
+      })
     }
     return () => {
       loading = false
     }
   }, [])
-  const productTitle = productsData?.[0]?.masterData?.current.name['en-US']
-  const productImage = productsData?.[0]?.masterData.current.masterVariant.images[0].url
-  const productDescription = productsData?.[0]?.masterData.current.description['en-US']
-  const variants = productsData?.[0]?.masterData?.current.variants
-  const [volume, setVolume] = useState(
-    // @ts-expect-error why
-    variants instanceof Array ? variants?.[0]?.attributes?.[1]?.value[0] : variants?.[0]?.attributes?.[1]?.value[0],
-  )
-  const [price, setPrice] = useState<string>(convertPrice(variants?.[0].prices[0].value.centAmount))
+  console.log(productsData)
+  const productTitle = productsData?.masterData?.current.name['en-US']
+  const productImage = productsData?.masterData.current.masterVariant.images[0].url
+  const productDescription = productsData?.masterData.current.description['en-US']
+  const variants = productsData?.masterData?.current.variants
+
   // @ts-expect-error why
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(newVolume)
   }
 
+  console.log(price)
   const handleVolumeSelect = (selectedPrice: number): void => {
     const priceInEuro = convertPrice(selectedPrice)
     setPrice(priceInEuro)
   }
+  console.log(price)
   return (
     <Fragment>
       <Box sx={{ display: 'flex', justifyContent: 'start' }} mt={'20px'}>
@@ -93,7 +94,8 @@ export const ProductPage = (): JSX.Element => {
                             key={variant?.prices[0].key}
                             // @ts-expect-error why
                             value={variant?.attributes[1]?.value[0]}>
-                            {variant?.attributes?.[1]?.value?.[0]}
+                            {/* {variant?.attributes?.[1]?.value?.[0]} */}
+                            {variant.attributes[0].value[0]}
                           </ToggleButton>
                         )
                       })
@@ -102,7 +104,7 @@ export const ProductPage = (): JSX.Element => {
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '20px 0' }}>
                 <Typography variant="h6">Price:</Typography>
-                <Typography variant="h6" sx={{ fontWeight: '700' }}>{`€ ${price}`}</Typography>
+                <Typography variant="h6" sx={{ fontWeight: '700' }}>{`€ ${price || undefined}`}</Typography>
               </Box>
             </Box>
             <Button size="small" variant="outlined" sx={{ marginTop: '20px' }}>

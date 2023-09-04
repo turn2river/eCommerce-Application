@@ -120,6 +120,10 @@ export type MasterVariant = {
 export type Variants = {
   id: number
   key: string
+  attributes: {
+    name: string
+    value: number[]
+  }[]
   prices: {
     id: string
     key: string
