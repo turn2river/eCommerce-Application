@@ -4,15 +4,13 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { Typography } from '@mui/material'
-import { CategoriesService } from '../../services/CategoriesService'
+import { CategoriesService, CategoryData } from '../../services/CategoriesService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
-import { ProductResult } from '../../services/GetProductsByCategoryIdService'
 
 // @ts-expect-error why
 export function DropdownButton({ categoryIdSetter }): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const [categoies, setCategories] = useState<ProductResult>(null)
-  // const [categoryId, setCategoryId] = useState<string[] | null>(null)
+  const [categoies, setCategories] = useState<CategoryData[] | null>(null)
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const categoriesService = new CategoriesService()
@@ -24,16 +22,6 @@ export function DropdownButton({ categoryIdSetter }): JSX.Element {
         data.forEach((categoryData) => {
           if (loading) {
             if (!('parent' in categoryData)) {
-              // setCategoryId((prevValue) => {
-              //   return prevValue ? [...prevValue, categoryData.id] : [categoryData.id]
-              // })
-
-              // INITIAL
-              // setCategories((prevValue) => {
-              //   return prevValue
-              //     ? [...prevValue, categoryData.description['en-US']]
-              //     : [categoryData.description['en-US']]
-              // })
               setCategories((prevValue) => {
                 return prevValue ? [...prevValue, categoryData] : [categoryData]
               })

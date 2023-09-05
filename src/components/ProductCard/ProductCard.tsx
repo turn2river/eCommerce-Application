@@ -28,7 +28,7 @@ export const ProductCard = ({
   const [discountPrice, setDiscountPrice] = useState(
     convertPrice(variants?.[0].prices[0].discounted?.value.centAmount || 0),
   )
-
+  // @ts-expect-error event is used under the hood
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: number): void => {
     setVolume(newVolume)
   }

@@ -2,21 +2,12 @@ import { Grid, Skeleton, TextField, Typography } from '@mui/material'
 import { useState, useEffect, Fragment } from 'react'
 import { Box } from '@mui/system'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
-<<<<<<< HEAD
-import { GetProductByIdService } from '../../services/GetProductByIdService'
-import { SelectionProductsQueryService } from '../../services/SelectionProductsQueryService'
-=======
->>>>>>> 9fb630b (feat: add categories in button)
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
-<<<<<<< HEAD
-import { Product } from '../../models/ProductType'
-=======
 import { GetProductsByCategoryIdService, ProductResult } from '../../services/GetProductsByCategoryIdService'
 // import { categories } from '../../models/categories'
->>>>>>> 9fb630b (feat: add categories in button)
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -81,18 +72,11 @@ export const Catalog = (): JSX.Element => {
                   <ProductCard
                     key={id}
                     productKey={key}
-<<<<<<< HEAD
-                    imageSource={masterData.current.masterVariant.images[0].url}
-                    title={masterData.current.name['en-US']}
-                    description={masterData.current.metaDescription['en-US']}
-                    variants={masterData.current.variants}
-=======
                     imageSource={product.masterVariant.images[0].url}
                     title={product.name['en-US']}
                     description={product.metaDescription['en-US']}
                     // @ts-expect-error why
                     variants={product.variants.length ? product.variants : product.masterVariant}
->>>>>>> 9fb630b (feat: add categories in button)
                   />
                 </Grid>
               )

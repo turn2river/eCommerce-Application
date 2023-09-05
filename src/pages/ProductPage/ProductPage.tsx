@@ -41,6 +41,7 @@ export const ProductPage = (): JSX.Element => {
   const productTitle = productsData?.masterData?.current.name['en-US']
   const productDescription = productsData?.masterData.current.description['en-US']
   const variants = productsData?.masterData?.current.variants
+  // @ts-expect-error event is used under the hood
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(Number.parseFloat(newVolume))
   }
