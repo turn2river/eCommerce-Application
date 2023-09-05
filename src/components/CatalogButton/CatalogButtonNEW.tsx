@@ -6,11 +6,13 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { Typography } from '@mui/material'
 import { CategoriesService } from '../../services/CategoriesService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
+import { ProductResult } from '../../services/GetProductsByCategoryIdService'
 
 // @ts-expect-error why
-export function DropdownButton({ test }): JSX.Element {
+export function DropdownButton({ categoryIdSetter }): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const [categoies, setCategories] = useState<string[] | null>(null)
+  const [categoies, setCategories] = useState<ProductResult>(null)
+  // const [categoryId, setCategoryId] = useState<string[] | null>(null)
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const categoriesService = new CategoriesService()
@@ -22,10 +24,18 @@ export function DropdownButton({ test }): JSX.Element {
         data.forEach((categoryData) => {
           if (loading) {
             if (!('parent' in categoryData)) {
+              // setCategoryId((prevValue) => {
+              //   return prevValue ? [...prevValue, categoryData.id] : [categoryData.id]
+              // })
+
+              // INITIAL
+              // setCategories((prevValue) => {
+              //   return prevValue
+              //     ? [...prevValue, categoryData.description['en-US']]
+              //     : [categoryData.description['en-US']]
+              // })
               setCategories((prevValue) => {
-                return prevValue
-                  ? [...prevValue, categoryData.description['en-US']]
-                  : [categoryData.description['en-US']]
+                return prevValue ? [...prevValue, categoryData] : [categoryData]
               })
             }
           }
@@ -43,9 +53,9 @@ export function DropdownButton({ test }): JSX.Element {
     }
   }
   // @ts-expect-error why
-  const handleMenuClose = (category): void => {
+  const handleMenuClose = (id): void => {
+    categoryIdSetter(id)
     setAnchorEl(null)
-    test(category)
   }
 
   return (
@@ -63,11 +73,11 @@ export function DropdownButton({ test }): JSX.Element {
         {categoies?.map((category) => {
           return (
             <MenuItem
-              key={category}
+              key={category.description?.['en-US']}
               onClick={(): void => {
-                handleMenuClose(category)
+                handleMenuClose(category.id)
               }}>
-              {<Typography variant="h5">{category}</Typography>}
+              {<Typography variant="h5">{category.description?.['en-US']}</Typography>}
             </MenuItem>
           )
         })}

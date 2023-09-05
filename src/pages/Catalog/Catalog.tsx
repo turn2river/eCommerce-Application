@@ -57,7 +57,7 @@ export const Catalog = (): JSX.Element => {
           aria-label="all-perfumes">
           CATEGORY
         </Button> */}
-        <DropdownButton test={setCategory} />
+        <DropdownButton categoryIdSetter={setCategory} />
         <TextField
           sx={{ marginLeft: '10px' }}
           fullWidth
@@ -90,6 +90,7 @@ export const Catalog = (): JSX.Element => {
                     imageSource={product.masterVariant.images[0].url}
                     title={product.name['en-US']}
                     description={product.metaDescription['en-US']}
+                    // @ts-expect-error why
                     variants={product.variants.length ? product.variants : product.masterVariant}
 >>>>>>> 9fb630b (feat: add categories in button)
                   />
