@@ -96,7 +96,7 @@ export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDat
             </Box>
             <CustomGradientButton
               onClick={(event: MouseEvent<HTMLElement>): void => {
-                const id = event.currentTarget.parentElement?.id.split('-')[1]
+                const id = event.currentTarget.parentElement?.id.slice(8)
                 setOpenEditModal(true)
                 if (id) {
                   setAddressID(id)
