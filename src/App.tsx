@@ -10,6 +10,7 @@ import { GetProductsByCategoryIdService } from './services/GetProductsByCategory
 import { GetProductsFilteredByCategoryIdAndAttributeService } from './services/GetProductsFilteredByCategoryIdAndAttributeService'
 import { GetFilteredProductsService } from './services/GetFilteredProductsService'
 import { AppRoutes } from './routes/AppRoutes.tsx'
+import { ProductsSortingService } from './services/ProductsSortingService'
 
 export function App(): JSX.Element {
   return (
@@ -30,6 +31,7 @@ const customerToken = customerTokensStorage.getLocalStorageCustomerAuthToken()
 const categoryProducts = new GetProductsByCategoryIdService()
 const filteredProducts = new GetProductsFilteredByCategoryIdAndAttributeService()
 const filteredProd = new GetFilteredProductsService()
+const sortedProducts = new ProductsSortingService()
 
 if (anonUserAuthToken) {
   const catalogue = new ProductsService()
@@ -52,6 +54,8 @@ if (anonUserAuthToken) {
   }
   filteredProducts.getProductsFilteredByCategoryIdAndAttribute(anonUserAuthToken, id, attribute, volume)
   filteredProd.getFilteredProducts(anonUserAuthToken, params)
+  sortedProducts.getSortedProductsByName(anonUserAuthToken, 'desc')
+  sortedProducts.getSortedProductsByPrice(anonUserAuthToken, 'desc')
 }
 
 if (customerToken) {
