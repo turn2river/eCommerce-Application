@@ -1,4 +1,4 @@
-import { Grid, Skeleton, TextField, Typography } from '@mui/material'
+import { Button, Grid, Skeleton, TextField, Typography } from '@mui/material'
 import { useState, useEffect, Fragment } from 'react'
 import { Box } from '@mui/system'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
@@ -13,15 +13,16 @@ export const Catalog = (): JSX.Element => {
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [productsData, setProductsData] = useState<ProductResult[]>([])
   const [loadingStatus, setLoadingstatus] = useState(false)
+  // const [url, setUrl] = useState('')
 
   const allProdcuts = 'b8ccabd8-946a-41f7-a61f-0e55ff7ce741'
-  const [category, setCategory] = useState(allProdcuts)
+  const [categoryId, setCategoryId] = useState(allProdcuts)
 
   useEffect(() => {
     let loading = true
-    if (anonUserAuthToken) {
+    if (anonUserAuthToken && typeof categoryId === 'string') {
       const newProductData = new GetProductsByCategoryIdService()
-      newProductData.getProductsByCategoryId(anonUserAuthToken, category).then((data) => {
+      newProductData.getProductsByCategoryId(anonUserAuthToken, categoryId).then((data) => {
         if (loading) {
           setProductsData(data.results)
           setLoadingstatus(false)
@@ -31,12 +32,28 @@ export const Catalog = (): JSX.Element => {
     return () => {
       loading = false
     }
-  }, [category])
+  }, [categoryId])
 
   return (
     <Fragment>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button
+          size="large"
+          color="secondary"
+          variant="contained"
+          sx={{ maxWidth: '740px', width: '100%', mt: '20px', p: '40px 0' }}>
+          SUMMER SALES!
+        </Button>
+        <Button
+          size="large"
+          color="secondary"
+          variant="contained"
+          sx={{ maxWidth: '740px', width: '100%', mt: '20px', p: '40px 0' }}>
+          LUXURY SALES!
+        </Button>
+      </Box>
       <Box sx={{ display: 'flex', marginTop: '20px' }}>
-        <DropdownButton categoryIdSetter={setCategory} />
+        <DropdownButton categoryIdSetter={setCategoryId} />
         <TextField
           sx={{ marginLeft: '10px' }}
           fullWidth

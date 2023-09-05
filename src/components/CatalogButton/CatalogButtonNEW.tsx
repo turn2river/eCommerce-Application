@@ -8,7 +8,7 @@ import { CategoriesService, CategoryData } from '../../services/CategoriesServic
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 
 // @ts-expect-error why
-export function DropdownButton({ categoryIdSetter }): JSX.Element {
+export const DropdownButton = ({ categoryIdSetter }): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [categoies, setCategories] = useState<CategoryData[] | null>(null)
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -34,14 +34,15 @@ export function DropdownButton({ categoryIdSetter }): JSX.Element {
       loading = false
     }
   }, [])
+
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     const { currentTarget } = event
     if (currentTarget && currentTarget instanceof HTMLButtonElement) {
       setAnchorEl(event.currentTarget)
     }
   }
-  // @ts-expect-error why
-  const handleMenuClose = (id): void => {
+
+  const handleMenuClose = (id: string): void => {
     categoryIdSetter(id)
     setAnchorEl(null)
   }
