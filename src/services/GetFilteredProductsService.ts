@@ -5,6 +5,8 @@ export class GetFilteredProductsService {
   public async getFilteredProducts(
     token: string,
     { categoriesList = [], attributesList = [], priceList }: IFilteredProducts,
+    limit: number,
+    page: number,
   ): Promise<FilteredProductsData> {
     const headers = {
       'Content-Type': 'application/json',
@@ -20,10 +22,10 @@ export class GetFilteredProductsService {
 
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${removeEmpty.join(
       '&',
-    )}`
+    )}limit=${limit}&offset=${page * limit}`
 
     const response = await axios.get(url, { headers })
-    // console.log(response.data.results)
+    console.log(response.data.results)
     return response.data.results
   }
 

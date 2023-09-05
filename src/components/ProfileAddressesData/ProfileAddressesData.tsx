@@ -9,7 +9,7 @@ import { EditAdressForm } from '../EditAdressForm/EditAdressForm.tsx'
 import { ProfileDataPropsInterface } from '../../models/ProfileDataPropsInterface'
 import { Address } from '../../services/GetCustomerByTokenService'
 import { addressCardFields } from '../../utils/addressCardFields'
-import { UpdateUserInfoService } from '../../services/UpdateUserInfoData'
+import { UpdateUserInfoService } from '../../services/UpdateUserInfoDataService'
 
 export const ProfileAddressesData = ({ userData, token, updateData }: ProfileDataPropsInterface): JSX.Element => {
   const handleDelete = async (event: MouseEvent<HTMLElement>): Promise<void> => {

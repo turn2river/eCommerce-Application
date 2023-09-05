@@ -6,18 +6,19 @@ export class ProductsSortingService {
     order: string,
     limit: number,
     page: number,
+    filter = '',
   ): Promise<FilteredProductsData> {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
 
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections?limit=${limit}&offset=${
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${filter}limit=${limit}&offset=${
       page * limit
     }&sort=name.en-us ${order}`
 
     const response = await axios.get(url, { headers })
-    // console.log(response.data.results)
+    console.log(response.data.results)
     return response.data.results
   }
 
@@ -26,17 +27,18 @@ export class ProductsSortingService {
     order: string,
     limit: number,
     page: number,
+    filter = '',
   ): Promise<FilteredProductsData> {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?limit=${limit}&offset=${
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${filter}limit=${limit}&offset=${
       page * limit
-    }=26&sort=price ${order}`
+    }&sort=price ${order}`
 
     const response = await axios.get(url, { headers })
-    // console.log(response.data.results)
+    console.log(response.data.results)
     return response.data.results
   }
 }

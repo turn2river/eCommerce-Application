@@ -25,7 +25,7 @@ import {
   CustomerUpdatedAddressData,
   CustomerUpdatedData,
   UpdateUserInfoService,
-} from '../../services/UpdateUserInfoData'
+} from '../../services/UpdateUserInfoDataService'
 import {
   AddressDataFieldsInterface,
   CheckBoxStateInterface,
