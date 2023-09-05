@@ -1,25 +1,39 @@
 import axios from 'axios'
 
 export class ProductsSortingService {
-  public async getSortedProductsByName(token: string, order: string): Promise<FilteredProductsData> {
+  public async getSortedProductsByName(
+    token: string,
+    order: string,
+    limit: number,
+    page: number,
+  ): Promise<FilteredProductsData> {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
 
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections?limit=26&sort=name.en-us ${order}`
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections?limit=${limit}&offset=${
+      page * limit
+    }&sort=name.en-us ${order}`
 
     const response = await axios.get(url, { headers })
-    //   console.log(response.data.results)
+    // console.log(response.data.results)
     return response.data.results
   }
 
-  public async getSortedProductsByPrice(token: string, order: string): Promise<FilteredProductsData> {
+  public async getSortedProductsByPrice(
+    token: string,
+    order: string,
+    limit: number,
+    page: number,
+  ): Promise<FilteredProductsData> {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?limit=26&sort=price ${order}`
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?limit=${limit}&offset=${
+      page * limit
+    }=26&sort=price ${order}`
 
     const response = await axios.get(url, { headers })
     // console.log(response.data.results)

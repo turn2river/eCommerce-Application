@@ -54,8 +54,8 @@ if (anonUserAuthToken) {
   }
   filteredProducts.getProductsFilteredByCategoryIdAndAttribute(anonUserAuthToken, id, attribute, volume)
   filteredProd.getFilteredProducts(anonUserAuthToken, params)
-  sortedProducts.getSortedProductsByName(anonUserAuthToken, 'desc')
-  sortedProducts.getSortedProductsByPrice(anonUserAuthToken, 'desc')
+  sortedProducts.getSortedProductsByName(anonUserAuthToken, 'desc', 8, 2)
+  sortedProducts.getSortedProductsByPrice(anonUserAuthToken, 'desc', 8, 1)
 }
 
 if (customerToken) {
