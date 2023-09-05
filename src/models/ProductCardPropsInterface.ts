@@ -1,4 +1,4 @@
-import { MasterVariant, Variants } from '../services/GetProductByIdService'
+import { Variants } from './ProductType'
 
 export interface ProductCardPropsInterface {
   key?: string
@@ -7,5 +7,5 @@ export interface ProductCardPropsInterface {
   imageSource: string
   title: string
   description: string
-  variants: Variants[] | MasterVariant
+  variants: Variants[]
 }

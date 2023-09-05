@@ -127,6 +127,18 @@ export type Variants = {
   prices: {
     id: string
     key: string
+    discounted?: {
+      discount: {
+        typeID: string
+        id: string
+      }
+      value: {
+        type: string
+        currencyCode: string
+        centAmount: number
+        fractionDigits: number
+      }
+    }
     value: {
       centAmount: number
       currencyCode: string
