@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import { Typography } from '@mui/material'
 import { ImageAndCaptionPropsInterface } from '../../models/ImageAndCaptionPropsInterface'
 
 export const ImageAndCaption = ({
@@ -32,7 +32,7 @@ export const ImageAndCaption = ({
   }
 
   return (
-    <Box mt={'20px'} sx={mainImage}>
+    <Box m={'20px 0'} sx={mainImage}>
       <Typography variant="h4" sx={mainImageCaption}>
         {children}
       </Typography>

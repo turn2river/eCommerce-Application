@@ -14,6 +14,7 @@ export const Header = (): JSX.Element => {
         py: 2,
       }}>
       <Toolbar
+        variant="regular"
         sx={{
           margin: '0 auto',
           maxWidth: '1536px',

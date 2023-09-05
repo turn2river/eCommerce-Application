@@ -10,7 +10,7 @@ export class GetProductsWithDiscountService {
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-discounts/${discountID}`
 
     const response = await axios.get(url, { headers })
-    // console.log(response.data.description)
+    console.log(response.data)
     return response.data
   }
 }

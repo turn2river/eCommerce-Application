@@ -6,7 +6,7 @@ import SecurityIcon from '@mui/icons-material/Security'
 
 export const ProfileNavBar = ({ tab, setTab }: ProfileNavBarPropsInterface): JSX.Element => {
   const [value, setValue] = useState(tab)
-
+  // @ts-expect-error why
   const handleChange = (event: SyntheticEvent, newValue: string): void => {
     setValue(newValue)
     setTab(newValue)

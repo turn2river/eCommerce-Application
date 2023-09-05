@@ -4,12 +4,13 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { Typography } from '@mui/material'
-import { CategoriesService } from '../../services/CategoriesService'
+import { CategoriesService, CategoryData } from '../../services/CategoriesService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 
-export function DropdownButton(): JSX.Element {
+// @ts-expect-error why
+export const DropdownButton = ({ categoryIdSetter }): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const [categoies, setCategories] = useState<string[] | null>(null)
+  const [categoies, setCategories] = useState<CategoryData[] | null>(null)
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const categoriesService = new CategoriesService()
@@ -22,9 +23,7 @@ export function DropdownButton(): JSX.Element {
           if (loading) {
             if (!('parent' in categoryData)) {
               setCategories((prevValue) => {
-                return prevValue
-                  ? [...prevValue, categoryData.description['en-US']]
-                  : [categoryData.description['en-US']]
+                return prevValue ? [...prevValue, categoryData] : [categoryData]
               })
             }
           }
@@ -35,6 +34,7 @@ export function DropdownButton(): JSX.Element {
       loading = false
     }
   }, [])
+
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>): void => {
     const { currentTarget } = event
     if (currentTarget && currentTarget instanceof HTMLButtonElement) {
@@ -42,7 +42,8 @@ export function DropdownButton(): JSX.Element {
     }
   }
 
-  const handleMenuClose = (): void => {
+  const handleMenuClose = (id: string): void => {
+    categoryIdSetter(id)
     setAnchorEl(null)
   }
 
@@ -58,12 +59,17 @@ export function DropdownButton(): JSX.Element {
         Categories
       </Button>
       <Menu id="dropdown-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        {categoies?.map((category) => (
-          <MenuItem key={category} onClick={handleMenuClose}>
-            {<Typography variant="h5">{category}</Typography>}
-          </MenuItem>
-        ))}
-        <MenuItem onClick={handleMenuClose}>{<Typography variant="h5">All Products</Typography>}</MenuItem>
+        {categoies?.map((category) => {
+          return (
+            <MenuItem
+              key={category.description?.['en-US']}
+              onClick={(): void => {
+                handleMenuClose(category.id)
+              }}>
+              {<Typography variant="h5">{category.description?.['en-US']}</Typography>}
+            </MenuItem>
+          )
+        })}
       </Menu>
     </div>
   )

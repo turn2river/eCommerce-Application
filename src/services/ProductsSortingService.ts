@@ -18,7 +18,7 @@ export class ProductsSortingService {
     }&sort=name.en-us ${order}`
 
     const response = await axios.get(url, { headers })
-    console.log(response.data.results)
+    // console.log(response.data.results)
     return response.data.results
   }
 
@@ -38,7 +38,7 @@ export class ProductsSortingService {
     }&sort=price ${order}`
 
     const response = await axios.get(url, { headers })
-    console.log(response.data.results)
+    // console.log(response.data.results)
     return response.data.results
   }
 }

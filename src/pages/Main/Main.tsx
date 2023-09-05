@@ -1,6 +1,5 @@
 import { Box } from '@mui/system'
-import { TextField, Typography } from '@mui/material'
-import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
+import { Link, Typography } from '@mui/material'
 import { ImageAndCaption } from '../../components/ImageAndCaption/ImageAndCaption.tsx'
 import MainImage from '../../assets/image/jpg/luxurious-perfume-bottle-adds-elegance-domestic-decor-generative-ai.jpg'
 import MansCategoryImage from '../../assets/image/jpg/groom-meeting-details-jacket-shoes-watches-buttons-wedding-day.jpg'
@@ -10,10 +9,6 @@ import AllCategoryImage from '../../assets/image/jpg/still-life-cosmetic-product
 export const Main = (): JSX.Element => {
   return (
     <Box>
-      <Box sx={{ display: 'flex', marginTop: '20px' }}>
-        <DropdownButton />
-        <TextField fullWidth variant="outlined" label="search parfume" type="search"></TextField>
-      </Box>
       <ImageAndCaption width={'100%'} height={'500px'} verticalPosition={'60%'} image={MainImage}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
       </ImageAndCaption>
@@ -34,7 +29,7 @@ export const Main = (): JSX.Element => {
           verticalPosition={'center'}
           image={MansCategoryImage}
           scale="1.05">
-          For him
+          <Link href="/catalogue">For him</Link>
         </ImageAndCaption>
         <ImageAndCaption
           width={'300px'}
@@ -42,7 +37,7 @@ export const Main = (): JSX.Element => {
           verticalPosition={'center'}
           image={WomensCategoryImage}
           scale="1.05">
-          For her
+          <Link href="/catalogue">For her</Link>
         </ImageAndCaption>
         <ImageAndCaption
           width={'300px'}
@@ -50,7 +45,7 @@ export const Main = (): JSX.Element => {
           verticalPosition={'center'}
           image={AllCategoryImage}
           scale="1.05">
-          All products
+          <Link href="/catalogue">All Products</Link>
         </ImageAndCaption>
       </Box>
     </Box>

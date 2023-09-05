@@ -28,7 +28,7 @@ export const ProductCard = ({
   const [discountPrice, setDiscountPrice] = useState(
     convertPrice(variants?.[0].prices[0].discounted?.value.centAmount || 0),
   )
-
+  // @ts-expect-error event is used under the hood
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: number): void => {
     setVolume(newVolume)
   }
@@ -51,7 +51,7 @@ export const ProductCard = ({
         <Link href={`${productKey}`} display={'block'} margin={'10px 0'} textAlign={'center'} noWrap={true}>
           {title}
         </Link>
-        <Typography variant="body2" sx={{ minHeight: '80px', textAlign: 'justify' }}>
+        <Typography noWrap={true} variant="body2" sx={{ minHeight: '80px', textAlign: 'justify', display: 'block' }}>
           {description}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
