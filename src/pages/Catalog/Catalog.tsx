@@ -7,7 +7,6 @@ import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
 import { GetProductsByCategoryIdService, ProductResult } from '../../services/GetProductsByCategoryIdService'
-// import { categories } from '../../models/categories'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -15,12 +14,8 @@ export const Catalog = (): JSX.Element => {
   const [productsData, setProductsData] = useState<ProductResult[]>([])
   const [loadingStatus, setLoadingstatus] = useState(false)
 
-  // const categoryId = '95f20a5a-77e8-4469-a7af-0167888d5ef5'
   const allProdcuts = 'b8ccabd8-946a-41f7-a61f-0e55ff7ce741'
-  // const cat1 = 'c3bbd3e2-ba78-4a21-9de1-e5c0ccdefc38' // это женские нишевые ароматы, просто пример
-  // const cat2 = '95f20a5a-77e8-4469-a7af-0167888d5ef5' // это женские ароматы
   const [category, setCategory] = useState(allProdcuts)
-  // console.log(categories['all-perfumes'])
 
   useEffect(() => {
     let loading = true
@@ -41,13 +36,6 @@ export const Catalog = (): JSX.Element => {
   return (
     <Fragment>
       <Box sx={{ display: 'flex', marginTop: '20px' }}>
-        {/* <Button
-          onClick={(event): void => {
-            setCategory(categories[event?.target.ariaLabel])
-          }}
-          aria-label="all-perfumes">
-          CATEGORY
-        </Button> */}
         <DropdownButton categoryIdSetter={setCategory} />
         <TextField
           sx={{ marginLeft: '10px' }}
