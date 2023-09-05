@@ -26,11 +26,7 @@ export const ProductCard = ({
 
   const [price, setPrice] = useState(convertPrice(variants?.[0].prices[0].value.centAmount))
   const [discountPrice, setDiscountPrice] = useState(
-    convertPrice(
-      typeof variants?.[0].prices[0].discounted?.value.centAmount === 'number'
-        ? variants?.[0].prices[0].discounted?.value.centAmount
-        : 0,
-    ),
+    convertPrice(variants?.[0].prices[0].discounted?.value.centAmount || 0),
   )
 
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: number): void => {
@@ -74,10 +70,7 @@ export const ProductCard = ({
                 <ToggleButton
                   onClick={(): void => {
                     const centPrice = variant.prices[0].value.centAmount
-                    const discountCentPrice =
-                      typeof variant.prices[0].discounted?.value.centAmount === 'number'
-                        ? variant.prices[0].discounted?.value.centAmount
-                        : 0
+                    const discountCentPrice = variant.prices[0].discounted?.value.centAmount || 0
                     handleVolumeSelect(centPrice, discountCentPrice)
                   }}
                   key={variant?.prices[0].key}
