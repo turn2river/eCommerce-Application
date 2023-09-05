@@ -8,7 +8,7 @@ import { validationScheme } from './validationScheme'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { ProfileDataPropsInterface } from '../../models/ProfileDataPropsInterface'
 import { SecurityDataFieldsInterface, SecurityDataFieldsIds } from './types.tsx'
-import { UpdateUserInfoService } from '../../services/UpdateUserInfoData'
+import { UpdateUserInfoService } from '../../services/UpdateUserInfoDataService'
 import { CustomerSignInService } from '../../services/CustomerSignInService'
 
 export const ProfileSecurityData = ({ userData, token, updateData }: ProfileDataPropsInterface): JSX.Element => {

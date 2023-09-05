@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { CheckBoxStateInterface } from '../components/EditAdressForm/type'
 import { GetCustomerByTokenService } from '../services/GetCustomerByTokenService'
-import { UpdateUserInfoService } from '../services/UpdateUserInfoData'
+import { UpdateUserInfoService } from '../services/UpdateUserInfoDataService'
 
 export async function checkStateOfCheckBox(
   token: string,

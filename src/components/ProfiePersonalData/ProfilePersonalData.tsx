@@ -8,7 +8,7 @@ import { validationScheme } from './validationScheme'
 import { PersonalDataFieldsInterface, PersonalDataFieldsIds } from './types'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { ProfileDataPropsInterface } from '../../models/ProfileDataPropsInterface'
-import { UpdateUserInfoService } from '../../services/UpdateUserInfoData'
+import { UpdateUserInfoService } from '../../services/UpdateUserInfoDataService'
 
 export const ProfilePersonalData = ({ userData, token, updateData }: ProfileDataPropsInterface): JSX.Element | null => {
   const fields: PersonalDataFieldsInterface[] = [
