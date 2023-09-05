@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Container } from '@mui/material'
+import { Box } from '@mui/system'
 import { ProfileNavBar } from '../../components/ProfileNavBar/ProfileNavBar.tsx'
 import { CustomerTokensStorage } from '../../store/customerTokensStorage'
 import { CustomerProfile, GetCustomerByTokenService } from '../../services/GetCustomerByTokenService'
@@ -30,7 +30,7 @@ export const Profile = (): JSX.Element => {
   }, [updateData])
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <ProfileNavBar tab={tab} setTab={setTab} />
       {userData && tab === 'personal' ? (
         <ProfilePersonalData userData={userData} token={customerToken} updateData={setUpdateData} />
@@ -41,6 +41,6 @@ export const Profile = (): JSX.Element => {
       {userData && tab === 'address' ? (
         <ProfileAddressesData userData={userData} token={customerToken} updateData={setUpdateData} />
       ) : null}
-    </Container>
+    </Box>
   )
 }

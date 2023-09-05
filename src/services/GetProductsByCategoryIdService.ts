@@ -13,7 +13,7 @@ export class GetProductsByCategoryIdService {
   }
 }
 
-interface CategoryProductsData {
+export interface CategoryProductsData {
   limit: number
   offset: number
   count: number
@@ -22,7 +22,7 @@ interface CategoryProductsData {
   facets: Record<string, unknown>
 }
 
-interface ProductResult {
+export interface ProductResult {
   id: string
   version: number
   productType: {

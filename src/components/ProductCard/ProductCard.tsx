@@ -51,7 +51,7 @@ export const ProductCard = ({
         <Link href={`${productKey}`} display={'block'} margin={'10px 0'} textAlign={'center'} noWrap={true}>
           {title}
         </Link>
-        <Typography variant="body2" sx={{ minHeight: '80px', textAlign: 'justify' }}>
+        <Typography noWrap={true} variant="body2" sx={{ minHeight: '80px', textAlign: 'justify', display: 'block' }}>
           {description}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

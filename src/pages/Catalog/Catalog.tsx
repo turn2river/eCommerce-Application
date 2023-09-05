@@ -2,51 +2,62 @@ import { Grid, Skeleton, TextField, Typography } from '@mui/material'
 import { useState, useEffect, Fragment } from 'react'
 import { Box } from '@mui/system'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
+<<<<<<< HEAD
 import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { SelectionProductsQueryService } from '../../services/SelectionProductsQueryService'
+=======
+>>>>>>> 9fb630b (feat: add categories in button)
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
+<<<<<<< HEAD
 import { Product } from '../../models/ProductType'
+=======
+import { GetProductsByCategoryIdService, ProductResult } from '../../services/GetProductsByCategoryIdService'
+// import { categories } from '../../models/categories'
+>>>>>>> 9fb630b (feat: add categories in button)
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
-  const selectionsID = new SelectionProductsQueryService()
-  const [productsData, setProductsData] = useState<Product[]>([])
+  const [productsData, setProductsData] = useState<ProductResult[]>([])
   const [loadingStatus, setLoadingstatus] = useState(false)
+
+  // const categoryId = '95f20a5a-77e8-4469-a7af-0167888d5ef5'
+  const allProdcuts = 'b8ccabd8-946a-41f7-a61f-0e55ff7ce741'
+  // const cat1 = 'c3bbd3e2-ba78-4a21-9de1-e5c0ccdefc38' // это женские нишевые ароматы, просто пример
+  // const cat2 = '95f20a5a-77e8-4469-a7af-0167888d5ef5' // это женские ароматы
+  const [category, setCategory] = useState(allProdcuts)
+  // console.log(categories['all-perfumes'])
 
   useEffect(() => {
     let loading = true
     if (anonUserAuthToken) {
-      const productIDs = async (): Promise<string[]> => {
-        setLoadingstatus(true)
-        const result = await selectionsID.getSectionProductsIDs(anonUserAuthToken, 'catalogue')
-        return result
-      }
-      ;(async (): Promise<void> => {
-        ;(await productIDs()).forEach(async (id) => {
-          const productService = new GetProductByIdService()
-          const data = await productService.getProductById(anonUserAuthToken, id)
-          if (loading) {
-            setProductsData((prevData: Product[]) => {
-              return [...prevData, data]
-            })
-            setLoadingstatus(false)
-          }
-        })
-      })()
+      const newProductData = new GetProductsByCategoryIdService()
+      newProductData.getProductsByCategoryId(anonUserAuthToken, category).then((data) => {
+        if (loading) {
+          setProductsData(data.results)
+          setLoadingstatus(false)
+        }
+      })
     }
-    return (): void => {
+    return () => {
       loading = false
     }
-  }, [])
+  }, [category])
 
   return (
     <Fragment>
       <Box sx={{ display: 'flex', marginTop: '20px' }}>
-        <DropdownButton />
+        {/* <Button
+          onClick={(event): void => {
+            setCategory(categories[event?.target.ariaLabel])
+          }}
+          aria-label="all-perfumes">
+          CATEGORY
+        </Button> */}
+        <DropdownButton test={setCategory} />
         <TextField
           sx={{ marginLeft: '10px' }}
           fullWidth
@@ -64,22 +75,33 @@ export const Catalog = (): JSX.Element => {
                 <Skeleton variant="rectangular" {...skeletonProps}></Skeleton>
               </Grid>
             ))
-          : productsData.map(({ id, key, masterData }) => {
+          : productsData.map(({ key, id, ...product }: ProductResult) => {
               return (
-                <Grid {...gridItemProps}>
+                <Grid key={id} {...gridItemProps}>
                   <ProductCard
                     key={id}
                     productKey={key}
+<<<<<<< HEAD
                     imageSource={masterData.current.masterVariant.images[0].url}
                     title={masterData.current.name['en-US']}
                     description={masterData.current.metaDescription['en-US']}
                     variants={masterData.current.variants}
+=======
+                    imageSource={product.masterVariant.images[0].url}
+                    title={product.name['en-US']}
+                    description={product.metaDescription['en-US']}
+                    variants={product.variants.length ? product.variants : product.masterVariant}
+>>>>>>> 9fb630b (feat: add categories in button)
                   />
                 </Grid>
               )
             })}
       </Grid>
-      <CustomPaginationBar count={10} />
+      <CustomPaginationBar count={3} />
     </Fragment>
   )
+}
+
+Catalog.defaultProps = {
+  initialCategory: '95f20a5a-77e8-4469-a7af-0167888d5ef5',
 }

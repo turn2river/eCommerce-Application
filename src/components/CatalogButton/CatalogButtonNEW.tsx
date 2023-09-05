@@ -7,7 +7,8 @@ import { Typography } from '@mui/material'
 import { CategoriesService } from '../../services/CategoriesService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 
-export function DropdownButton(): JSX.Element {
+// @ts-expect-error why
+export function DropdownButton({ test }): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [categoies, setCategories] = useState<string[] | null>(null)
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -41,9 +42,10 @@ export function DropdownButton(): JSX.Element {
       setAnchorEl(event.currentTarget)
     }
   }
-
-  const handleMenuClose = (): void => {
+  // @ts-expect-error why
+  const handleMenuClose = (category): void => {
     setAnchorEl(null)
+    test(category)
   }
 
   return (
@@ -58,12 +60,17 @@ export function DropdownButton(): JSX.Element {
         Categories
       </Button>
       <Menu id="dropdown-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        {categoies?.map((category) => (
-          <MenuItem key={category} onClick={handleMenuClose}>
-            {<Typography variant="h5">{category}</Typography>}
-          </MenuItem>
-        ))}
-        <MenuItem onClick={handleMenuClose}>{<Typography variant="h5">All Products</Typography>}</MenuItem>
+        {categoies?.map((category) => {
+          return (
+            <MenuItem
+              key={category}
+              onClick={(): void => {
+                handleMenuClose(category)
+              }}>
+              {<Typography variant="h5">{category}</Typography>}
+            </MenuItem>
+          )
+        })}
       </Menu>
     </div>
   )
