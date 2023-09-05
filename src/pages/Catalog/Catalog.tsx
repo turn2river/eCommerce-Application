@@ -9,6 +9,7 @@ import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
 import { Product } from '../../models/ProductType'
+import { DropdownMenu } from '../../components/DropdownMenu/DropdownMenu.tsx'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -45,6 +46,7 @@ export const Catalog = (): JSX.Element => {
 
   return (
     <Fragment>
+      <DropdownMenu />
       <Box sx={{ display: 'flex', marginTop: '20px' }}>
         <DropdownButton />
         <TextField
