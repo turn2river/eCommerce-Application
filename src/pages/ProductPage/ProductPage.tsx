@@ -1,6 +1,6 @@
 import { Button, Chip, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState, MouseEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import { Carousel } from 'react-responsive-carousel'
 import { GetProductByIdService } from '../../services/GetProductByIdService'
@@ -16,6 +16,7 @@ export const ProductPage = (): JSX.Element => {
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [productsData, setProductsData] = useState<Product | null>(null)
   const [price, setPrice] = useState<string>('')
+  const [discountedPrice, setDiscountedPrice] = useState<string>('')
   const [volume, setVolume] = useState<number>(0)
 
   useEffect(() => {
@@ -26,6 +27,9 @@ export const ProductPage = (): JSX.Element => {
         if (loading) {
           setProductsData(response)
           setPrice(convertPrice(response.masterData.current.variants[0].prices[0].value.centAmount))
+          setDiscountedPrice(
+            convertPrice(response.masterData.current.variants[0].prices[0].discounted?.value.centAmount || 0),
+          )
           setVolume(response.masterData.current.variants[0].attributes[0].value[0])
         }
       })
@@ -37,14 +41,14 @@ export const ProductPage = (): JSX.Element => {
   const productTitle = productsData?.masterData?.current.name['en-US']
   const productDescription = productsData?.masterData.current.description['en-US']
   const variants = productsData?.masterData?.current.variants
-
-  // @ts-expect-error why
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(Number.parseFloat(newVolume))
   }
-  const handleVolumeSelect = (selectedPrice: number): void => {
+  const handleVolumeSelect = (selectedPrice: number, discountCentPrice: number): void => {
     const priceInEuro = convertPrice(selectedPrice)
+    const discountPriceInEuro = convertPrice(discountCentPrice)
     setPrice(priceInEuro)
+    setDiscountedPrice(discountPriceInEuro)
   }
   return (
     <Fragment>
@@ -91,10 +95,10 @@ export const ProductPage = (): JSX.Element => {
                           <ToggleButton
                             onClick={(): void => {
                               const centPrice = variant.prices[0].value.centAmount
-                              handleVolumeSelect(centPrice)
+                              const discountCentPrice = variant.prices[0].discounted?.value.centAmount || 0
+                              handleVolumeSelect(centPrice, discountCentPrice)
                             }}
                             key={variant?.prices[0].key}
-                            // @ts-expect-error why
                             value={variant?.attributes[0]?.value[0]}>
                             {variant.attributes[0].value[0]}
                           </ToggleButton>
@@ -105,7 +109,18 @@ export const ProductPage = (): JSX.Element => {
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '20px 0' }}>
                 <Typography variant="h6">Price:</Typography>
-                <Typography variant="h6" sx={{ fontWeight: '700' }}>{`€ ${price || undefined}`}</Typography>
+                {discountedPrice !== '0.00' ? (
+                  <>
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: '400', textDecoration: 'line-through' }}>{`€ ${price}`}</Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: '700', color: '#ffc107' }}>{`€ ${discountedPrice}`}</Typography>
+                  </>
+                ) : (
+                  <Typography variant="h6" sx={{ fontWeight: '700' }}>{`€ ${price}`}</Typography>
+                )}
               </Box>
             </Box>
             <Button size="small" variant="outlined" sx={{ marginTop: '20px' }}>

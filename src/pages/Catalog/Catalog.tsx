@@ -2,12 +2,13 @@ import { Grid, Skeleton, TextField, Typography } from '@mui/material'
 import { useState, useEffect, Fragment } from 'react'
 import { Box } from '@mui/system'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
-import { Product, GetProductByIdService } from '../../services/GetProductByIdService'
+import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { SelectionProductsQueryService } from '../../services/SelectionProductsQueryService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
+import { Product } from '../../models/ProductType'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -72,11 +73,7 @@ export const Catalog = (): JSX.Element => {
                     imageSource={masterData.current.masterVariant.images[0].url}
                     title={masterData.current.name['en-US']}
                     description={masterData.current.metaDescription['en-US']}
-                    variants={
-                      masterData.current.variants.length
-                        ? masterData.current.variants
-                        : masterData.current.masterVariant
-                    }
+                    variants={masterData.current.variants}
                   />
                 </Grid>
               )
