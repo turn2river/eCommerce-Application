@@ -1,4 +1,4 @@
-import { Button, Chip, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import { Button, Chip, Modal, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { Fragment, useEffect, useState, MouseEvent } from 'react'
 import { useParams } from 'react-router-dom'
@@ -10,6 +10,17 @@ import { Product } from '../../models/ProductType'
 import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
 
 export const ProductPage = (): JSX.Element => {
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  }
   const { id } = useParams()
 
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -51,10 +62,15 @@ export const ProductPage = (): JSX.Element => {
     setPrice(priceInEuro)
     setDiscountedPrice(discountPriceInEuro)
   }
+
+  const [open, setOpen] = useState(false)
+  const handleOpenModal = (): void => setOpen(true)
+  const handleModalClose = (): void => setOpen(false)
+
   return (
     <Fragment>
       <Box sx={{ display: 'flex', justifyContent: 'start' }} mt={'20px'}>
-        <Box sx={{ maxWidth: '500px' }}>
+        <Button onClick={handleOpenModal} sx={{ maxWidth: '500px' }}>
           <Carousel useKeyboardArrows showArrows selectedItem={0}>
             {productsData?.masterData.current.masterVariant.images.map((image, index) => {
               return (
@@ -64,7 +80,24 @@ export const ProductPage = (): JSX.Element => {
               )
             })}
           </Carousel>
-        </Box>
+        </Button>
+        <Modal
+          open={open}
+          onClose={handleModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description">
+          <Box sx={modalStyle}>
+            <Carousel useKeyboardArrows showArrows selectedItem={0}>
+              {productsData?.masterData.current.masterVariant.images.map((image, index) => {
+                return (
+                  <Box key={index} sx={{ backgroundColor: 'white' }}>
+                    <img src={image.url} />
+                  </Box>
+                )
+              })}
+            </Carousel>
+          </Box>
+        </Modal>
         <Box
           px={4}
           minWidth={500}
