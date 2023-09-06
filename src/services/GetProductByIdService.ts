@@ -14,7 +14,7 @@ export class GetProductByIdService {
   }
 
   public async getProductByKey(token: string, key: string): Promise<Product> {
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie//products/key=${key}`
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/products/key=${key}`
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
