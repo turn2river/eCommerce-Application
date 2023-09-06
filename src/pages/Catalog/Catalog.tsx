@@ -102,7 +102,11 @@ export const Catalog = (): JSX.Element => {
         <Typography variant="h4" sx={{ margin: 'auto 0' }}>
           {catalogueTitle}
         </Typography>
-        <SortingMenu setProductsData={setProductsData} token={anonUserAuthToken} page={currentPage}></SortingMenu>
+        <SortingMenu
+          setProductsData={setProductsData}
+          token={anonUserAuthToken}
+          page={currentPage}
+          categoryID={categoriesID}></SortingMenu>
       </Box>
       <Grid {...gridContainerProps}>
         {loadingStatus

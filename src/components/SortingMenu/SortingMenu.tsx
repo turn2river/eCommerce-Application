@@ -15,11 +15,12 @@ const options = [
 
 interface SortingMenuPropsInterface {
   page: string
+  categoryID: string
   token: string | null
   setProductsData: Dispatch<SetStateAction<(ProductResult | Product)[]>>
 }
 
-export const SortingMenu = ({ setProductsData, token, page }: SortingMenuPropsInterface): JSX.Element => {
+export const SortingMenu = ({ setProductsData, token, page, categoryID }: SortingMenuPropsInterface): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const open = Boolean(anchorEl)
@@ -35,7 +36,13 @@ export const SortingMenu = ({ setProductsData, token, page }: SortingMenuPropsIn
     setAnchorEl(null)
     if (id === 'name' && token) {
       try {
-        const productData = await productsSortingService.getSortedProductsByName(token, direction, 26, 0)
+        const productData = await productsSortingService.getSortedProductsByName(
+          token,
+          direction,
+          26,
+          0,
+          `filter=categories.id:"${categoryID}"`,
+        )
         setProductsData(productData)
       } catch (error) {
         if (error instanceof Error) {
@@ -46,7 +53,13 @@ export const SortingMenu = ({ setProductsData, token, page }: SortingMenuPropsIn
     }
     if (id === 'price' && token) {
       try {
-        const productData = await productsSortingService.getSortedProductsByPrice(token, direction, 26, 0)
+        const productData = await productsSortingService.getSortedProductsByPrice(
+          token,
+          direction,
+          26,
+          0,
+          `filter=categories.id:"${categoryID}"`,
+        )
         setProductsData(productData)
       } catch (error) {
         if (error instanceof Error) {
@@ -55,6 +68,7 @@ export const SortingMenu = ({ setProductsData, token, page }: SortingMenuPropsIn
         }
       }
     }
+    console.log(categoryID)
   }
 
   const handleClose = (): void => {

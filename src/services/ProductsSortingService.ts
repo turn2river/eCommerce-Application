@@ -14,7 +14,7 @@ export class ProductsSortingService {
       'Authorization': `Bearer ${token}`,
     }
 
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${filter}limit=${limit}&offset=${
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${filter}&limit=${limit}&offset=${
       page * limit
     }&sort=name.en-us ${order}`
 
@@ -34,7 +34,7 @@ export class ProductsSortingService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${filter}limit=${limit}&offset=${
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${filter}&limit=${limit}&offset=${
       page * limit
     }&sort=price ${order}`
 
