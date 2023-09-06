@@ -1,10 +1,14 @@
 import { AppBar, Box, Toolbar, Button } from '@mui/material'
 import { Logo } from '../Logo/Logo.tsx'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
 export const Header = (): JSX.Element => {
   const auth = useAuth()
   const { isAuth, setIsAuth } = auth as AuthContextType
+
+  const page = useCataloguePage()
+  const { setCurrentPage } = page as CataloguePageContextType
 
   return (
     <AppBar
@@ -27,7 +31,13 @@ export const Header = (): JSX.Element => {
           <Button href="/" color="inherit">
             Home
           </Button>
-          <Button variant="outlined" href="/catalogue" color="inherit">
+          <Button
+            variant="outlined"
+            href="/catalogue"
+            color="inherit"
+            onClick={(): void => {
+              setCurrentPage('catalogue')
+            }}>
             Catalogue
           </Button>
           <Button href="/about" color="inherit">
@@ -47,7 +57,12 @@ export const Header = (): JSX.Element => {
               logout
             </Button>
           ) : (
-            <Button href="/registration" color="inherit">
+            <Button
+              href="/registration"
+              color="inherit"
+              onClick={(): void => {
+                setCurrentPage('signup')
+              }}>
               Sign up
             </Button>
           )}

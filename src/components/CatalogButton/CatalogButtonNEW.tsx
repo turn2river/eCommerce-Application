@@ -6,6 +6,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { Typography } from '@mui/material'
 import { CategoriesService, CategoryData } from '../../services/CategoriesService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
 // @ts-expect-error why
 export const DropdownButton = ({ categoryIdSetter }): JSX.Element => {
@@ -14,6 +15,8 @@ export const DropdownButton = ({ categoryIdSetter }): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const categoriesService = new CategoriesService()
+  const page = useCataloguePage()
+  const { setCurrentPage } = page as CataloguePageContextType
 
   useEffect(() => {
     let loading = true
@@ -65,6 +68,7 @@ export const DropdownButton = ({ categoryIdSetter }): JSX.Element => {
               key={category.description?.['en-US']}
               onClick={(): void => {
                 handleMenuClose(category.id)
+                setCurrentPage('catalogue')
               }}>
               {<Typography variant="h5">{category.description?.['en-US']}</Typography>}
             </MenuItem>
