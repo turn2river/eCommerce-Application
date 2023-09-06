@@ -1,15 +1,8 @@
 import axios from 'axios'
 
 export class GetProductsByCategoryIdService {
-  public async getProductsByCategoryId(
-    token: string,
-    id: string,
-    currentPage: number,
-    limit: number = 8,
-  ): Promise<CategoryProductsData> {
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=categories.id:"${id}"&limit=${limit}&offset=${
-      limit * currentPage
-    }`
+  public async getProductsByCategoryId(token: string, id: string): Promise<CategoryProductsData> {
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=categories.id:"${id}"`
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
