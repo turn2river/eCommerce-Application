@@ -9,7 +9,7 @@ import { useCataloguePage, CataloguePageContextType } from '../../store/Catalogu
 
 export const Main = (): JSX.Element => {
   const page = useCataloguePage()
-  const { setCategoriesID } = page as CataloguePageContextType
+  const { setCategoriesID, setCurrentPage } = page as CataloguePageContextType
   return (
     <Box>
       <ImageAndCaption width={'100%'} height={'500px'} verticalPosition={'60%'} image={MainImage}>
@@ -32,7 +32,12 @@ export const Main = (): JSX.Element => {
           verticalPosition={'center'}
           image={MansCategoryImage}
           scale="1.05">
-          <Link href="/catalogue" onClick={(): void => setCategoriesID('810c0293-5704-4033-bb92-5d237fe5983d')}>
+          <Link
+            href="/catalogue"
+            onClick={(): void => {
+              setCurrentPage('catalogue')
+              setCategoriesID('810c0293-5704-4033-bb92-5d237fe5983d')
+            }}>
             For him
           </Link>
         </ImageAndCaption>
@@ -42,7 +47,12 @@ export const Main = (): JSX.Element => {
           verticalPosition={'center'}
           image={WomensCategoryImage}
           scale="1.05">
-          <Link href="/catalogue" onClick={(): void => setCategoriesID('95f20a5a-77e8-4469-a7af-0167888d5ef5')}>
+          <Link
+            href="/catalogue"
+            onClick={(): void => {
+              setCurrentPage('catalogue')
+              setCategoriesID('810c0293-5704-4033-bb92-5d237fe5983d')
+            }}>
             For her
           </Link>
         </ImageAndCaption>
@@ -52,7 +62,12 @@ export const Main = (): JSX.Element => {
           verticalPosition={'center'}
           image={AllCategoryImage}
           scale="1.05">
-          <Link href="/catalogue" onClick={(): void => setCategoriesID('0e007442-ed84-4e4f-ab3b-3c14191462c7')}>
+          <Link
+            href="/catalogue"
+            onClick={(): void => {
+              setCurrentPage('catalogue')
+              setCategoriesID('810c0293-5704-4033-bb92-5d237fe5983d')
+            }}>
             All Products
           </Link>
         </ImageAndCaption>
