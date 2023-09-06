@@ -12,7 +12,7 @@ import { GetFilteredProductsService } from './services/GetFilteredProductsServic
 import { AppRoutes } from './routes/AppRoutes.tsx'
 import { ProductsSortingService } from './services/ProductsSortingService'
 import { GetProductsWithDiscountService } from './services/GetProductsWithDiscountService'
-import { SearchProductsService } from './services/SearchPriductsService'
+import { SearchProductsService } from './services/SearchProductsService'
 
 export function App(): JSX.Element {
   return (
