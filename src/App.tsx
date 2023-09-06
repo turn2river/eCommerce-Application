@@ -12,6 +12,7 @@ import { GetFilteredProductsService } from './services/GetFilteredProductsServic
 import { AppRoutes } from './routes/AppRoutes.tsx'
 import { ProductsSortingService } from './services/ProductsSortingService'
 import { GetProductsWithDiscountService } from './services/GetProductsWithDiscountService'
+import { SearchProductsService } from './services/SearchPriductsService'
 
 export function App(): JSX.Element {
   return (
@@ -34,6 +35,7 @@ const filteredProducts = new GetProductsFilteredByCategoryIdAndAttributeService(
 const filteredProd = new GetFilteredProductsService()
 const sortedProducts = new ProductsSortingService()
 const discountedProducts = new GetProductsWithDiscountService()
+const searchProducts = new SearchProductsService()
 
 if (anonUserAuthToken) {
   const catalogue = new ProductsService()
@@ -60,6 +62,7 @@ if (anonUserAuthToken) {
   sortedProducts.getSortedProductsByName(anonUserAuthToken, 'desc', 8, 2)
   sortedProducts.getSortedProductsByPrice(anonUserAuthToken, 'desc', 8, 1)
   discountedProducts.getProductsWithDiscount(anonUserAuthToken, 'b8294a95-8151-4e58-ae1a-ae036e7dabc4')
+  searchProducts.searchProducts(anonUserAuthToken, 'luxe')
 }
 
 if (customerToken) {
