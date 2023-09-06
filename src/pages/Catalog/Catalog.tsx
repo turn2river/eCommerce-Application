@@ -12,6 +12,7 @@ import { DiscountIds, GetProductsWithDiscountService } from '../../services/GetP
 import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { Product } from '../../models/ProductType'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
+import { SortingMenu } from '../../components/SortingMenu/SortingMenu.tsx'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -19,13 +20,8 @@ export const Catalog = (): JSX.Element => {
   const [productsData, setProductsData] = useState<(ProductResult | Product)[]>([])
   const [loadingStatus, setLoadingstatus] = useState(false)
   const [catalogueTitle, setCatalogueTitle] = useState('')
-  // const [url, setUrl] = useState('')
-
   const page = useCataloguePage()
   const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
-
-  // const allProdcuts = '0e007442-ed84-4e4f-ab3b-3c14191462c7'
-  // const [categoryId, setCategoryId] = useState(allProdcuts)
 
   useEffect(() => {
     let loading = true
@@ -102,9 +98,12 @@ export const Catalog = (): JSX.Element => {
           label="search parfume"
           type="search"></TextField>
       </Box>
-      <Typography variant="h4" margin={'20px 0'}>
-        {catalogueTitle}
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '30px 0 10px 0' }}>
+        <Typography variant="h4" sx={{ margin: 'auto 0' }}>
+          {catalogueTitle}
+        </Typography>
+        <SortingMenu setProductsData={setProductsData} token={anonUserAuthToken} page={currentPage}></SortingMenu>
+      </Box>
       <Grid {...gridContainerProps}>
         {loadingStatus
           ? productsData.map(({ id }) => (
