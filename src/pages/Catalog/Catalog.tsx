@@ -126,7 +126,7 @@ export const Catalog = (): JSX.Element => {
                       title={product.name['en-US']}
                       description={product.metaDescription['en-US']}
                       // @ts-expect-error why
-                      variants={product.variants.length ? product.variants : product.masterVariant}
+                      variants={product.variants}
                     />
                   </Grid>
                 )

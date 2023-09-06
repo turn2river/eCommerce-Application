@@ -8,7 +8,7 @@ export const Header = (): JSX.Element => {
   const { isAuth, setIsAuth } = auth as AuthContextType
 
   const page = useCataloguePage()
-  const { setCurrentPage } = page as CataloguePageContextType
+  const { setCurrentPage, setCategoriesID } = page as CataloguePageContextType
 
   return (
     <AppBar
@@ -37,6 +37,7 @@ export const Header = (): JSX.Element => {
             color="inherit"
             onClick={(): void => {
               setCurrentPage('catalogue')
+              setCategoriesID('0e007442-ed84-4e4f-ab3b-3c14191462c7')
             }}>
             Catalogue
           </Button>

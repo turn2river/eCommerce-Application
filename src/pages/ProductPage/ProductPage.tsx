@@ -37,11 +37,22 @@ export const ProductPage = (): JSX.Element => {
       productService.getProductById(anonUserAuthToken, `key=${id}`).then((response) => {
         if (loading) {
           setProductsData(response)
-          setPrice(convertPrice(response.masterData.current.variants[0].prices[0].value.centAmount))
-          setDiscountedPrice(
-            convertPrice(response.masterData.current.variants[0].prices[0].discounted?.value.centAmount || 0),
+          setPrice(
+            convertPrice(
+              response.masterData.current.variants[response.masterData.current.variants.length - 1].prices[0].value
+                .centAmount,
+            ),
           )
-          setVolume(response.masterData.current.variants[0].attributes[0].value[0])
+          setDiscountedPrice(
+            convertPrice(
+              response.masterData.current.variants[response.masterData.current.variants.length - 1].prices[0].discounted
+                ?.value.centAmount || 0,
+            ),
+          )
+          setVolume(
+            response.masterData.current.variants[response.masterData.current.variants.length - 1].attributes[0]
+              .value[0],
+          )
         }
       })
     }
