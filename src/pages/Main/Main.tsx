@@ -51,7 +51,7 @@ export const Main = (): JSX.Element => {
             href="/catalogue"
             onClick={(): void => {
               setCurrentPage('catalogue')
-              setCategoriesID('810c0293-5704-4033-bb92-5d237fe5983d')
+              setCategoriesID('95f20a5a-77e8-4469-a7af-0167888d5ef5')
             }}>
             For her
           </Link>
@@ -66,7 +66,7 @@ export const Main = (): JSX.Element => {
             href="/catalogue"
             onClick={(): void => {
               setCurrentPage('catalogue')
-              setCategoriesID('810c0293-5704-4033-bb92-5d237fe5983d')
+              setCategoriesID('0e007442-ed84-4e4f-ab3b-3c14191462c7')
             }}>
             All Products
           </Link>
