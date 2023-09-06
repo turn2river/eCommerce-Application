@@ -1,6 +1,7 @@
 import { Button, Grid, Skeleton, TextField, Typography } from '@mui/material'
 import { useState, useEffect, Fragment, MouseEvent } from 'react'
 import { Box } from '@mui/system'
+import { toast } from 'react-toastify'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
@@ -10,6 +11,7 @@ import { GetProductsByCategoryIdService, ProductResult } from '../../services/Ge
 import { DiscountIds, GetProductsWithDiscountService } from '../../services/GetProductsWithDiscountService'
 import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { Product } from '../../models/ProductType'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -17,30 +19,32 @@ export const Catalog = (): JSX.Element => {
   const [productsData, setProductsData] = useState<(ProductResult | Product)[]>([])
   const [loadingStatus, setLoadingstatus] = useState(false)
   const [catalogueTitle, setCatalogueTitle] = useState('')
-  const [pageNumber, setPageNumber] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
   // const [url, setUrl] = useState('')
 
-  const allProdcuts = '0e007442-ed84-4e4f-ab3b-3c14191462c7'
-  const [categoryId, setCategoryId] = useState(allProdcuts)
+  const page = useCataloguePage()
+  const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
+
+  // const allProdcuts = '0e007442-ed84-4e4f-ab3b-3c14191462c7'
+  // const [categoryId, setCategoryId] = useState(allProdcuts)
 
   useEffect(() => {
     let loading = true
-    if (anonUserAuthToken && typeof categoryId === 'string') {
-      const newProductData = new GetProductsByCategoryIdService()
-      newProductData.getProductsByCategoryId(anonUserAuthToken, categoryId).then((data) => {
-        if (loading) {
-          setCatalogueTitle('Catalogue')
-          setTotalPages(Math.ceil(data.total / 8))
-          setProductsData(data.results)
-          setLoadingstatus(false)
-        }
-      })
+    if (currentPage === 'catalogue') {
+      if (anonUserAuthToken && typeof categoriesID === 'string') {
+        const newProductData = new GetProductsByCategoryIdService()
+        newProductData.getProductsByCategoryId(anonUserAuthToken, categoriesID).then((data) => {
+          if (loading) {
+            setCatalogueTitle('Catalogue')
+            setProductsData(data.results)
+            setLoadingstatus(false)
+          }
+        })
+      }
     }
     return () => {
       loading = false
     }
-  }, [categoryId])
+  }, [categoriesID, currentPage])
 
   async function getDiscountedProducts(event: MouseEvent<HTMLElement>): Promise<void> {
     const { id } = event.currentTarget
@@ -49,7 +53,7 @@ export const Catalog = (): JSX.Element => {
     if (anonUserAuthToken) {
       setProductsData([])
       try {
-        setPageNumber(1)
+        setCurrentPage('sale')
         const discountedProducts = await getProductsWithDiscountService.getProductsWithDiscount(anonUserAuthToken, id)
         setCatalogueTitle(discountedProducts.name['en-US'])
         const productKeys = discountedProducts.predicate.split('or').map((el) => el.trim().slice(15, 19))
@@ -57,9 +61,12 @@ export const Catalog = (): JSX.Element => {
           productKeys.map((key) => {
             return newProductData.getProductByKey(anonUserAuthToken, key)
           }),
-        ).then((response) => setProductsData((prevData) => [...prevData, ...response]))
+        ).then((response) => {
+          setProductsData([...response])
+        })
       } catch (error) {
         console.error(error)
+        toast.error('somthing went wrong')
       }
     }
   }
@@ -87,7 +94,7 @@ export const Catalog = (): JSX.Element => {
         </Button>
       </Box>
       <Box sx={{ display: 'flex', marginTop: '20px' }}>
-        <DropdownButton categoryIdSetter={setCategoryId} />
+        <DropdownButton categoryIdSetter={setCategoriesID} />
         <TextField
           sx={{ marginLeft: '10px' }}
           fullWidth
@@ -140,7 +147,7 @@ export const Catalog = (): JSX.Element => {
               )
             })}
       </Grid>
-      <CustomPaginationBar count={totalPages} page={pageNumber} setPage={setPageNumber} />
+      <CustomPaginationBar count={4} />
     </Fragment>
   )
 }
