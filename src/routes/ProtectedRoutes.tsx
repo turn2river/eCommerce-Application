@@ -7,7 +7,7 @@ export const ProtectedRoutes: React.FC<{ children: React.ReactNode }> = ({ child
   const { isAuth } = auth as AuthContextType
 
   if (!isAuth) {
-    return <Navigate to="/" />
+    return <Navigate to="/login" />
   }
 
   return <Fragment>{children}</Fragment>

@@ -48,10 +48,13 @@ export const ProductCard = ({
         image={imageSource}
       />
       <CardContent sx={{ margin: '0', padding: '0' }}>
-        <Link href={`${productKey}`} display={'block'} margin={'10px 0'} textAlign={'center'} noWrap={true}>
+        <Typography display={'block'} margin={'10px 0'} textAlign={'center'} variant="h6" height={60}>
           {title}
-        </Link>
-        <Typography noWrap={true} variant="body2" sx={{ minHeight: '80px', textAlign: 'justify', display: 'block' }}>
+        </Typography>
+        <Typography
+          noWrap={true}
+          variant="body2"
+          sx={{ height: '40px', textAlign: 'justify', display: 'block', marginTop: '40px' }}>
           {description}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -98,6 +101,9 @@ export const ProductCard = ({
       <CardActions sx={{ justifyContent: 'center' }}>
         <CustomGradientButton>Add to cart</CustomGradientButton>
       </CardActions>
+      <Link href={`${productKey}`} display={'block'} margin={'10px 0'} textAlign={'center'} noWrap={true} fontSize={12}>
+        view details
+      </Link>
     </Card>
   )
 }

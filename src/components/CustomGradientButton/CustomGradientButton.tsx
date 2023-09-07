@@ -6,9 +6,9 @@ const GradientButton = styled(Button)`
   cursor: pointer;
   color: white;
   position: relative;
-  padding: 12px 30px;
+  padding: 12px 20px;
   font-family: Montserrat, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   line-height: normal;
   text-align: center;
