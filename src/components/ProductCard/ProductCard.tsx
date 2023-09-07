@@ -22,11 +22,11 @@ export const ProductCard = ({
   variants,
   description,
 }: ProductCardPropsInterface): JSX.Element => {
-  const [volume, setVolume] = useState(variants?.[0]?.attributes?.[1]?.value[0])
+  const [volume, setVolume] = useState(variants?.[variants.length - 1]?.attributes?.[1]?.value[0])
 
-  const [price, setPrice] = useState(convertPrice(variants?.[0].prices[0].value.centAmount))
+  const [price, setPrice] = useState(convertPrice(variants?.[variants.length - 1].prices[0].value.centAmount))
   const [discountPrice, setDiscountPrice] = useState(
-    convertPrice(variants?.[0].prices[0].discounted?.value.centAmount || 0),
+    convertPrice(variants?.[variants.length - 1].prices[0].discounted?.value.centAmount || 0),
   )
   // @ts-expect-error event is used under the hood
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: number): void => {
