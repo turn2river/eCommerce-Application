@@ -13,18 +13,22 @@ import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { Product } from '../../models/ProductType'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 import { SortingMenu } from '../../components/SortingMenu/SortingMenu.tsx'
+import { SearchProductsService } from '../../services/SearchProductsService'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
+  const searchProductSrvice = new SearchProductsService()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
-  const [productsData, setProductsData] = useState<(ProductResult | Product)[]>([])
+  const [productsData, setProductsData] = useState<(ProductResult | Product)[]>(new Array(1))
   const [loadingStatus, setLoadingstatus] = useState(false)
   const [catalogueTitle, setCatalogueTitle] = useState('')
+  const [serchValue, setSearchValue] = useState('')
   const page = useCataloguePage()
   const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
 
   useEffect(() => {
     let loading = true
+    setSearchValue('')
     if (currentPage === 'catalogue') {
       if (anonUserAuthToken && typeof categoriesID === 'string') {
         const newProductData = new GetProductsByCategoryIdService()
@@ -47,7 +51,7 @@ export const Catalog = (): JSX.Element => {
     const getProductsWithDiscountService = new GetProductsWithDiscountService()
     const newProductData = new GetProductByIdService()
     if (anonUserAuthToken) {
-      setProductsData([])
+      setProductsData(new Array(1))
       try {
         setCurrentPage('sale')
         const discountedProducts = await getProductsWithDiscountService.getProductsWithDiscount(anonUserAuthToken, id)
@@ -96,7 +100,22 @@ export const Catalog = (): JSX.Element => {
           fullWidth
           variant="outlined"
           label="search parfume"
-          type="search"></TextField>
+          type="search"
+          value={serchValue}
+          onChange={(event): void => {
+            setSearchValue(event.currentTarget.value)
+          }}></TextField>
+        <Button
+          variant="contained"
+          onClick={async (): Promise<void> => {
+            if (anonUserAuthToken) {
+              const data = await searchProductSrvice.searchProducts(anonUserAuthToken, serchValue)
+              setCurrentPage('search')
+              setProductsData(data.results)
+            }
+          }}>
+          Search
+        </Button>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '30px 0 10px 0' }}>
         <Typography variant="h4" sx={{ margin: 'auto 0' }}>
@@ -149,6 +168,11 @@ export const Catalog = (): JSX.Element => {
                 </Grid>
               )
             })}
+        {productsData.length === 0 ? (
+          <Typography variant="h1" component={'p'}>
+            Products not found
+          </Typography>
+        ) : null}
       </Grid>
       <CustomPaginationBar count={4} />
     </Fragment>

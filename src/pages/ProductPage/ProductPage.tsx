@@ -15,7 +15,7 @@ export const ProductPage = (): JSX.Element => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 800,
+    width: 'calc((100vh + 100vw)*0.27)',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -80,7 +80,7 @@ export const ProductPage = (): JSX.Element => {
 
   return (
     <Fragment>
-      <Box sx={{ display: 'flex', justifyContent: 'start' }} mt={'20px'}>
+      <Box sx={{ display: 'flex', justifyContent: 'start', flexWrap: 'wrap-reverse' }} mt={'20px'}>
         <Button onClick={handleOpenModal} sx={{ maxWidth: '500px' }}>
           <Carousel useKeyboardArrows showArrows selectedItem={0}>
             {productsData?.masterData.current.masterVariant.images.map((image, index) => {

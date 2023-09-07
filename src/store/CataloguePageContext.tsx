@@ -15,7 +15,7 @@ export const useCataloguePage = (): CataloguePageContextType | string => {
 }
 
 export const CataloguePageProvider: React.FC<{ children: ReactNode }> = ({ children }): JSX.Element => {
-  const [currentPage, setCurrentPage] = useState<string>('')
+  const [currentPage, setCurrentPage] = useState<string>('catalogue')
   const [categoriesID, setCategoriesID] = useState<string>('0e007442-ed84-4e4f-ab3b-3c14191462c7')
 
   const value = {

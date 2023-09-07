@@ -8,11 +8,11 @@ export const AppBreadcrumbs = (): JSX.Element => {
   const crumbs = location.pathname
     .split('/')
     .filter((crumb) => crumb !== '')
-    .map((crumb) => {
+    .map((crumb, index) => {
       currentLocation += `/${crumb}`
 
       return (
-        <Link underline="hover" href={currentLocation}>
+        <Link key={index} underline="hover" href={currentLocation}>
           {crumb.toUpperCase()}
         </Link>
       )
