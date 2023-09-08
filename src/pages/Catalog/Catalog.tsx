@@ -70,7 +70,7 @@ export const Catalog = (): JSX.Element => {
         })
       } catch (error) {
         console.error(error)
-        toast.error('somthing went wrong')
+        toast.error('something went wrong')
       }
     }
   }
@@ -138,10 +138,11 @@ export const Catalog = (): JSX.Element => {
                 max: maxvalue,
               }
               const filterParam = {
+                categoriesList: [categoriesID],
                 priceList: pricelist,
               }
               const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
-              setCurrentPage('filter') // это что?
+              setCurrentPage('filter')
               console.log(1, data)
               setProductsData(data)
             }

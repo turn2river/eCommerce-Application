@@ -8,6 +8,8 @@ export class GetFilteredProductsService {
     { categoriesList = [], attributesList = [], priceList }: IFilteredProducts,
     limit: number,
     page: number,
+    sortName: string = 'name.en-us',
+    order: string = 'asc',
   ): Promise<ProductResult[]> {
     const headers = {
       'Content-Type': 'application/json',
@@ -23,10 +25,10 @@ export class GetFilteredProductsService {
 
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${removeEmpty.join(
       '&',
-    )}&limit=${limit}&offset=${page * limit}`
+    )}&limit=${limit}&offset=${page * limit}&sort=${sortName} ${order}`
 
     const response = await axios.get(url, { headers })
-    // console.log(response.data.results)
+    console.log(3, response.data.results)
     return response.data.results
   }
 
@@ -80,9 +82,16 @@ interface IFilteredProducts {
   categoriesList?: string[]
   attributesList?: { [key: string]: string }[]
   priceList?: PriceType
+  sortName?: string
+  order?: string
 }
 
 type PriceType = {
   min: number
   max: number
+}
+
+export enum SortingNames {
+  name = 'name.en-us',
+  price = 'price',
 }

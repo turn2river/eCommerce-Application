@@ -58,7 +58,7 @@ if (anonUserAuthToken) {
     priceList: priceRange,
   }
   filteredProducts.getProductsFilteredByCategoryIdAndAttribute(anonUserAuthToken, id, attribute, volume)
-  filteredProd.getFilteredProducts(anonUserAuthToken, params, 4, 1)
+  filteredProd.getFilteredProducts(anonUserAuthToken, params, 4, 1, 'price', 'desc')
   sortedProducts.getSortedProductsByName(anonUserAuthToken, 'desc', 8, 2)
   sortedProducts.getSortedProductsByPrice(anonUserAuthToken, 'desc', 8, 1)
   discountedProducts.getProductsWithDiscount(anonUserAuthToken, 'b8294a95-8151-4e58-ae1a-ae036e7dabc4')

@@ -11,7 +11,7 @@ export const RangeSlider = ({
 }: {
   priceRangeSetter: (newValue: number | number[]) => void
 }): JSX.Element => {
-  const [value, setValue] = React.useState<number[]>([20, 37])
+  const [value, setValue] = React.useState<number[]>([1, 350])
   // @ts-expect-error event is used under the hood of mui
   const handleChange = (event: Event, newValue: number | number[]): void => {
     priceRangeSetter(newValue as number[])
@@ -23,7 +23,7 @@ export const RangeSlider = ({
   const marks = [
     {
       value: minPrice,
-      label: '0',
+      label: '1',
     },
     {
       value: maxPrice,
@@ -39,7 +39,6 @@ export const RangeSlider = ({
         valueLabelDisplay="on"
         max={maxPrice}
         marks={marks}
-        step={50}
         getAriaValueText={valuetext}
       />
     </Box>
