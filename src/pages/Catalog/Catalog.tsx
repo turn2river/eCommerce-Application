@@ -74,7 +74,25 @@ export const Catalog = (): JSX.Element => {
       }
     }
   }
-  console.log(priceRange)
+  async function priceRangeSelect(): Promise<void> {
+    if (anonUserAuthToken) {
+      const [min, max] = Array.isArray(priceRange) ? priceRange : [priceRange]
+      const minvalue = min * 100
+      const maxvalue = max * 100
+      const pricelist = {
+        min: minvalue,
+        max: maxvalue,
+      }
+      const filterParam = {
+        categoriesList: [categoriesID],
+        priceList: pricelist,
+      }
+      const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
+      setCurrentPage('filter')
+      console.log(1, data)
+      setProductsData(data)
+    }
+  }
   return (
     <Fragment>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -126,27 +144,7 @@ export const Catalog = (): JSX.Element => {
           {catalogueTitle}
         </Typography>
         <RangeSlider priceRangeSetter={setPriceRange} />
-        <Button
-          variant="contained"
-          onClick={async (): Promise<void> => {
-            if (anonUserAuthToken) {
-              const [min, max] = Array.isArray(priceRange) ? priceRange : [priceRange]
-              const minvalue = min * 100
-              const maxvalue = max * 100
-              const pricelist = {
-                min: minvalue,
-                max: maxvalue,
-              }
-              const filterParam = {
-                categoriesList: [categoriesID],
-                priceList: pricelist,
-              }
-              const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
-              setCurrentPage('filter')
-              console.log(1, data)
-              setProductsData(data)
-            }
-          }}>
+        <Button variant="contained" onClick={priceRangeSelect.bind(this)}>
           Submit
         </Button>
         <SortingMenu
