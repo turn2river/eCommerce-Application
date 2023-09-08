@@ -14,15 +14,19 @@ import { Product } from '../../models/ProductType'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 import { SortingMenu } from '../../components/SortingMenu/SortingMenu.tsx'
 import { SearchProductsService } from '../../services/SearchProductsService'
+import { RangeSlider } from '../../components/RangeSlider/Range.slider.tsx'
+import { GetFilteredProductsService } from '../../services/GetFilteredProductsService'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const searchProductSrvice = new SearchProductsService()
+  const filteredProducts = new GetFilteredProductsService()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [productsData, setProductsData] = useState<(ProductResult | Product)[]>(new Array(1))
   const [loadingStatus, setLoadingstatus] = useState(false)
   const [catalogueTitle, setCatalogueTitle] = useState('')
   const [serchValue, setSearchValue] = useState('')
+  const [priceRange, setPriceRange] = useState<number | number[]>([])
   const page = useCataloguePage()
   const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
 
@@ -70,7 +74,7 @@ export const Catalog = (): JSX.Element => {
       }
     }
   }
-
+  console.log(priceRange)
   return (
     <Fragment>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -121,6 +125,29 @@ export const Catalog = (): JSX.Element => {
         <Typography variant="h4" sx={{ margin: 'auto 0' }}>
           {catalogueTitle}
         </Typography>
+        <RangeSlider priceRangeSetter={setPriceRange} />
+        <Button
+          variant="contained"
+          onClick={async (): Promise<void> => {
+            if (anonUserAuthToken) {
+              const [min, max] = Array.isArray(priceRange) ? priceRange : [priceRange]
+              const minvalue = min * 100
+              const maxvalue = max * 100
+              const pricelist = {
+                min: minvalue,
+                max: maxvalue,
+              }
+              const filterParam = {
+                priceList: pricelist,
+              }
+              const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
+              setCurrentPage('filter') // это что?
+              console.log(1, data)
+              setProductsData(data)
+            }
+          }}>
+          Submit
+        </Button>
         <SortingMenu
           setProductsData={setProductsData}
           token={anonUserAuthToken}
