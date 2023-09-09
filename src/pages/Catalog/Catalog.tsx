@@ -27,6 +27,10 @@ export const Catalog = (): JSX.Element => {
   const [catalogueTitle, setCatalogueTitle] = useState('')
   const [serchValue, setSearchValue] = useState('')
   const [priceRange, setPriceRange] = useState<number | number[]>([])
+  const [filterParam, setFilterParam] = useState<null | {
+    categoriesList: string[]
+    priceList: { min: number; max: number }
+  }>(null)
   const page = useCataloguePage()
   const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
 
@@ -83,14 +87,16 @@ export const Catalog = (): JSX.Element => {
         min: minvalue,
         max: maxvalue,
       }
-      const filterParam = {
+      setFilterParam({
         categoriesList: [categoriesID],
         priceList: pricelist,
+      })
+      console.log(filterParam)
+      if (filterParam) {
+        const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
+        console.log(1, data)
+        setProductsData(data)
       }
-      const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
-      setCurrentPage('filter')
-      console.log(1, data)
-      setProductsData(data)
     }
   }
   return (
@@ -151,7 +157,8 @@ export const Catalog = (): JSX.Element => {
           setProductsData={setProductsData}
           token={anonUserAuthToken}
           page={currentPage}
-          categoryID={categoriesID}></SortingMenu>
+          categoryID={categoriesID}
+          filterParams={filterParam}></SortingMenu>
       </Box>
       <Grid {...gridContainerProps}>
         {loadingStatus

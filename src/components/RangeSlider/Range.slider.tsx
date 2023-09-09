@@ -1,6 +1,6 @@
-import * as React from 'react'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 function valuetext(value: number): string {
   return `${value}Euro`
@@ -9,21 +9,21 @@ function valuetext(value: number): string {
 export const RangeSlider = ({
   priceRangeSetter,
 }: {
-  priceRangeSetter: (newValue: number | number[]) => void
+  priceRangeSetter: Dispatch<SetStateAction<number | number[]>>
 }): JSX.Element => {
-  const [value, setValue] = React.useState<number[]>([1, 350])
+  const [value, setValue] = useState<number[]>([1, 350])
   // @ts-expect-error event is used under the hood of mui
   const handleChange = (event: Event, newValue: number | number[]): void => {
     priceRangeSetter(newValue as number[])
     setValue(newValue as number[])
   }
   const maxPrice = 350
-  const minPrice = 0
+  const minPrice = 1
 
   const marks = [
     {
       value: minPrice,
-      label: '1',
+      label: minPrice,
     },
     {
       value: maxPrice,
@@ -38,6 +38,7 @@ export const RangeSlider = ({
         onChange={handleChange}
         valueLabelDisplay="on"
         max={maxPrice}
+        min={minPrice}
         marks={marks}
         getAriaValueText={valuetext}
       />
