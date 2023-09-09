@@ -25,13 +25,7 @@ interface SortingMenuPropsInterface {
   setProductsData: Dispatch<SetStateAction<(ProductResult | Product)[]>>
 }
 
-export const SortingMenu = ({
-  setProductsData,
-  token,
-  page,
-  // categoryID,
-  filterParams,
-}: SortingMenuPropsInterface): JSX.Element => {
+export const SortingMenu = ({ setProductsData, token, page, filterParams }: SortingMenuPropsInterface): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const open = Boolean(anchorEl)

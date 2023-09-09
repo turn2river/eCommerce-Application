@@ -26,13 +26,12 @@ export const Catalog = (): JSX.Element => {
   const [loadingStatus, setLoadingstatus] = useState(false)
   const [catalogueTitle, setCatalogueTitle] = useState('')
   const [serchValue, setSearchValue] = useState('')
-  const [priceRange, setPriceRange] = useState<number | number[]>([])
-  const [filterParam, setFilterParam] = useState<null | {
-    categoriesList: string[]
-    priceList: { min: number; max: number }
-  }>(null)
   const page = useCataloguePage()
   const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
+  const [filterParam, setFilterParam] = useState<{
+    categoriesList: string[]
+    priceList: { min: number; max: number }
+  }>({ categoriesList: [categoriesID], priceList: { min: 1, max: 350 } })
 
   useEffect(() => {
     let loading = true
@@ -80,18 +79,6 @@ export const Catalog = (): JSX.Element => {
   }
   async function priceRangeSelect(): Promise<void> {
     if (anonUserAuthToken) {
-      const [min, max] = Array.isArray(priceRange) ? priceRange : [priceRange]
-      const minvalue = min * 100
-      const maxvalue = max * 100
-      const pricelist = {
-        min: minvalue,
-        max: maxvalue,
-      }
-      setFilterParam({
-        categoriesList: [categoriesID],
-        priceList: pricelist,
-      })
-      console.log(filterParam)
       if (filterParam) {
         const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
         console.log(1, data)
@@ -145,11 +132,11 @@ export const Catalog = (): JSX.Element => {
           Search
         </Button>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '30px 0 10px 0' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '30px 0 10px 0', alignItems: 'center' }}>
         <Typography variant="h4" sx={{ margin: 'auto 0' }}>
           {catalogueTitle}
         </Typography>
-        <RangeSlider priceRangeSetter={setPriceRange} />
+        <RangeSlider filterParamsSetter={setFilterParam} />
         <Button variant="contained" onClick={priceRangeSelect.bind(this)}>
           Submit
         </Button>

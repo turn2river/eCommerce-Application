@@ -7,14 +7,37 @@ function valuetext(value: number): string {
 }
 
 export const RangeSlider = ({
-  priceRangeSetter,
+  filterParamsSetter,
 }: {
-  priceRangeSetter: Dispatch<SetStateAction<number | number[]>>
+  filterParamsSetter: Dispatch<
+    SetStateAction<{
+      categoriesList: string[]
+      priceList: {
+        min: number
+        max: number
+      }
+    }>
+  >
 }): JSX.Element => {
   const [value, setValue] = useState<number[]>([1, 350])
+  // const [priceRange, setPriceRange] = useState<number | number[]>([])
   // @ts-expect-error event is used under the hood of mui
   const handleChange = (event: Event, newValue: number | number[]): void => {
-    priceRangeSetter(newValue as number[])
+    // priceRangeSetter(newValue as number[])
+    const [min, max] = value
+    const minvalue = min * 100
+    const maxvalue = max * 100
+    const pricelist = {
+      min: minvalue,
+      max: maxvalue,
+    }
+    filterParamsSetter((prevValue) => {
+      return {
+        ...prevValue,
+        priceList: pricelist,
+      }
+    })
+    // console.log(value)
     setValue(newValue as number[])
   }
   const maxPrice = 350
