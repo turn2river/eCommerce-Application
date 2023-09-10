@@ -14,10 +14,13 @@ import { Product } from '../../models/ProductType'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 import { SortingMenu } from '../../components/SortingMenu/SortingMenu.tsx'
 import { SearchProductsService } from '../../services/SearchProductsService'
+import { RangeSlider } from '../../components/RangeSlider/Range.slider.tsx'
+import { GetFilteredProductsService } from '../../services/GetFilteredProductsService'
 
 export const Catalog = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const searchProductSrvice = new SearchProductsService()
+  const filteredProducts = new GetFilteredProductsService()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [productsData, setProductsData] = useState<(ProductResult | Product)[]>(new Array(1))
   const [loadingStatus, setLoadingstatus] = useState(false)
@@ -25,6 +28,10 @@ export const Catalog = (): JSX.Element => {
   const [serchValue, setSearchValue] = useState('')
   const page = useCataloguePage()
   const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
+  const [filterParam, setFilterParam] = useState<{
+    categoriesList: string[]
+    priceList: { min: number; max: number }
+  }>({ categoriesList: [categoriesID], priceList: { min: 1, max: 350 } })
 
   useEffect(() => {
     let loading = true
@@ -66,11 +73,19 @@ export const Catalog = (): JSX.Element => {
         })
       } catch (error) {
         console.error(error)
-        toast.error('somthing went wrong')
+        toast.error('something went wrong')
       }
     }
   }
-
+  async function priceRangeSelect(): Promise<void> {
+    if (anonUserAuthToken) {
+      if (filterParam) {
+        const data = await filteredProducts.getFilteredProducts(anonUserAuthToken, filterParam, 26, 0)
+        console.log(1, data)
+        setProductsData(data)
+      }
+    }
+  }
   return (
     <Fragment>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -117,15 +132,20 @@ export const Catalog = (): JSX.Element => {
           Search
         </Button>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '30px 0 10px 0' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '30px 0 10px 0', alignItems: 'center' }}>
         <Typography variant="h4" sx={{ margin: 'auto 0' }}>
           {catalogueTitle}
         </Typography>
+        <RangeSlider filterParamsSetter={setFilterParam} />
+        <Button variant="contained" onClick={priceRangeSelect.bind(this)}>
+          Submit
+        </Button>
         <SortingMenu
           setProductsData={setProductsData}
           token={anonUserAuthToken}
           page={currentPage}
-          categoryID={categoriesID}></SortingMenu>
+          categoryID={categoriesID}
+          filterParams={filterParam}></SortingMenu>
       </Box>
       <Grid {...gridContainerProps}>
         {loadingStatus
