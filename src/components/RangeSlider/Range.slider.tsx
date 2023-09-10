@@ -1,10 +1,7 @@
-import Box from '@mui/material/Box'
-import Slider from '@mui/material/Slider'
 import { Dispatch, SetStateAction, useState } from 'react'
-
-function valuetext(value: number): string {
-  return `${value}Euro`
-}
+import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 
 export const RangeSlider = ({
   filterParamsSetter,
@@ -20,10 +17,8 @@ export const RangeSlider = ({
   >
 }): JSX.Element => {
   const [value, setValue] = useState<number[]>([1, 350])
-  // const [priceRange, setPriceRange] = useState<number | number[]>([])
-  // @ts-expect-error event is used under the hood of mui
+
   const handleChange = (event: Event, newValue: number | number[]): void => {
-    // priceRangeSetter(newValue as number[])
     const [min, max] = value
     const minvalue = min * 100
     const maxvalue = max * 100
@@ -37,33 +32,35 @@ export const RangeSlider = ({
         priceList: pricelist,
       }
     })
-    // console.log(value)
     setValue(newValue as number[])
   }
+
   const maxPrice = 350
   const minPrice = 1
 
   const marks = [
     {
       value: minPrice,
-      label: minPrice,
+      label: `${minPrice} €`,
     },
     {
       value: maxPrice,
-      label: maxPrice,
+      label: `${maxPrice} €`,
     },
   ]
+
   return (
     <Box sx={{ width: 300 }}>
+      <Typography>Set price range:</Typography>
       <Slider
         getAriaLabel={(): string => 'Price range'}
-        value={value} // массив значений из 2х элементов Type: Array<number> | number
+        value={value}
         onChange={handleChange}
-        valueLabelDisplay="on"
+        valueLabelDisplay="auto"
         max={maxPrice}
         min={minPrice}
         marks={marks}
-        getAriaValueText={valuetext}
+        valueLabelFormat={(currentValue): string => `${currentValue} €`}
       />
     </Box>
   )
