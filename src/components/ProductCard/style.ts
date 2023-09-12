@@ -19,3 +19,24 @@ export const titleStyle: SxProps<Theme> = {
   width: '100%',
   textAlign: 'center',
 }
+
+export const modalWindowStyle: SxProps<Theme> = {
+  color: 'white',
+  width: '300px',
+  height: '300px',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'rgb(0 0 0 / 80%)',
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  alignItems: 'center',
+}
+
+export const priceStyle: SxProps<Theme> = { fontWeight: '700', color: '#ffc107' }
+
+export const commonPriceStyle: SxProps<Theme> = { fontWeight: '700' }
+
+export const discountedPriceStyle: SxProps<Theme> = { fontWeight: '400', textDecoration: 'line-through' }
