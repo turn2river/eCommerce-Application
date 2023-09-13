@@ -1,4 +1,5 @@
 import { AppBar, Box, Toolbar, Button } from '@mui/material'
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import { Logo } from '../Logo/Logo.tsx'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
@@ -68,6 +69,9 @@ export const Header = (): JSX.Element => {
             </Button>
           )}
         </Box>
+        <Button href="/cart">
+          <ShoppingBasketIcon />
+        </Button>
       </Toolbar>
     </AppBar>
   )
