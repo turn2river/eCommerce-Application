@@ -1,20 +1,44 @@
 import axios from 'axios'
+import { CustomerTokensStorage } from '../store/customerTokensStorage'
+import { AnonTokensStorage } from '../store/anonTokensStorage'
 
-export class CreateAnonymousUserCartService {
-  public async createAnonymousCart(token: string): Promise<Cart> {
-    const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/carts'
+const customerTokens = new CustomerTokensStorage()
+const anonTokens = new AnonTokensStorage()
+
+export class CartService {
+  public createCart(): void {
+    if (
+      localStorage.getItem('isAuth') &&
+      customerTokens.getLocalStorageCustomerAuthToken() &&
+      anonTokens.getLocalStorageAnonAuthToken()
+    ) {
+      const token = customerTokens.getLocalStorageCustomerAuthToken()
+      console.log(token)
+      this.createUserCart(token)
+    } else if (anonTokens.getLocalStorageAnonAuthToken()) {
+      const token = anonTokens.getLocalStorageAnonAuthToken()
+      this.createAnonymousCart(token)
+    }
+  }
+  public async createAnonymousCart(token: string | null): Promise<Cart> {
+    const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts'
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
-    const response = await axios.post(url, { headers })
-    // console.log(response.data)
+
+    const body = {
+      currency: 'EUR',
+      //  anonymousId: token,
+    }
+    const response = await axios.post(url, body, { headers })
+    console.log('createCart', response)
 
     return response.data
   }
 
   public async queryUserCart(token: string): Promise<Cart> {
-    // получить корзину пользователя по токену пользователя
+    // получить корзины пользователя по токену пользователя
     const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts'
 
     const headers = {
@@ -27,14 +51,19 @@ export class CreateAnonymousUserCartService {
     return response.data.results
   }
 
-  public async createUserCart(token: string): Promise<Cart> {
+  public async createUserCart(token: string | null): Promise<Cart> {
+    console.log(token)
     const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts'
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`, // customer token
     }
-    const response = await axios.post(url, { headers })
-    // console.log(response.data)
+
+    const body = {
+      currency: 'EUR',
+    }
+    const response = await axios.post(url, body, { headers })
+    console.log('createUserCart', response)
 
     return response.data
   }
@@ -42,6 +71,7 @@ export class CreateAnonymousUserCartService {
     token: string,
     cartId: string,
     cartVersion: number,
+    action: string, // "action" : "addLineItem", "removeLineItem"
     productId: string,
     variantId: number,
     quantity: number,
@@ -57,7 +87,7 @@ export class CreateAnonymousUserCartService {
       version: cartVersion,
       actions: [
         {
-          action: 'addLineItem',
+          action,
           productId,
           variantId,
           quantity,
@@ -65,28 +95,13 @@ export class CreateAnonymousUserCartService {
       ],
     }
     const response = await axios.post(url, body, { headers })
-    // console.log(response.data.results)
+    console.log('added', response.data.results)
 
     return response.data
   }
 
-  public async addItemToUserCart(token: string, cartId: string, cartUpdate: CartUpdate): Promise<Cart> {
-    // "action" : "addLineItem",
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    }
-
-    const body = cartUpdate
-    const response = await axios.post(url, body, { headers })
-    // console.log(response.data.results)
-
-    return response.data
-  }
-  public async removeItemToUserCart(token: string, cartId: string, cartUpdate: CartUpdate): Promise<Cart> {
-    // "action" : "removeLineItem"
+  public async handleCartItemInUserCart(token: string, cartId: string, cartUpdate: CartUpdate): Promise<Cart> {
+    // "action" : "addLineItem", "removeLineItem"
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
 
     const headers = {

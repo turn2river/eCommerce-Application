@@ -13,6 +13,7 @@ import { AppRoutes } from './routes/AppRoutes.tsx'
 import { ProductsSortingService } from './services/ProductsSortingService'
 import { GetProductsWithDiscountService } from './services/GetProductsWithDiscountService'
 import { SearchProductsService } from './services/SearchProductsService'
+import { CartService } from './services/CartService'
 
 export function App(): JSX.Element {
   return (
@@ -36,6 +37,8 @@ const filteredProd = new GetFilteredProductsService()
 const sortedProducts = new ProductsSortingService()
 const discountedProducts = new GetProductsWithDiscountService()
 const searchProducts = new SearchProductsService()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const cartHandling = new CartService()
 
 if (anonUserAuthToken) {
   const catalogue = new ProductsService()
@@ -63,6 +66,8 @@ if (anonUserAuthToken) {
   sortedProducts.getSortedProductsByPrice(anonUserAuthToken, 'desc', 8, 1)
   discountedProducts.getProductsWithDiscount(anonUserAuthToken, 'b8294a95-8151-4e58-ae1a-ae036e7dabc4')
   searchProducts.searchProducts(anonUserAuthToken, 'luxe')
+  // cartHandling.createCart()
+  // cartHandling.updateUserCartByCartId(anonUserAuthToken,"3e13bc5e-9df5-4baf-8502-e6068c314bdc", 16, "addLineItem", "5dc7b880-3a0b-4abb-9f40-d9e1c988223b", 1, 1)
 }
 
 if (customerToken) {
