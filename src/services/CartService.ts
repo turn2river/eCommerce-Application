@@ -32,7 +32,7 @@ export class CartService {
       //  anonymousId: token,
     }
     const response = await axios.post(url, body, { headers })
-    console.log('createCart', response)
+    console.log('createCart', token, response)
 
     return response.data
   }
