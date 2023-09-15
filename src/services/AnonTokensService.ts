@@ -25,6 +25,7 @@ export class AnonTokensService {
     }
     const anonTokensStorage = AnonTokensStorage.getInstance()
     anonTokensStorage.setLocalStorageAnonAuthToken(tokens.accessToken)
+    console.log('service', tokens.accessToken)
     anonTokensStorage.setLocalStorageAnonRefreshToken(tokens.refreshToken)
 
     return response.data

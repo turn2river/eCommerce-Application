@@ -23,11 +23,16 @@ export function App(): JSX.Element {
     </Fragment>
   )
 }
-const anonTokens = new AnonTokensService()
-anonTokens.getAnonymousTokens()
 
 const anonTokensStorage = AnonTokensStorage.getInstance()
-const anonAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
+let anonAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
+const cartHandling = new CartService()
+if (!anonAuthToken) {
+  const anonTokens = new AnonTokensService()
+  anonTokens.getAnonymousTokens()
+  anonAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
+}
+cartHandling.createCart()
 const customerTokensStorage = new CustomerTokensStorage()
 const customerToken = customerTokensStorage.getLocalStorageCustomerAuthToken()
 
@@ -37,7 +42,6 @@ const filteredProd = new GetFilteredProductsService()
 const sortedProducts = new ProductsSortingService()
 const discountedProducts = new GetProductsWithDiscountService()
 const searchProducts = new SearchProductsService()
-const cartHandling = new CartService()
 
 if (anonAuthToken) {
   const catalogue = new ProductsService()
@@ -66,7 +70,7 @@ if (anonAuthToken) {
   sortedProducts.getSortedProductsByPrice(anonAuthToken, 'desc', 8, 1)
   discountedProducts.getProductsWithDiscount(anonAuthToken, 'b8294a95-8151-4e58-ae1a-ae036e7dabc4')
   searchProducts.searchProducts(anonAuthToken, 'luxe')
-  cartHandling.createCart()
+
   // cartHandling.createAnonymousCart(anonAuthToken)
   // cartHandling.updateUserCartByCartId(anonAuthToken,"3e13bc5e-9df5-4baf-8502-e6068c314bdc", 16, "addLineItem", "5dc7b880-3a0b-4abb-9f40-d9e1c988223b", 1, 1)
 }

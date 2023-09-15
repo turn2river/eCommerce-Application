@@ -3,7 +3,7 @@ import { CustomerTokensStorage } from '../store/customerTokensStorage'
 import { AnonTokensStorage } from '../store/anonTokensStorage'
 
 const customerTokens = new CustomerTokensStorage()
-const anonTokens = new AnonTokensStorage()
+const anonTokens = AnonTokensStorage.getInstance()
 
 export class CartService {
   public createCart(): void {

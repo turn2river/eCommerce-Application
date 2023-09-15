@@ -131,8 +131,8 @@ export const RegistrationForm = (): JSX.Element => {
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer
-        await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
-        // await customerServiceSignUp.signUpMeCustomer(anonUserAuthToken, customerInfo)
+        // await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
+        await customerServiceSignUp.signUpMeCustomer(anonUserAuthToken, customerInfo)
         // Check the server response and set the form status and error message accordingly
         toast.success('Congratulations, you have successfully signed up!')
         setIsAuth(true)
