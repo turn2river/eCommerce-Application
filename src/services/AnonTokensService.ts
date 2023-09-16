@@ -10,8 +10,8 @@ export class AnonTokensService {
       method: 'post',
       url,
       auth: {
-        /* username: 'siFhmtGmnSioXkUJakkWQafJ',
-      password: 'wBkMaGx7k8lGflmkfPMt0OZe-Bhj9jy5',*/
+        // username: 'siFhmtGmnSioXkUJakkWQafJ',
+        // password: 'wBkMaGx7k8lGflmkfPMt0OZe-Bhj9jy5',
 
         username: 'rYRaZX089qXdVYTbWgTytLcU',
         password: 'itUuiiHan_5t0wwKkkslnPXc_jIjV3VI',

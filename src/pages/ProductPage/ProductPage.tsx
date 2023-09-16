@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Button, Chip, Modal, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { Fragment, useEffect, useState, MouseEvent } from 'react'
@@ -8,6 +9,8 @@ import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { convertPrice } from '../../utils/convertPrice'
 import { Product } from '../../models/ProductType'
 import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
+import { CartService } from '../../services/CartService'
+import { CustomerTokensStorage } from '../../store/customerTokensStorage'
 
 export const ProductPage = (): JSX.Element => {
   const modalStyle = {
@@ -29,14 +32,20 @@ export const ProductPage = (): JSX.Element => {
   const [price, setPrice] = useState<string>('')
   const [discountedPrice, setDiscountedPrice] = useState<string>('')
   const [volume, setVolume] = useState<number>(0)
+  const [productID, setProductID] = useState<string>('')
+  const [cartID, setCartID] = useState<string>('')
+  const [cartVersion, setCartVersion] = useState<number>(0)
+  const [variantID, setVariantID] = useState<number>(0)
 
   useEffect(() => {
     let loading = true
-    if (anonUserAuthToken) {
+    if (anonUserAuthToken && id) {
       const productService = new GetProductByIdService()
-      productService.getProductById(anonUserAuthToken, `key=${id}`).then((response) => {
+      productService.getProductByKey(anonUserAuthToken, id).then((response) => {
         if (loading) {
           setProductsData(response)
+          setProductID(response.id)
+          setVariantID(+response.masterData.current.variants[response.masterData.current.variants.length - 1].id)
           setPrice(
             convertPrice(
               response.masterData.current.variants[response.masterData.current.variants.length - 1].prices[0].value
@@ -62,7 +71,7 @@ export const ProductPage = (): JSX.Element => {
   }, [])
   const productTitle = productsData?.masterData?.current.name['en-US']
   const productDescription = productsData?.masterData.current.description['en-US']
-  const variants = productsData?.masterData?.current.variants
+  const variants = productsData?.masterData?.current.variants || []
   // @ts-expect-error event is used under the hood
   const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(Number.parseFloat(newVolume))
@@ -77,6 +86,36 @@ export const ProductPage = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const handleOpenModal = (): void => setOpen(true)
   const handleModalClose = (): void => setOpen(false)
+  const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
+  console.log(customerToken)
+  const myCart = new CartService()
+
+  async function addToCart(): Promise<void> {
+    await myCart.createCart()
+    if (customerToken) {
+      const lastCart = await myCart.queryMyActiveCart(customerToken)
+      setCartID(lastCart.id)
+      setCartVersion(lastCart.version)
+    }
+    const cartUpdate = {
+      version: cartVersion,
+      actions: [
+        {
+          action: 'addLineItem',
+          productId: productID,
+          variantId: variantID,
+          quantity: 1,
+        },
+      ],
+    }
+    if (customerToken) {
+      try {
+        await myCart.handleCartItemInUserCart(customerToken, cartID, cartUpdate)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
 
   return (
     <Fragment>
@@ -144,9 +183,11 @@ export const ProductPage = (): JSX.Element => {
                               const centPrice = variant.prices[0].value.centAmount
                               const discountCentPrice = variant.prices[0].discounted?.value.centAmount || 0
                               handleVolumeSelect(centPrice, discountCentPrice)
+                              setVariantID(+variant.id)
                             }}
                             key={variant?.prices[0].key}
-                            value={variant?.attributes[0]?.value[0]}>
+                            value={variant?.attributes[0]?.value[0]}
+                            id={variant.id}>
                             {variant.attributes[0].value[0]}
                           </ToggleButton>
                         )
@@ -170,7 +211,7 @@ export const ProductPage = (): JSX.Element => {
                 )}
               </Box>
             </Box>
-            <Button size="small" variant="outlined" sx={{ marginTop: '20px' }}>
+            <Button size="small" variant="outlined" sx={{ marginTop: '20px' }} onClick={addToCart}>
               Add to cart
             </Button>
           </Box>

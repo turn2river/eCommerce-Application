@@ -118,7 +118,7 @@ export type MasterVariant = {
 }
 
 export type Variants = {
-  id: number
+  id: string
   key: string
   attributes: {
     name: string
