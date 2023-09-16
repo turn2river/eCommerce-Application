@@ -15,6 +15,19 @@ export class CustomerSignUpService {
 
     return response.data
   }
+  public async signUpMeCustomer(token: string, customerData: SignUpDataInterface): Promise<Customer | undefined> {
+    const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/me/signup'
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+    const body = customerData
+
+    const response = await axios.post(url, body, { headers })
+    console.log(response.status, response.data)
+
+    return response.data
+  }
 }
 
 type Customer = {

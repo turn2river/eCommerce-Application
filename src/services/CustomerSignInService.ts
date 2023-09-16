@@ -26,4 +26,27 @@ export class CustomerSignInService {
 
     // console.log(response.data)
   }
+
+  public async authenticateCustomer(token: string | null, email: string, password: string): Promise<void> {
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/login`
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+    const body = {
+      email,
+      password,
+      activeCartSignInMode: 'MergeWithExistingCustomerCart',
+    }
+
+    await axios.post(url, body, { headers })
+    console.log('new signin')
+    // return response.data
+  }
+}
+
+export interface MeCustomerData {
+  email: string
+  password: string
+  activeCartSignInMode: string
 }
