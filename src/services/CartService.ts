@@ -6,7 +6,8 @@ const customerTokens = new CustomerTokensStorage()
 const anonTokens = AnonTokensStorage.getInstance()
 
 export class CartService {
-  public createCart(): void {
+  public async createCart(): Promise<void> {
+    // нужно использовать для проверки на наличие корзины и создания новой корзины
     if (
       localStorage.getItem('isAuth') &&
       customerTokens.getLocalStorageCustomerAuthToken() &&
@@ -14,10 +15,20 @@ export class CartService {
     ) {
       const token = customerTokens.getLocalStorageCustomerAuthToken()
       console.log(token)
-      this.createUserCart(token)
+      try {
+        await this.queryUserCart(token)
+      } catch (error) {
+        console.log(error)
+        this.createUserCart(token)
+      }
     } else if (anonTokens.getLocalStorageAnonAuthToken()) {
       const token = anonTokens.getLocalStorageAnonAuthToken()
-      this.createAnonymousCart(token)
+      try {
+        await this.queryUserCart(token)
+      } catch (error) {
+        console.log(error)
+        this.createAnonymousCart(token)
+      }
     }
   }
   public async createAnonymousCart(token: string | null): Promise<Cart> {
@@ -37,18 +48,18 @@ export class CartService {
     return response.data
   }
 
-  public async queryUserCart(token: string): Promise<Cart> {
+  public async queryUserCart(token: string | null): Promise<Cart> {
     // получить корзины пользователя по токену пользователя
     const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts'
 
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`, // customer token
+      'Authorization': `Bearer ${token}`, // customer token or anonymous token for anonymous user
     }
     const response = await axios.get(url, { headers })
-    // console.log(response.data.results)
+    // console.log(response.data)
 
-    return response.data.results
+    return response.data
   }
 
   public async createUserCart(token: string | null): Promise<Cart> {

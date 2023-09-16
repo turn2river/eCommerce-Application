@@ -11,6 +11,7 @@ import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
+import { AnonTokensService } from '../../services/AnonTokensService.ts'
 
 const anonTokens = AnonTokensStorage.getInstance()
 export const LoginForm = (): JSX.Element => {
@@ -34,6 +35,8 @@ export const LoginForm = (): JSX.Element => {
       if (anonTokens.getLocalStorageAnonAuthToken()) {
         const token = anonTokens.getLocalStorageAnonAuthToken()
         await customerService.authenticateCustomer(token, email, password)
+        const anonymTokens = new AnonTokensService()
+        anonymTokens.getAnonymousTokens()
       }
       await customerService.signInCustomer(data)
       toast.success('Congratulations, you have successfully signed in!')
