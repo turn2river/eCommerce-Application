@@ -1,8 +1,8 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from 'react'
 
 export type CataloguePageContextType = {
-  currentPage: string
-  setCurrentPage: Dispatch<SetStateAction<string>>
+  currentPageName: string
+  setCurrentPageName: Dispatch<SetStateAction<string>>
   categoriesID: string
   setCategoriesID: Dispatch<SetStateAction<string>>
   cartListLength: number
@@ -19,14 +19,14 @@ export const useCataloguePage = (): CataloguePageContextType | string => {
 }
 
 export const CataloguePageProvider: React.FC<{ children: ReactNode }> = ({ children }): JSX.Element => {
-  const [currentPage, setCurrentPage] = useState<string>('catalogue')
+  const [currentPageName, setCurrentPageName] = useState<string>('catalogue')
   const [categoriesID, setCategoriesID] = useState<string>('0e007442-ed84-4e4f-ab3b-3c14191462c7')
   const [cartListLength, setCartListLength] = useState<number>(0)
   const [cartListTrigger, setCartListTRigger] = useState<number>(0)
 
   const value = {
-    currentPage,
-    setCurrentPage,
+    currentPageName,
+    setCurrentPageName,
     categoriesID,
     setCategoriesID,
     cartListLength,

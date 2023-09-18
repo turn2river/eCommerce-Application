@@ -1,14 +1,21 @@
 import axios from 'axios'
 
 export class GetProductsByCategoryIdService {
-  public async getProductsByCategoryId(token: string, id: string): Promise<CategoryProductsData> {
-    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=categories.id:"${id}"&limit=26`
+  public async getProductsByCategoryId(
+    token: string,
+    id: string,
+    limit: number,
+    page: number,
+  ): Promise<CategoryProductsData> {
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?filter=categories.id:"${id}"&limit=${limit}&offset=${
+      page * limit
+    }`
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
     const response = await axios.get(url, { headers })
-    // console.log(response.data.results)
+    // console.log(response.data)
     return response.data
   }
 }

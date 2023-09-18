@@ -1,10 +1,19 @@
 import { Pagination } from '@mui/material'
 
-export const CustomPaginationBar = ({ count }: CustomPaginationBarInterface): JSX.Element => {
+export const CustomPaginationBar = ({
+  pageQuantity,
+  pageNumber,
+  setPageNumber,
+}: CustomPaginationBarInterface): JSX.Element => {
+  const pageNumberHandler = (num: number): void => {
+    setPageNumber(num)
+  }
   return (
     <Pagination
       size="large"
-      count={count}
+      count={pageQuantity}
+      page={pageNumber}
+      onChange={(_, number): void => pageNumberHandler(number)}
       variant="outlined"
       shape="rounded"
       sx={{ '& > ul': { justifyContent: 'center' }, 'margin': '20px 0' }}
@@ -13,5 +22,7 @@ export const CustomPaginationBar = ({ count }: CustomPaginationBarInterface): JS
 }
 
 interface CustomPaginationBarInterface {
-  count: number
+  pageQuantity: number | undefined
+  pageNumber: number
+  setPageNumber: React.Dispatch<React.SetStateAction<number>>
 }
