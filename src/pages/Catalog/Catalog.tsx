@@ -1,15 +1,12 @@
 import { Button, Grid, Skeleton, TextField, Typography } from '@mui/material'
-import { useState, useEffect, Fragment, MouseEvent } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { Box } from '@mui/system'
-import { toast } from 'react-toastify'
 import { ProductCard } from '../../components/ProductCard/ProductCard.tsx'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { gridContainerProps, gridItemProps, skeletonProps } from '../Main/style'
 import { CustomPaginationBar } from '../../components/CustomPaginationBar/CustomPaginationBar.tsx'
 import { DropdownButton } from '../../components/CatalogButton/CatalogButtonNEW.tsx'
 import { GetProductsByCategoryIdService, ProductResult } from '../../services/GetProductsByCategoryIdService'
-import { DiscountIds, GetProductsWithDiscountService } from '../../services/GetProductsWithDiscountService'
-import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { Product } from '../../models/ProductType'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 import { SortingMenu } from '../../components/SortingMenu/SortingMenu.tsx'
@@ -68,30 +65,6 @@ export const Catalog = (): JSX.Element => {
     }
   }, [categoriesID, currentPageName, pageNumber])
 
-  async function getDiscountedProducts(event: MouseEvent<HTMLElement>): Promise<void> {
-    const { id } = event.currentTarget
-    const getProductsWithDiscountService = new GetProductsWithDiscountService()
-    const newProductData = new GetProductByIdService()
-    if (anonUserAuthToken) {
-      setProductsData(new Array(1))
-      try {
-        setCurrentPageName('sale')
-        const discountedProducts = await getProductsWithDiscountService.getProductsWithDiscount(anonUserAuthToken, id)
-        setCatalogueTitle(discountedProducts.name['en-US'])
-        const productKeys = discountedProducts.predicate.split('or').map((el) => el.trim().slice(15, 19))
-        Promise.all(
-          productKeys.map((key) => {
-            return newProductData.getProductByKey(anonUserAuthToken, key)
-          }),
-        ).then((response) => {
-          setProductsData([...response])
-        })
-      } catch (error) {
-        console.error(error)
-        toast.error('something went wrong')
-      }
-    }
-  }
   async function priceRangeSelect(): Promise<void> {
     if (anonUserAuthToken) {
       if (filterParam) {
@@ -103,26 +76,6 @@ export const Catalog = (): JSX.Element => {
   }
   return (
     <Fragment>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button
-          id={DiscountIds.SummerSale}
-          size="large"
-          color="secondary"
-          variant="contained"
-          sx={{ maxWidth: '740px', width: '100%', mt: '20px', p: '40px 0' }}
-          onClick={getDiscountedProducts.bind(this)}>
-          SUMMER SALES!
-        </Button>
-        <Button
-          id={DiscountIds.LuxeSale}
-          size="large"
-          color="secondary"
-          variant="contained"
-          sx={{ maxWidth: '740px', width: '100%', mt: '20px', p: '40px 0' }}
-          onClick={getDiscountedProducts.bind(this)}>
-          LUXURY SALES!
-        </Button>
-      </Box>
       <Box sx={{ display: 'flex', marginTop: '20px' }}>
         <DropdownButton categoryIdSetter={setCategoriesID} />
         <TextField
