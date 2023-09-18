@@ -65,7 +65,6 @@ export class GetFilteredProductsService {
   }
 
   private getPriceFilters(pricesFilter?: PriceType): string {
-    console.log('BANANA', pricesFilter)
     if (!pricesFilter) {
       return ''
     }

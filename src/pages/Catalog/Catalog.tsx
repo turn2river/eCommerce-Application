@@ -33,7 +33,7 @@ export const Catalog = (): JSX.Element => {
   const [filterParam, setFilterParam] = useState<{
     categoriesList: string[]
     priceList: { min: number; max: number }
-  }>({ categoriesList: [categoriesID], priceList: { min: 1, max: 350 } })
+  }>({ categoriesList: [categoriesID], priceList: { min: 1, max: 35000 } })
   const [pageNumber, setPageNumber] = useState(1)
   const [pageQuantity, setPageQuantity] = useState<number>(0)
 
