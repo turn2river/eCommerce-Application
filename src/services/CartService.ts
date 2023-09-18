@@ -15,7 +15,7 @@ export class CartService {
       anonTokens.getLocalStorageAnonAuthToken()
     ) {
       const token = customerTokens.getLocalStorageCustomerAuthToken()
-      console.log(token)
+      // console.log(token)
       try {
         response = await this.queryMyActiveCart(token)
       } catch (error) {
@@ -43,7 +43,7 @@ export class CartService {
       'Authorization': `Bearer ${token}`, // customer token or anonymous token for anonymous user
     }
     const response = await axios.get(url, { headers })
-    console.log(response.data)
+    // console.log(response.data)
 
     return response.data
   }
@@ -60,7 +60,7 @@ export class CartService {
       //  anonymousId: token,
     }
     const response = await axios.post(url, body, { headers })
-    console.log('createCart', token, response)
+    // console.log('createCart', token, response)
 
     return response.data
   }
@@ -80,7 +80,7 @@ export class CartService {
   }
 
   public async createUserCart(token: string | null): Promise<Cart> {
-    console.log(token)
+    // console.log(token)
     const url = 'https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts'
     const headers = {
       'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export class CartService {
       currency: 'EUR',
     }
     const response = await axios.post(url, body, { headers })
-    console.log('createUserCart', response)
+    // console.log('createUserCart', response)
 
     return response.data
   }
@@ -123,7 +123,7 @@ export class CartService {
       ],
     }
     const response = await axios.post(url, body, { headers })
-    console.log('added', response.data.results)
+    // console.log('added', response.data.results)
 
     return response.data
   }

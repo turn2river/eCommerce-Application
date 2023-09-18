@@ -11,7 +11,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material'
-import { useState, MouseEvent } from 'react'
+import { useState } from 'react'
 import { cardStyle, commonPriceStyle, discountedPriceStyle, modalWindowStyle, priceStyle } from './style'
 import { ProductCardPropsInterface } from '../../models/ProductCardPropsInterface'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
@@ -48,7 +48,7 @@ export const ProductCard = ({
   const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
   const anonUserAuthToken = AnonTokensStorage.getInstance().getLocalStorageAnonAuthToken()
 
-  async function addItemToCart(event: MouseEvent<HTMLButtonElement>, currentId: string): Promise<void> {
+  async function addItemToCart(currentId: string): Promise<void> {
     if (customerToken && id) {
       const lastCart = await myCart.createCart()
       const cartUpdate = {
@@ -62,7 +62,6 @@ export const ProductCard = ({
           },
         ],
       }
-      console.log(cartUpdate)
       try {
         await myCart.handleCartItemInUserCart(customerToken, lastCart?.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
@@ -82,7 +81,6 @@ export const ProductCard = ({
           },
         ],
       }
-      console.log(cartUpdate)
       try {
         await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart?.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
@@ -240,8 +238,8 @@ export const ProductCard = ({
             </CustomGradientButton>
           ) : (
             <CustomGradientButton
-              onClick={(event): void => {
-                addItemToCart(event, productsID)
+              onClick={(): void => {
+                addItemToCart(productsID)
                 setVariantInCart(true)
                 setModal(false)
               }}>
