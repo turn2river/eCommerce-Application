@@ -186,6 +186,76 @@ export class CartService {
 
     return response.data
   }
+
+  public async addDiscountCode(token: string, cartId: string, version: number, myDiscountCode: string): Promise<Cart> {
+    // "action" : "addLineItem", "removeLineItem"
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+
+    const body = {
+      version,
+      actions: [
+        {
+          action: 'addDiscountCode',
+          code: myDiscountCode,
+        },
+      ],
+    }
+
+    const response = await axios.post(url, body, { headers })
+    // console.log(response.data.results)
+
+    return response.data
+  }
+
+  public async removeDiscountCode(
+    token: string,
+    cartId: string,
+    version: number,
+    myDiscountCodeId: string,
+  ): Promise<Cart> {
+    // "action" : "addLineItem", "removeLineItem"
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+
+    const body = {
+      version,
+      actions: [
+        {
+          action: 'removeDiscountCode',
+          discountCode: {
+            typeId: 'discount-code',
+            id: myDiscountCodeId,
+          },
+        },
+      ],
+    }
+    const response = await axios.post(url, body, { headers })
+    // console.log(response.data.results)
+
+    return response.data
+  }
+
+  public async deleteCart(token: string, cartId: string, cartVersion: string): Promise<void> {
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}?version=${cartVersion}`
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+    const response = await axios.delete(url, { headers })
+    console.log(response.data)
+
+    return response.data
+  }
 }
 
 interface RemoveLineItem {
