@@ -49,7 +49,7 @@ if (anonAuthToken) {
   const id = 'c3bbd3e2-ba78-4a21-9de1-e5c0ccdefc38' // это женские нишевые ароматы, просто пример
   const id1 = '95f20a5a-77e8-4469-a7af-0167888d5ef5' // это женские ароматы
   // id discount 'b8294a95-8151-4e58-ae1a-ae036e7dabc4'
-  categoryProducts.getProductsByCategoryId(anonAuthToken, id)
+  categoryProducts.getProductsByCategoryId(anonAuthToken, id, 8, 0)
   const volume = '50'
   const volume1 = '30'
   const attribute = 'VolumeEDP'

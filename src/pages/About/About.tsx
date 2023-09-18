@@ -5,6 +5,7 @@ import { Fragment } from 'react'
 export const About = (): JSX.Element => {
   const aboutData = [
     {
+      id: 0,
       teamMember: 'Julia',
       photo: './avatar.jpg',
       role: 'Commercetools/Front-end',
@@ -12,6 +13,7 @@ export const About = (): JSX.Element => {
       github: 'https://github.com/JuliaBel5',
     },
     {
+      id: 1,
       teamMember: 'Denis',
       photo: './denis.jpeg',
       role: 'Front-end',
@@ -19,6 +21,7 @@ export const About = (): JSX.Element => {
       github: 'https://github.com/Laevus92',
     },
     {
+      id: 2,
       teamMember: 'Alexey',
       photo: './alexey.jpeg',
       role: 'TeamLead/Front-end',
@@ -38,11 +41,11 @@ export const About = (): JSX.Element => {
         our users.
       </Typography>
       <Divider sx={{ marginTop: '20px' }} />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px', flexWrap: 'wrap' }}>
         {aboutData.map((profile) => {
-          const { teamMember, photo, role, bio, github } = profile
+          const { id, teamMember, photo, role, bio, github } = profile
           return (
-            <Card sx={{ maxWidth: 400, padding: '0 10px' }}>
+            <Card key={id} sx={{ maxWidth: 400, padding: '0 10px' }}>
               <CardMedia component="img" alt="coffeecoder" height="400" image={photo} />
               <CardContent>
                 <Typography variant="h3" component="div">

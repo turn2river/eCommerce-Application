@@ -18,40 +18,55 @@ import { RangeSlider } from '../../components/RangeSlider/Range.slider.tsx'
 import { GetFilteredProductsService } from '../../services/GetFilteredProductsService'
 
 export const Catalog = (): JSX.Element => {
+  const PRODUCTS_PER_PAGE = 8
+
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const searchProductSrvice = new SearchProductsService()
   const filteredProducts = new GetFilteredProductsService()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
+
+  const cataloguePage = useCataloguePage()
+  const { setCurrentPageName, currentPageName, categoriesID, setCategoriesID } =
+    cataloguePage as CataloguePageContextType
+
   const [productsData, setProductsData] = useState<(ProductResult | Product)[]>(new Array(1))
   const [loadingStatus, setLoadingstatus] = useState(false)
   const [catalogueTitle, setCatalogueTitle] = useState('')
   const [serchValue, setSearchValue] = useState('')
-  const page = useCataloguePage()
-  const { setCurrentPage, currentPage, categoriesID, setCategoriesID } = page as CataloguePageContextType
   const [filterParam, setFilterParam] = useState<{
     categoriesList: string[]
     priceList: { min: number; max: number }
   }>({ categoriesList: [categoriesID], priceList: { min: 1, max: 350 } })
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageQuantity, setPageQuantity] = useState<number>(0)
 
   useEffect(() => {
+    const page = pageNumber - 1
     let loading = true
     setSearchValue('')
-    if (currentPage === 'catalogue') {
+    if (currentPageName === 'catalogue') {
       if (anonUserAuthToken && typeof categoriesID === 'string') {
         const newProductData = new GetProductsByCategoryIdService()
-        newProductData.getProductsByCategoryId(anonUserAuthToken, categoriesID).then((data) => {
-          if (loading) {
-            setCatalogueTitle('Catalogue')
-            setProductsData(data.results)
-            setLoadingstatus(false)
-          }
-        })
+        newProductData
+          .getProductsByCategoryId(anonUserAuthToken, categoriesID, PRODUCTS_PER_PAGE, page)
+          .then((data) => {
+            if (loading) {
+              setPageQuantity(Math.ceil(data.total / PRODUCTS_PER_PAGE))
+              setCatalogueTitle('Catalogue')
+              setProductsData(data.results)
+              setLoadingstatus(false)
+
+              if (page > data.total) {
+                setPageNumber(1)
+              }
+            }
+          })
       }
     }
     return () => {
       loading = false
     }
-  }, [categoriesID, currentPage])
+  }, [categoriesID, currentPageName, pageNumber])
 
   async function getDiscountedProducts(event: MouseEvent<HTMLElement>): Promise<void> {
     const { id } = event.currentTarget
@@ -60,7 +75,7 @@ export const Catalog = (): JSX.Element => {
     if (anonUserAuthToken) {
       setProductsData(new Array(1))
       try {
-        setCurrentPage('sale')
+        setCurrentPageName('sale')
         const discountedProducts = await getProductsWithDiscountService.getProductsWithDiscount(anonUserAuthToken, id)
         setCatalogueTitle(discountedProducts.name['en-US'])
         const productKeys = discountedProducts.predicate.split('or').map((el) => el.trim().slice(15, 19))
@@ -125,7 +140,7 @@ export const Catalog = (): JSX.Element => {
           onClick={async (): Promise<void> => {
             if (anonUserAuthToken) {
               const data = await searchProductSrvice.searchProducts(anonUserAuthToken, serchValue)
-              setCurrentPage('search')
+              setCurrentPageName('search')
               setProductsData(data.results)
             }
           }}>
@@ -143,9 +158,10 @@ export const Catalog = (): JSX.Element => {
         <SortingMenu
           setProductsData={setProductsData}
           token={anonUserAuthToken}
-          page={currentPage}
+          currentPageName={currentPageName}
           categoryID={categoriesID}
-          filterParams={filterParam}></SortingMenu>
+          filterParams={filterParam}
+          limit={PRODUCTS_PER_PAGE}></SortingMenu>
       </Box>
       <Grid {...gridContainerProps}>
         {loadingStatus
@@ -194,11 +210,7 @@ export const Catalog = (): JSX.Element => {
           </Typography>
         ) : null}
       </Grid>
-      <CustomPaginationBar count={4} />
+      <CustomPaginationBar pageQuantity={pageQuantity} pageNumber={pageNumber} setPageNumber={setPageNumber} />
     </Fragment>
   )
-}
-
-Catalog.defaultProps = {
-  initialCategory: '95f20a5a-77e8-4469-a7af-0167888d5ef5',
 }
