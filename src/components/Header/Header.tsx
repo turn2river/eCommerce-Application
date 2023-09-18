@@ -1,15 +1,32 @@
-import { AppBar, Box, Toolbar, Button } from '@mui/material'
+import { AppBar, Box, Toolbar, Button, Badge, Link } from '@mui/material'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
+import { useEffect } from 'react'
 import { Logo } from '../Logo/Logo.tsx'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
+import { CartService } from '../../services/CartService'
 
 export const Header = (): JSX.Element => {
   const auth = useAuth()
   const { isAuth, setIsAuth } = auth as AuthContextType
 
   const page = useCataloguePage()
-  const { setCurrentPage, setCategoriesID } = page as CataloguePageContextType
+  const { setCurrentPage, setCategoriesID, cartListLength, setCartListLength, cartListTrigger } =
+    page as CataloguePageContextType
+  const myCart = new CartService()
+
+  useEffect(() => {
+    const loading = true
+    if (loading) {
+      myCart.createCart().then((response) => {
+        console.log(response)
+        if (response) {
+          const cartsLength = response.lineItems.reduce((acc, lineItem) => acc + lineItem.quantity, 0)
+          setCartListLength(cartsLength)
+        }
+      })
+    }
+  }, [cartListTrigger])
 
   return (
     <AppBar
@@ -69,9 +86,9 @@ export const Header = (): JSX.Element => {
             </Button>
           )}
         </Box>
-        <Button href="/cart">
+        <Badge component={Link} badgeContent={cartListLength || null} color="secondary" href="/cart">
           <ShoppingBasketIcon />
-        </Button>
+        </Badge>
       </Toolbar>
     </AppBar>
   )

@@ -11,6 +11,7 @@ import { Product } from '../../models/ProductType'
 import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
 import { CartService } from '../../services/CartService'
 import { CustomerTokensStorage } from '../../store/customerTokensStorage'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
 export const ProductPage = (): JSX.Element => {
   const modalStyle = {
@@ -33,9 +34,11 @@ export const ProductPage = (): JSX.Element => {
   const [discountedPrice, setDiscountedPrice] = useState<string>('')
   const [volume, setVolume] = useState<number>(0)
   const [productID, setProductID] = useState<string>('')
-  const [cartID, setCartID] = useState<string>('')
-  const [cartVersion, setCartVersion] = useState<number>(0)
+  // const [cartID, setCartID] = useState<string>('')
+  // const [cartVersion, setCartVersion] = useState<number>(0)
   const [variantID, setVariantID] = useState<number>(0)
+  const page = useCataloguePage()
+  const { setCartListTRigger } = page as CataloguePageContextType
 
   useEffect(() => {
     let loading = true
@@ -87,30 +90,46 @@ export const ProductPage = (): JSX.Element => {
   const handleOpenModal = (): void => setOpen(true)
   const handleModalClose = (): void => setOpen(false)
   const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
-  console.log(customerToken)
   const myCart = new CartService()
 
   async function addToCart(): Promise<void> {
-    await myCart.createCart()
     if (customerToken) {
       const lastCart = await myCart.queryMyActiveCart(customerToken)
-      setCartID(lastCart.id)
-      setCartVersion(lastCart.version)
-    }
-    const cartUpdate = {
-      version: cartVersion,
-      actions: [
-        {
-          action: 'addLineItem',
-          productId: productID,
-          variantId: variantID,
-          quantity: 1,
-        },
-      ],
-    }
-    if (customerToken) {
+
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: productID,
+            variantId: variantID,
+            quantity: 1,
+          },
+        ],
+      }
       try {
-        await myCart.handleCartItemInUserCart(customerToken, cartID, cartUpdate)
+        await myCart.handleCartItemInUserCart(customerToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (anonUserAuthToken) {
+      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
+
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: productID,
+            variantId: variantID,
+            quantity: 1,
+          },
+        ],
+      }
+      try {
+        await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
       } catch (error) {
         console.error(error)
       }
@@ -122,7 +141,7 @@ export const ProductPage = (): JSX.Element => {
       <Box
         sx={{ display: 'flex', justifyContent: 'start', flexWrap: 'wrap-reverse', alignItems: 'flex-end' }}
         mt={'20px'}>
-        <Button onClick={handleOpenModal} sx={{ maxWidth: '500px' }}>
+        <Box onClick={handleOpenModal} sx={{ maxWidth: '500px', cursor: 'pointer' }}>
           <Carousel useKeyboardArrows showArrows selectedItem={0}>
             {productsData?.masterData.current.masterVariant.images.map((image, index) => {
               return (
@@ -132,7 +151,7 @@ export const ProductPage = (): JSX.Element => {
               )
             })}
           </Carousel>
-        </Button>
+        </Box>
         <Modal
           open={open}
           onClose={handleModalClose}

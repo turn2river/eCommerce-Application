@@ -42,6 +42,7 @@ export const Catalog = (): JSX.Element => {
         newProductData.getProductsByCategoryId(anonUserAuthToken, categoriesID).then((data) => {
           if (loading) {
             setCatalogueTitle('Catalogue')
+            console.log(data.results)
             setProductsData(data.results)
             setLoadingstatus(false)
           }
@@ -160,6 +161,7 @@ export const Catalog = (): JSX.Element => {
                   <Grid key={product.id} {...gridItemProps}>
                     <ProductCard
                       key={product.id}
+                      id={product.id}
                       productKey={product.key}
                       imageSource={product.masterVariant.images[0].url}
                       title={product.name['en-US']}

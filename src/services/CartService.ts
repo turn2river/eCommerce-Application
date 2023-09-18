@@ -128,7 +128,11 @@ export class CartService {
     return response.data
   }
 
-  public async handleCartItemInUserCart(token: string, cartId: string, cartUpdate: CartUpdate): Promise<Cart> {
+  public async handleCartItemInUserCart(
+    token: string,
+    cartId: string | undefined,
+    cartUpdate: CartUpdate,
+  ): Promise<Cart> {
     // "action" : "addLineItem", "removeLineItem"
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
 
@@ -166,9 +170,35 @@ export class CartService {
 
     return response.data
   }
+
+  public async removeLineItem(token: string, cartId: string, cartUpdate: RemoveLineItem): Promise<Cart> {
+    // "action" : "addLineItem", "removeLineItem"
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+
+    const body = cartUpdate
+    const response = await axios.post(url, body, { headers })
+    // console.log(response.data.results)
+
+    return response.data
+  }
 }
 
-interface Cart {
+interface RemoveLineItem {
+  version: number
+  actions: RemoveAction[]
+}
+
+interface RemoveAction {
+  action: string
+  lineItemId: string
+  quantity: number
+}
+export interface Cart {
   type: string
   id: string
   version: number
@@ -184,7 +214,7 @@ interface Cart {
     clientId: string
     isPlatformClient: boolean
   }
-  lineItems: string[]
+  lineItems: LineItems[]
   cartState: string
   totalPrice: {
     type: string
@@ -208,7 +238,7 @@ interface Cart {
 }
 
 interface CartUpdate {
-  version: number
+  version: number | undefined
   actions: Action[]
 }
 
@@ -242,4 +272,76 @@ interface ShippingDetails {
 interface ShippingTarget {
   addressKey: string
   quantity: number
+}
+
+interface LineItems {
+  addedAt: string
+  id: string
+  lastModifiedAt: string
+  lineItemMode: string
+  name: {
+    ['en-US']: string
+    ru: string
+  }
+  price: {
+    discounted: {
+      discount: {
+        id: string
+        typeId: string
+      }
+      value: {
+        centAmount: number
+        currencyCode: string
+        fractionDigits: number
+        type: string
+      }
+      id: string
+      key: string
+    }
+  }
+  priceMode: string
+  productId: string
+  productKey: string
+  quantity: number
+  totalPrice: {
+    type: string
+    currencyCode: string
+    centAmount: number
+    fractionDigits: number
+  }
+  variant: {
+    id: number
+    key: string
+    images: {
+      url: string
+    }[]
+    prices: {
+      discounted: {
+        discount: {
+          id: string
+          typeId: string
+        }
+        value: {
+          type: string
+          currencyCode: string
+          centAmount: number
+          fractionDigits: number
+        }
+        id: string
+        key: string
+      }
+      id: string
+      key: string
+      value: {
+        type: string
+        currencyCode: string
+        centAmount: number
+        fractionDigits: number
+      }
+    }[]
+    attributes: {
+      name: string
+      value: number[]
+    }[]
+  }
 }

@@ -10,12 +10,16 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
+import { useState, MouseEvent } from 'react'
 import { cardStyle, commonPriceStyle, discountedPriceStyle, modalWindowStyle, priceStyle } from './style'
 import { ProductCardPropsInterface } from '../../models/ProductCardPropsInterface'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { convertPrice } from '../../utils/convertPrice'
 import { Variants } from '../../models/ProductType'
+import { CartService } from '../../services/CartService'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
+import { CustomerTokensStorage } from '../../store/customerTokensStorage'
+import { AnonTokensStorage } from '../../store/anonTokensStorage'
 
 export const ProductCard = ({
   productKey,
@@ -23,6 +27,7 @@ export const ProductCard = ({
   title,
   variants,
   description,
+  id,
 }: ProductCardPropsInterface): JSX.Element => {
   const minPrice = variants[0].prices[0].value.centAmount
   const maxPrice = variants[variants.length - 1].prices[0].value.centAmount
@@ -31,9 +36,59 @@ export const ProductCard = ({
   const [modal, setModal] = useState(false)
   const [volume, setVolume] = useState(variants[variants.length - 1].attributes[1].value[0])
   const [price, setPrice] = useState(variants[variants.length - 1].prices[0].value.centAmount)
+  const [productsID, setProductsID] = useState<string>(`${id}___${variants[variants.length - 1].id}`)
   const [discountedPrice, setDiscountedPrice] = useState(
     variants[variants.length - 1].prices[0].discounted?.value.centAmount,
   )
+  const myCart = new CartService()
+  const page = useCataloguePage()
+  const { setCartListTRigger } = page as CataloguePageContextType
+  const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
+  const anonUserAuthToken = AnonTokensStorage.getInstance().getLocalStorageAnonAuthToken()
+
+  async function addItemToCart(event: MouseEvent<HTMLButtonElement>, currentId: string): Promise<void> {
+    if (customerToken && id) {
+      const lastCart = await myCart.createCart()
+      const cartUpdate = {
+        version: lastCart?.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: currentId.split('___')[0],
+            variantId: Number.parseFloat(currentId.split('___')[1]),
+            quantity: 1,
+          },
+        ],
+      }
+      console.log(cartUpdate)
+      try {
+        await myCart.handleCartItemInUserCart(customerToken, lastCart?.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (anonUserAuthToken && id) {
+      const lastCart = await myCart.createCart()
+      const cartUpdate = {
+        version: lastCart?.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: currentId.split('___')[0],
+            variantId: Number.parseFloat(currentId.split('___')[1]),
+            quantity: 1,
+          },
+        ],
+      }
+      console.log(cartUpdate)
+      try {
+        await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart?.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
 
   function modalWindowController(): void {
     setModal((prevValue) => !prevValue)
@@ -91,10 +146,12 @@ export const ProductCard = ({
               return (
                 <ToggleButton
                   key={variant.id}
+                  id={`${id}____${variant.id}`}
                   value={variant.attributes[1].value[0]}
-                  onClick={(): void =>
+                  onClick={(event): void => {
                     clickOnVolumeButton(variant)
-                  }>{`${variant.attributes[1].value[0]} ml`}</ToggleButton>
+                    setProductsID(event.currentTarget.id)
+                  }}>{`${variant.attributes[1].value[0]} ml`}</ToggleButton>
               )
             })}
           </ToggleButtonGroup>
@@ -106,7 +163,13 @@ export const ProductCard = ({
           ) : (
             <Typography variant="h6" sx={commonPriceStyle} mb={'20px'}>{`€ ${convertPrice(price)}`}</Typography>
           )}
-          <CustomGradientButton>Continue</CustomGradientButton>
+          <CustomGradientButton
+            onClick={(event): void => {
+              addItemToCart(event, productsID)
+              setModal(false)
+            }}>
+            Continue
+          </CustomGradientButton>
         </Box>
       </Modal>
     </Card>
