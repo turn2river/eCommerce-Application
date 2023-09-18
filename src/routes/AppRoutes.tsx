@@ -11,7 +11,7 @@ import { Catalog } from '../pages/Catalog/Catalog.tsx'
 import { CatalogLayout } from '../layouts/CatalogLayout.tsx'
 import { Profile } from '../pages/Profile/Profile.tsx'
 import { ProtectedRoutes } from './ProtectedRoutes.tsx'
-import { Cart } from '../pages/Cart/Cart.tsx'
+import { CartPage } from '../pages/Cart/CartPage.tsx'
 
 export const AppRoutes = (): JSX.Element => {
   const auth = useAuth()
@@ -40,7 +40,7 @@ export const AppRoutes = (): JSX.Element => {
             </ProtectedRoutes>
           }
         />
-        <Route path="cart" element={<Cart />} />
+        <Route path="cart" element={<CartPage />} />
         <Route path="*" element={<PageNotFound />}></Route>
       </Route>,
     ),

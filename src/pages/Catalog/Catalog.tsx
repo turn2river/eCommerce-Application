@@ -129,6 +129,7 @@ export const Catalog = (): JSX.Element => {
                   <Grid key={product.id} {...gridItemProps}>
                     <ProductCard
                       key={product.id}
+                      id={product.id}
                       productKey={product.key}
                       imageSource={product.masterVariant.images[0].url}
                       title={product.name['en-US']}

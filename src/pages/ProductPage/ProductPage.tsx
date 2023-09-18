@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Button, Chip, Modal, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { Fragment, useEffect, useState, MouseEvent } from 'react'
@@ -8,6 +9,9 @@ import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { convertPrice } from '../../utils/convertPrice'
 import { Product } from '../../models/ProductType'
 import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
+import { CartService } from '../../services/CartService'
+import { CustomerTokensStorage } from '../../store/customerTokensStorage'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
 export const ProductPage = (): JSX.Element => {
   const modalStyle = {
@@ -23,20 +27,43 @@ export const ProductPage = (): JSX.Element => {
   }
   const { id } = useParams()
 
+  const myCart = new CartService()
+
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [productsData, setProductsData] = useState<Product | null>(null)
   const [price, setPrice] = useState<string>('')
   const [discountedPrice, setDiscountedPrice] = useState<string>('')
   const [volume, setVolume] = useState<number>(0)
+  const [productID, setProductID] = useState<string>('')
+  const [variantID, setVariantID] = useState<number>(0)
+  const [variantInCart, setVariantInCart] = useState<boolean>(false)
+  const page = useCataloguePage()
+  const { setCartListTRigger } = page as CataloguePageContextType
 
   useEffect(() => {
     let loading = true
-    if (anonUserAuthToken) {
+    if (anonUserAuthToken && id) {
       const productService = new GetProductByIdService()
-      productService.getProductById(anonUserAuthToken, `key=${id}`).then((response) => {
+      productService.getProductByKey(anonUserAuthToken, id).then((response) => {
         if (loading) {
           setProductsData(response)
+          myCart.createCart().then((cartResponse) => {
+            if (
+              cartResponse?.lineItems.some(
+                (lineItem) =>
+                  lineItem.variant.id ===
+                    response.masterData.current.variants[response.masterData.current.variants.length - 1].id &&
+                  lineItem.productId === response.id,
+              )
+            ) {
+              setVariantInCart(true)
+            } else {
+              setVariantInCart(false)
+            }
+          })
+          setProductID(response.id)
+          setVariantID(+response.masterData.current.variants[response.masterData.current.variants.length - 1].id)
           setPrice(
             convertPrice(
               response.masterData.current.variants[response.masterData.current.variants.length - 1].prices[0].value
@@ -62,8 +89,9 @@ export const ProductPage = (): JSX.Element => {
   }, [])
   const productTitle = productsData?.masterData?.current.name['en-US']
   const productDescription = productsData?.masterData.current.description['en-US']
-  const variants = productsData?.masterData?.current.variants
-  const handleVolumeClick = (_: MouseEvent<HTMLElement>, newVolume: string): void => {
+  const variants = productsData?.masterData?.current.variants || []
+  // @ts-expect-error event is used under the hood
+  const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(Number.parseFloat(newVolume))
   }
   const handleVolumeSelect = (selectedPrice: number, discountCentPrice: number): void => {
@@ -76,18 +104,100 @@ export const ProductPage = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const handleOpenModal = (): void => setOpen(true)
   const handleModalClose = (): void => setOpen(false)
+  const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
+
+  async function addToCart(): Promise<void> {
+    if (customerToken) {
+      const lastCart = await myCart.queryMyActiveCart(customerToken)
+
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: productID,
+            variantId: variantID,
+            quantity: 1,
+          },
+        ],
+      }
+      try {
+        await myCart.handleCartItemInUserCart(customerToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+        setVariantInCart(true)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (anonUserAuthToken) {
+      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
+
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: productID,
+            variantId: variantID,
+            quantity: 1,
+          },
+        ],
+      }
+      try {
+        await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+        setVariantInCart(true)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  async function removeItemFromCart(lineId: string, productsQuantity: number): Promise<void> {
+    if (customerToken && lineId) {
+      const lastCart = await myCart.queryMyActiveCart(customerToken)
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineId,
+            quantity: productsQuantity,
+          },
+        ],
+      }
+      try {
+        await myCart.removeLineItem(customerToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (anonUserAuthToken && lineId) {
+      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineId,
+            quantity: productsQuantity,
+          },
+        ],
+      }
+      try {
+        await myCart.removeLineItem(anonUserAuthToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
 
   return (
     <Fragment>
       <Box
         sx={{ display: 'flex', justifyContent: 'start', flexWrap: 'wrap-reverse', alignItems: 'flex-end' }}
         mt={'20px'}>
-        <Box
-          onClick={handleOpenModal}
-          sx={{
-            'maxWidth': '500px',
-            '&:hover': { cursor: 'pointer' },
-          }}>
+        <Box onClick={handleOpenModal} sx={{ maxWidth: '500px', cursor: 'pointer' }}>
           <Carousel useKeyboardArrows showArrows selectedItem={0}>
             {productsData?.masterData.current.masterVariant.images.map((image, index) => {
               return (
@@ -144,13 +254,21 @@ export const ProductPage = (): JSX.Element => {
                     ? variants.map((variant) => {
                         return (
                           <ToggleButton
-                            onClick={(): void => {
+                            onClick={async (): Promise<void> => {
                               const centPrice = variant.prices[0].value.centAmount
                               const discountCentPrice = variant.prices[0].discounted?.value.centAmount || 0
                               handleVolumeSelect(centPrice, discountCentPrice)
+                              setVariantID(variant.id)
+                              const cartData = await myCart.createCart()
+                              if (cartData?.lineItems.some((lineItem) => lineItem.variant.id === variant.id)) {
+                                setVariantInCart(true)
+                              } else {
+                                setVariantInCart(false)
+                              }
                             }}
                             key={variant?.prices[0].key}
-                            value={variant?.attributes[0]?.value[0]}>
+                            value={variant?.attributes[0]?.value[0]}
+                            id={variant.id.toString()}>
                             {variant.attributes[0].value[0]}
                           </ToggleButton>
                         )
@@ -174,9 +292,28 @@ export const ProductPage = (): JSX.Element => {
                 )}
               </Box>
             </Box>
-            <Button size="small" variant="outlined" sx={{ marginTop: '20px' }}>
-              Add to cart
-            </Button>
+            {variantInCart ? (
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ marginTop: '20px' }}
+                onClick={async (): Promise<void> => {
+                  const cartDetails = await myCart.createCart()
+                  const lineId = cartDetails?.lineItems.filter((lineItem) => lineItem.productId === productID)[0].id
+                  const quantity = cartDetails?.lineItems.filter((lineItem) => lineItem.productId === productID)[0]
+                    .quantity
+                  if (lineId && quantity) {
+                    removeItemFromCart(lineId, quantity)
+                    setVariantInCart(false)
+                  }
+                }}>
+                Remove from cart
+              </Button>
+            ) : (
+              <Button size="small" variant="outlined" sx={{ marginTop: '20px' }} onClick={addToCart}>
+                Add to cart
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>

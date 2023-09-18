@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import {
   Box,
   Card,
@@ -16,6 +17,10 @@ import { ProductCardPropsInterface } from '../../models/ProductCardPropsInterfac
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
 import { convertPrice } from '../../utils/convertPrice'
 import { Variants } from '../../models/ProductType'
+import { CartService } from '../../services/CartService'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
+import { CustomerTokensStorage } from '../../store/customerTokensStorage'
+import { AnonTokensStorage } from '../../store/anonTokensStorage'
 
 export const ProductCard = ({
   productKey,
@@ -23,7 +28,10 @@ export const ProductCard = ({
   title,
   variants,
   description,
+  id,
 }: ProductCardPropsInterface): JSX.Element => {
+  const myCart = new CartService()
+  const [variantInCart, setVariantInCart] = useState<boolean | undefined>(false)
   const minPrice = variants[0].prices[0].value.centAmount
   const maxPrice = variants[variants.length - 1].prices[0].value.centAmount
   const minDiscountPrice = variants[0].prices[0].discounted?.value.centAmount
@@ -31,9 +39,56 @@ export const ProductCard = ({
   const [modal, setModal] = useState(false)
   const [volume, setVolume] = useState(variants[variants.length - 1].attributes[1].value[0])
   const [price, setPrice] = useState(variants[variants.length - 1].prices[0].value.centAmount)
+  const [productsID, setProductsID] = useState<string>(`${id}___${variants[variants.length - 1].id}`)
   const [discountedPrice, setDiscountedPrice] = useState(
     variants[variants.length - 1].prices[0].discounted?.value.centAmount,
   )
+  const page = useCataloguePage()
+  const { setCartListTRigger } = page as CataloguePageContextType
+  const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
+  const anonUserAuthToken = AnonTokensStorage.getInstance().getLocalStorageAnonAuthToken()
+
+  async function addItemToCart(currentId: string): Promise<void> {
+    if (customerToken && id) {
+      const lastCart = await myCart.createCart()
+      const cartUpdate = {
+        version: lastCart?.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: currentId.split('___')[0],
+            variantId: Number.parseFloat(currentId.split('___')[1]),
+            quantity: 1,
+          },
+        ],
+      }
+      try {
+        await myCart.handleCartItemInUserCart(customerToken, lastCart?.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (anonUserAuthToken && id) {
+      const lastCart = await myCart.createCart()
+      const cartUpdate = {
+        version: lastCart?.version,
+        actions: [
+          {
+            action: 'addLineItem',
+            productId: currentId.split('___')[0],
+            variantId: Number.parseFloat(currentId.split('___')[1]),
+            quantity: 1,
+          },
+        ],
+      }
+      try {
+        await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart?.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
 
   function modalWindowController(): void {
     setModal((prevValue) => !prevValue)
@@ -43,6 +98,47 @@ export const ProductCard = ({
     setPrice(variant.prices[0].value.centAmount)
     setDiscountedPrice(variant.prices[0].discounted?.value.centAmount)
   }
+
+  async function removeItemFromCart(lineId: string, productsQuantity: number): Promise<void> {
+    if (customerToken && lineId) {
+      const lastCart = await myCart.queryMyActiveCart(customerToken)
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineId,
+            quantity: productsQuantity,
+          },
+        ],
+      }
+      try {
+        await myCart.removeLineItem(customerToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (anonUserAuthToken && lineId) {
+      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineId,
+            quantity: productsQuantity,
+          },
+        ],
+      }
+      try {
+        await myCart.removeLineItem(anonUserAuthToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
   return (
     <Card variant="outlined" sx={cardStyle}>
       <CardMedia
@@ -76,7 +172,20 @@ export const ProductCard = ({
         </Box>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
-        <CustomGradientButton onClick={modalWindowController}>Add to cart</CustomGradientButton>
+        <CustomGradientButton
+          onClick={async (): Promise<void> => {
+            modalWindowController()
+            const currentCartData = await myCart.createCart()
+            if (
+              currentCartData?.lineItems.some((lineItem) => lineItem.variant.id === variants[variants.length - 1].id)
+            ) {
+              setVariantInCart(true)
+            } else {
+              setVariantInCart(false)
+            }
+          }}>
+          Add to cart
+        </CustomGradientButton>
       </CardActions>
       <Link href={`${productKey}`} sx={{ display: 'block', width: '100%', textAlign: 'center', margin: '20px 0 0 0' }}>
         View details
@@ -91,10 +200,18 @@ export const ProductCard = ({
               return (
                 <ToggleButton
                   key={variant.id}
+                  id={`${id}___${variant.id}`}
                   value={variant.attributes[1].value[0]}
-                  onClick={(): void =>
+                  onClick={async (event): Promise<void> => {
                     clickOnVolumeButton(variant)
-                  }>{`${variant.attributes[1].value[0]} ml`}</ToggleButton>
+                    setProductsID(event.currentTarget.id)
+                    const currentCartData = await myCart.createCart()
+                    if (currentCartData?.lineItems.some((lineItem) => lineItem.variant.id === variant.id)) {
+                      setVariantInCart(true)
+                    } else {
+                      setVariantInCart(false)
+                    }
+                  }}>{`${variant.attributes[1].value[0]} ml`}</ToggleButton>
               )
             })}
           </ToggleButtonGroup>
@@ -106,7 +223,29 @@ export const ProductCard = ({
           ) : (
             <Typography variant="h6" sx={commonPriceStyle} mb={'20px'}>{`€ ${convertPrice(price)}`}</Typography>
           )}
-          <CustomGradientButton>Continue</CustomGradientButton>
+          {variantInCart ? (
+            <CustomGradientButton
+              onClick={async (): Promise<void> => {
+                const cartDetails = await myCart.createCart()
+                const lineId = cartDetails?.lineItems.filter((lineItem) => lineItem.productId === id)[0].id
+                const quantity = cartDetails?.lineItems.filter((lineItem) => lineItem.productId === id)[0].quantity
+                if (lineId && quantity) {
+                  removeItemFromCart(lineId, quantity)
+                }
+                setModal(false)
+              }}>
+              Remove from cart
+            </CustomGradientButton>
+          ) : (
+            <CustomGradientButton
+              onClick={(): void => {
+                addItemToCart(productsID)
+                setVariantInCart(true)
+                setModal(false)
+              }}>
+              Continue
+            </CustomGradientButton>
+          )}
         </Box>
       </Modal>
     </Card>
