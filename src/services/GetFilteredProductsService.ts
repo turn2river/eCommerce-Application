@@ -22,13 +22,12 @@ export class GetFilteredProductsService {
 
     const allParams: string[] = [categoriesFilters, attributesFilters, pricesFilters]
     const removeEmpty = allParams.filter((param) => !!param)
-
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/product-projections/search?${removeEmpty.join(
       '&',
     )}&limit=${limit}&offset=${page * limit}&sort=${sortName} ${order}`
 
     const response = await axios.get(url, { headers })
-    console.log(3, response.data.results)
+    // console.log(3, response.data)
     return response.data.results
   }
 

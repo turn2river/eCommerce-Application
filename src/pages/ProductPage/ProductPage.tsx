@@ -71,9 +71,9 @@ export const ProductPage = (): JSX.Element => {
   }, [])
   const productTitle = productsData?.masterData?.current.name['en-US']
   const productDescription = productsData?.masterData.current.description['en-US']
-  const variants = productsData?.masterData?.current.variants || []
-  // @ts-expect-error event is used under the hood
-  const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
+
+  const variants = productsData?.masterData?.current.variants
+  const handleVolumeClick = (_: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(Number.parseFloat(newVolume))
   }
   const handleVolumeSelect = (selectedPrice: number, discountCentPrice: number): void => {
@@ -122,7 +122,12 @@ export const ProductPage = (): JSX.Element => {
       <Box
         sx={{ display: 'flex', justifyContent: 'start', flexWrap: 'wrap-reverse', alignItems: 'flex-end' }}
         mt={'20px'}>
-        <Button onClick={handleOpenModal} sx={{ maxWidth: '500px' }}>
+        <Box
+          onClick={handleOpenModal}
+          sx={{
+            'maxWidth': '500px',
+            '&:hover': { cursor: 'pointer' },
+          }}>
           <Carousel useKeyboardArrows showArrows selectedItem={0}>
             {productsData?.masterData.current.masterVariant.images.map((image, index) => {
               return (
@@ -132,7 +137,7 @@ export const ProductPage = (): JSX.Element => {
               )
             })}
           </Carousel>
-        </Button>
+        </Box>
         <Modal
           open={open}
           onClose={handleModalClose}

@@ -16,7 +16,7 @@ export const DropdownButton = ({ categoryIdSetter }): JSX.Element => {
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const categoriesService = new CategoriesService()
   const page = useCataloguePage()
-  const { setCurrentPage } = page as CataloguePageContextType
+  const { setCurrentPageName } = page as CataloguePageContextType
 
   useEffect(() => {
     let loading = true
@@ -68,7 +68,7 @@ export const DropdownButton = ({ categoryIdSetter }): JSX.Element => {
               key={category.description?.['en-US']}
               onClick={(): void => {
                 handleMenuClose(category.id)
-                setCurrentPage('catalogue')
+                setCurrentPageName('catalogue')
               }}>
               {<Typography variant="h5">{category.description?.['en-US']}</Typography>}
             </MenuItem>
