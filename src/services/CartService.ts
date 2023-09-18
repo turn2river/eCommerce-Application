@@ -188,7 +188,6 @@ export class CartService {
   }
 
   public async addDiscountCode(token: string, cartId: string, version: number, myDiscountCode: string): Promise<Cart> {
-    // "action" : "addLineItem", "removeLineItem"
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
 
     const headers = {
@@ -216,9 +215,8 @@ export class CartService {
     token: string,
     cartId: string,
     version: number,
-    myDiscountCodeId: string,
+    myDiscountCodeId: string, // это не сам код, а его ай-ди!! он приходит в ответе завпроса по добавлению скидочного кода
   ): Promise<Cart> {
-    // "action" : "addLineItem", "removeLineItem"
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}`
 
     const headers = {
@@ -238,13 +236,14 @@ export class CartService {
         },
       ],
     }
+
     const response = await axios.post(url, body, { headers })
     // console.log(response.data.results)
 
     return response.data
   }
 
-  public async deleteCart(token: string, cartId: string, cartVersion: string): Promise<void> {
+  public async deleteCart(token: string, cartId: string, cartVersion: number): Promise<void> {
     const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/carts/${cartId}?version=${cartVersion}`
 
     const headers = {

@@ -31,7 +31,7 @@ if (anonAuthToken) {
   try {
     const response = await anonTokens.introspectToken(anonAuthToken)
     if (!response) {
-      console.log('токен протух')
+      console.log('токен протух, держи новый')
       anonTokens.getAnonymousTokens()
       anonAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
       console.log(anonAuthToken)
