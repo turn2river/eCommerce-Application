@@ -15,7 +15,7 @@ const options = [
 ]
 
 interface SortingMenuPropsInterface {
-  page: string
+  currentPageName: string
   categoryID: string
   token: string | null
   filterParams: null | {
@@ -23,9 +23,16 @@ interface SortingMenuPropsInterface {
     priceList: { min: number; max: number }
   }
   setProductsData: Dispatch<SetStateAction<(ProductResult | Product)[]>>
+  limit: number
 }
 
-export const SortingMenu = ({ setProductsData, token, page, filterParams }: SortingMenuPropsInterface): JSX.Element => {
+export const SortingMenu = ({
+  setProductsData,
+  token,
+  currentPageName,
+  filterParams,
+  limit,
+}: SortingMenuPropsInterface): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const open = Boolean(anchorEl)
@@ -39,10 +46,17 @@ export const SortingMenu = ({ setProductsData, token, page, filterParams }: Sort
     const [id, direction] = event.currentTarget.id.split('--')
     setSelectedIndex(index)
     setAnchorEl(null)
-    console.log(filterParams)
+    // console.log(filterParams)
     if (token && filterParams) {
       try {
-        const productData = await productsSortingService.getFilteredProducts(token, filterParams, 26, 0, id, direction)
+        const productData = await productsSortingService.getFilteredProducts(
+          token,
+          filterParams,
+          limit,
+          0,
+          id,
+          direction,
+        )
         setProductsData(productData)
       } catch (error) {
         if (error instanceof Error) {
@@ -52,7 +66,6 @@ export const SortingMenu = ({ setProductsData, token, page, filterParams }: Sort
       }
     }
   }
-
   const handleClose = (): void => {
     setAnchorEl(null)
   }
@@ -61,7 +74,7 @@ export const SortingMenu = ({ setProductsData, token, page, filterParams }: Sort
     <Box>
       <List component="nav" aria-label="Sorting" sx={{ padding: '0' }}>
         <ListItemButton
-          disabled={page !== 'catalogue'}
+          disabled={currentPageName !== 'catalogue'}
           id="sort-button"
           aria-haspopup="listbox"
           aria-controls="sort-menu"
