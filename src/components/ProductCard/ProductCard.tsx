@@ -62,6 +62,7 @@ export const ProductCard = ({
           },
         ],
       }
+      console.log(cartUpdate)
       try {
         await myCart.handleCartItemInUserCart(customerToken, lastCart?.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
@@ -81,6 +82,7 @@ export const ProductCard = ({
           },
         ],
       }
+      console.log(cartUpdate)
       try {
         await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart?.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
@@ -177,9 +179,7 @@ export const ProductCard = ({
             modalWindowController()
             const currentCartData = await myCart.createCart()
             if (
-              currentCartData?.lineItems.some(
-                (lineItem) => lineItem.variant.id === Number.parseFloat(variants[variants.length - 1].id),
-              )
+              currentCartData?.lineItems.some((lineItem) => lineItem.variant.id === variants[variants.length - 1].id)
             ) {
               setVariantInCart(true)
             } else {
@@ -202,17 +202,13 @@ export const ProductCard = ({
               return (
                 <ToggleButton
                   key={variant.id}
-                  id={`${id}____${variant.id}`}
+                  id={`${id}___${variant.id}`}
                   value={variant.attributes[1].value[0]}
                   onClick={async (event): Promise<void> => {
                     clickOnVolumeButton(variant)
                     setProductsID(event.currentTarget.id)
                     const currentCartData = await myCart.createCart()
-                    if (
-                      currentCartData?.lineItems.some(
-                        (lineItem) => lineItem.variant.id === Number.parseFloat(variant.id),
-                      )
-                    ) {
+                    if (currentCartData?.lineItems.some((lineItem) => lineItem.variant.id === variant.id)) {
                       setVariantInCart(true)
                     } else {
                       setVariantInCart(false)

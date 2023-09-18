@@ -49,11 +49,10 @@ export const ProductPage = (): JSX.Element => {
         if (loading) {
           setProductsData(response)
           myCart.createCart().then((cartResponse) => {
-            console.log(productsData)
             if (
               cartResponse?.lineItems.some(
                 (lineItem) =>
-                  lineItem.variant.id.toString() ===
+                  lineItem.variant.id ===
                     response.masterData.current.variants[response.masterData.current.variants.length - 1].id &&
                   lineItem.productId === response.id,
               )
@@ -90,9 +89,9 @@ export const ProductPage = (): JSX.Element => {
   }, [])
   const productTitle = productsData?.masterData?.current.name['en-US']
   const productDescription = productsData?.masterData.current.description['en-US']
-
-  const variants = productsData?.masterData?.current.variants
-  const handleVolumeClick = (_: MouseEvent<HTMLElement>, newVolume: string): void => {
+  const variants = productsData?.masterData?.current.variants || []
+  // @ts-expect-error event is used under the hood
+  const handleVolumeClick = (event: MouseEvent<HTMLElement>, newVolume: string): void => {
     setVolume(Number.parseFloat(newVolume))
   }
   const handleVolumeSelect = (selectedPrice: number, discountCentPrice: number): void => {
@@ -198,12 +197,7 @@ export const ProductPage = (): JSX.Element => {
       <Box
         sx={{ display: 'flex', justifyContent: 'start', flexWrap: 'wrap-reverse', alignItems: 'flex-end' }}
         mt={'20px'}>
-        <Box
-          onClick={handleOpenModal}
-          sx={{
-            'maxWidth': '500px',
-            '&:hover': { cursor: 'pointer' },
-          }}>
+        <Box onClick={handleOpenModal} sx={{ maxWidth: '500px', cursor: 'pointer' }}>
           <Carousel useKeyboardArrows showArrows selectedItem={0}>
             {productsData?.masterData.current.masterVariant.images.map((image, index) => {
               return (
@@ -264,13 +258,9 @@ export const ProductPage = (): JSX.Element => {
                               const centPrice = variant.prices[0].value.centAmount
                               const discountCentPrice = variant.prices[0].discounted?.value.centAmount || 0
                               handleVolumeSelect(centPrice, discountCentPrice)
-                              setVariantID(+variant.id)
+                              setVariantID(variant.id)
                               const cartData = await myCart.createCart()
-                              if (
-                                cartData?.lineItems.some(
-                                  (lineItem) => lineItem.variant.id === Number.parseFloat(variant.id),
-                                )
-                              ) {
+                              if (cartData?.lineItems.some((lineItem) => lineItem.variant.id === variant.id)) {
                                 setVariantInCart(true)
                               } else {
                                 setVariantInCart(false)
@@ -278,7 +268,7 @@ export const ProductPage = (): JSX.Element => {
                             }}
                             key={variant?.prices[0].key}
                             value={variant?.attributes[0]?.value[0]}
-                            id={variant.id}>
+                            id={variant.id.toString()}>
                             {variant.attributes[0].value[0]}
                           </ToggleButton>
                         )

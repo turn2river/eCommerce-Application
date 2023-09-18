@@ -11,7 +11,7 @@ export const Header = (): JSX.Element => {
   const { isAuth, setIsAuth } = auth as AuthContextType
 
   const page = useCataloguePage()
-  const { setCurrentPage, setCategoriesID, cartListLength, setCartListLength, cartListTrigger } =
+  const { setCurrentPageName, setCategoriesID, cartListLength, setCartListLength, cartListTrigger } =
     page as CataloguePageContextType
   const myCart = new CartService()
 
@@ -19,7 +19,6 @@ export const Header = (): JSX.Element => {
     const loading = true
     if (loading) {
       myCart.createCart().then((response) => {
-        console.log(response)
         if (response) {
           const cartsLength = response.lineItems.reduce((acc, lineItem) => acc + lineItem.quantity, 0)
           setCartListLength(cartsLength)
@@ -54,7 +53,7 @@ export const Header = (): JSX.Element => {
             href="/catalogue"
             color="inherit"
             onClick={(): void => {
-              setCurrentPage('catalogue')
+              setCurrentPageName('catalogue')
               setCategoriesID('0e007442-ed84-4e4f-ab3b-3c14191462c7')
             }}>
             Catalogue
@@ -80,7 +79,7 @@ export const Header = (): JSX.Element => {
               href="/registration"
               color="inherit"
               onClick={(): void => {
-                setCurrentPage('signup')
+                setCurrentPageName('signup')
               }}>
               Sign up
             </Button>
