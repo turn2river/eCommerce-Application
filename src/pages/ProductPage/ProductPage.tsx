@@ -27,6 +27,8 @@ export const ProductPage = (): JSX.Element => {
   }
   const { id } = useParams()
 
+  const myCart = new CartService()
+
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
   const [productsData, setProductsData] = useState<Product | null>(null)
@@ -34,9 +36,8 @@ export const ProductPage = (): JSX.Element => {
   const [discountedPrice, setDiscountedPrice] = useState<string>('')
   const [volume, setVolume] = useState<number>(0)
   const [productID, setProductID] = useState<string>('')
-  // const [cartID, setCartID] = useState<string>('')
-  // const [cartVersion, setCartVersion] = useState<number>(0)
   const [variantID, setVariantID] = useState<number>(0)
+  const [variantInCart, setVariantInCart] = useState<boolean>(false)
   const page = useCataloguePage()
   const { setCartListTRigger } = page as CataloguePageContextType
 
@@ -47,6 +48,21 @@ export const ProductPage = (): JSX.Element => {
       productService.getProductByKey(anonUserAuthToken, id).then((response) => {
         if (loading) {
           setProductsData(response)
+          myCart.createCart().then((cartResponse) => {
+            console.log(productsData)
+            if (
+              cartResponse?.lineItems.some(
+                (lineItem) =>
+                  lineItem.variant.id.toString() ===
+                    response.masterData.current.variants[response.masterData.current.variants.length - 1].id &&
+                  lineItem.productId === response.id,
+              )
+            ) {
+              setVariantInCart(true)
+            } else {
+              setVariantInCart(false)
+            }
+          })
           setProductID(response.id)
           setVariantID(+response.masterData.current.variants[response.masterData.current.variants.length - 1].id)
           setPrice(
@@ -90,7 +106,6 @@ export const ProductPage = (): JSX.Element => {
   const handleOpenModal = (): void => setOpen(true)
   const handleModalClose = (): void => setOpen(false)
   const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
-  const myCart = new CartService()
 
   async function addToCart(): Promise<void> {
     if (customerToken) {
@@ -110,6 +125,7 @@ export const ProductPage = (): JSX.Element => {
       try {
         await myCart.handleCartItemInUserCart(customerToken, lastCart.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
+        setVariantInCart(true)
       } catch (error) {
         console.error(error)
       }
@@ -129,6 +145,47 @@ export const ProductPage = (): JSX.Element => {
       }
       try {
         await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+        setVariantInCart(true)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  async function removeItemFromCart(lineId: string, productsQuantity: number): Promise<void> {
+    if (customerToken && lineId) {
+      const lastCart = await myCart.queryMyActiveCart(customerToken)
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineId,
+            quantity: productsQuantity,
+          },
+        ],
+      }
+      try {
+        await myCart.removeLineItem(customerToken, lastCart.id, cartUpdate)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (anonUserAuthToken && lineId) {
+      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
+      const cartUpdate = {
+        version: lastCart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineId,
+            quantity: productsQuantity,
+          },
+        ],
+      }
+      try {
+        await myCart.removeLineItem(anonUserAuthToken, lastCart.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
       } catch (error) {
         console.error(error)
@@ -198,11 +255,21 @@ export const ProductPage = (): JSX.Element => {
                     ? variants.map((variant) => {
                         return (
                           <ToggleButton
-                            onClick={(): void => {
+                            onClick={async (): Promise<void> => {
                               const centPrice = variant.prices[0].value.centAmount
                               const discountCentPrice = variant.prices[0].discounted?.value.centAmount || 0
                               handleVolumeSelect(centPrice, discountCentPrice)
                               setVariantID(+variant.id)
+                              const cartData = await myCart.createCart()
+                              if (
+                                cartData?.lineItems.some(
+                                  (lineItem) => lineItem.variant.id === Number.parseFloat(variant.id),
+                                )
+                              ) {
+                                setVariantInCart(true)
+                              } else {
+                                setVariantInCart(false)
+                              }
                             }}
                             key={variant?.prices[0].key}
                             value={variant?.attributes[0]?.value[0]}
@@ -230,9 +297,28 @@ export const ProductPage = (): JSX.Element => {
                 )}
               </Box>
             </Box>
-            <Button size="small" variant="outlined" sx={{ marginTop: '20px' }} onClick={addToCart}>
-              Add to cart
-            </Button>
+            {variantInCart ? (
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ marginTop: '20px' }}
+                onClick={async (): Promise<void> => {
+                  const cartDetails = await myCart.createCart()
+                  const lineId = cartDetails?.lineItems.filter((lineItem) => lineItem.productId === productID)[0].id
+                  const quantity = cartDetails?.lineItems.filter((lineItem) => lineItem.productId === productID)[0]
+                    .quantity
+                  if (lineId && quantity) {
+                    removeItemFromCart(lineId, quantity)
+                    setVariantInCart(false)
+                  }
+                }}>
+                Remove from cart
+              </Button>
+            ) : (
+              <Button size="small" variant="outlined" sx={{ marginTop: '20px' }} onClick={addToCart}>
+                Add to cart
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>

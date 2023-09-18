@@ -194,7 +194,7 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
       <Typography variant="h3" textAlign={'center'}>
         Your cart is empty 🥺
       </Typography>
-      <Button href="../catalogue">Let's go to catalogue</Button>
+      <Button href="../catalogue">Let's go to catalogue 🛒</Button>
     </Box>
   )
 }
