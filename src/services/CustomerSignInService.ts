@@ -40,7 +40,6 @@ export class CustomerSignInService {
     }
 
     await axios.post(url, body, { headers })
-    console.log('new signin')
     // return response.data
   }
 }
