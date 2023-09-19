@@ -117,6 +117,26 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
     }
   }
 
+  async function removeCart(): Promise<void> {
+    if (anonUserAuthToken && cartsData) {
+      try {
+        await myCart.deleteCart(anonUserAuthToken, cartsData?.id, cartsData?.version)
+        setCartsData(undefined)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    } else if (customerToken && cartsData) {
+      try {
+        await myCart.deleteCart(customerToken, cartsData?.id, cartsData?.version)
+        setCartsData(undefined)
+        setCartListTRigger((prevValue) => prevValue + 1)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
   return cartsData?.lineItems.length ? (
     <Box mt={4}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -134,7 +154,7 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
             SUBMIT
           </Button>
         </Box>
-        <Button variant="outlined" color="secondary">
+        <Button variant="outlined" color="secondary" onClick={removeCart}>
           CLEAR CART
         </Button>
       </Box>
