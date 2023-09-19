@@ -176,9 +176,12 @@ export const ProductCard = ({
           onClick={async (): Promise<void> => {
             modalWindowController()
             const currentCartData = await myCart.createCart()
-            if (
-              currentCartData?.lineItems.some((lineItem) => lineItem.variant.id === variants[variants.length - 1].id)
-            ) {
+            const isVariantInCart = currentCartData?.lineItems.some((lineItem) => {
+              const matchingVariant = variants.find((variant) => variant.id === lineItem.variant.id)
+              return matchingVariant && lineItem.productId === id
+            })
+
+            if (isVariantInCart) {
               setVariantInCart(true)
             } else {
               setVariantInCart(false)
@@ -206,7 +209,11 @@ export const ProductCard = ({
                     clickOnVolumeButton(variant)
                     setProductsID(event.currentTarget.id)
                     const currentCartData = await myCart.createCart()
-                    if (currentCartData?.lineItems.some((lineItem) => lineItem.variant.id === variant.id)) {
+                    if (
+                      currentCartData?.lineItems.some(
+                        (lineItem) => lineItem.variant.id === variant.id && lineItem.productId === id,
+                      )
+                    ) {
                       setVariantInCart(true)
                     } else {
                       setVariantInCart(false)

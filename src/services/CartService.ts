@@ -19,7 +19,7 @@ export class CartService {
       try {
         response = await this.queryMyActiveCart(token)
       } catch (error) {
-        console.error(error)
+        // console.error(error)
         response = await this.createUserCart(token)
       }
     } else if (anonTokens.getLocalStorageAnonAuthToken()) {
@@ -27,7 +27,7 @@ export class CartService {
       try {
         response = await this.queryMyActiveCart(token)
       } catch (error) {
-        console.error(error)
+        // console.error(error)
         response = await this.createAnonymousCart(token)
       }
     }

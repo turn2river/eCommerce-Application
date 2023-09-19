@@ -80,7 +80,7 @@ export const Header = (): JSX.Element => {
               color="inherit"
               onClick={(): void => {
                 setIsAuth(false)
-                removeTokenOnLogut.clearLocalStorageTokens()
+                removeTokenOnLogut.clearLocalStorageCustomerTokens()
               }}>
               logout
             </Button>
