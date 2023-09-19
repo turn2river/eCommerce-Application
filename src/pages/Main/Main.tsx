@@ -9,11 +9,11 @@ import { useCataloguePage, CataloguePageContextType } from '../../store/Catalogu
 
 export const Main = (): JSX.Element => {
   const page = useCataloguePage()
-  const { setCategoriesID, setCurrentPage } = page as CataloguePageContextType
+  const { setCategoriesID, setCurrentPageName } = page as CataloguePageContextType
   return (
     <Box>
       <ImageAndCaption width={'100%'} height={'500px'} verticalPosition={'60%'} image={MainImage}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        To get a discount, use one of ours promocodes: RSS || sept23
       </ImageAndCaption>
       <Typography variant="h4" component="h3" margin={'20px'} textAlign={'center'}>
         Categories
@@ -35,7 +35,7 @@ export const Main = (): JSX.Element => {
           <Link
             href="/catalogue"
             onClick={(): void => {
-              setCurrentPage('catalogue')
+              setCurrentPageName('catalogue')
               setCategoriesID('810c0293-5704-4033-bb92-5d237fe5983d')
             }}>
             For him
@@ -50,7 +50,7 @@ export const Main = (): JSX.Element => {
           <Link
             href="/catalogue"
             onClick={(): void => {
-              setCurrentPage('catalogue')
+              setCurrentPageName('catalogue')
               setCategoriesID('95f20a5a-77e8-4469-a7af-0167888d5ef5')
             }}>
             For her
@@ -65,7 +65,7 @@ export const Main = (): JSX.Element => {
           <Link
             href="/catalogue"
             onClick={(): void => {
-              setCurrentPage('catalogue')
+              setCurrentPageName('catalogue')
               setCategoriesID('0e007442-ed84-4e4f-ab3b-3c14191462c7')
             }}>
             All Products

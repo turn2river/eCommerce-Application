@@ -5,10 +5,13 @@ import { Logo } from '../Logo/Logo.tsx'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 import { CartService } from '../../services/CartService'
+import { CustomerTokensStorage } from '../../store/customerTokensStorage'
 
 export const Header = (): JSX.Element => {
   const auth = useAuth()
   const { isAuth, setIsAuth } = auth as AuthContextType
+
+  const removeTokenOnLogut = new CustomerTokensStorage()
 
   const page = useCataloguePage()
   const { setCurrentPageName, setCategoriesID, cartListLength, setCartListLength, cartListTrigger } =
@@ -71,7 +74,14 @@ export const Header = (): JSX.Element => {
             </Button>
           )}
           {isAuth ? (
-            <Button component="button" href="/" color="inherit" onClick={(): void => setIsAuth(false)}>
+            <Button
+              component="button"
+              href="/"
+              color="inherit"
+              onClick={(): void => {
+                setIsAuth(false)
+                removeTokenOnLogut.clearLocalStorageTokens()
+              }}>
               logout
             </Button>
           ) : (
