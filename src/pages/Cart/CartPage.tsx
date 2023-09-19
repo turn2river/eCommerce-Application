@@ -1,5 +1,5 @@
 import { useEffect, useState, MouseEvent } from 'react'
-import { Box, Button, ButtonGroup, Card, CardMedia, IconButton, Typography } from '@mui/material'
+import { Box, Button, ButtonGroup, Card, CardMedia, IconButton, TextField, Typography } from '@mui/material'
 import { Add, DeleteForever, Remove } from '@mui/icons-material'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { Cart, CartService } from '../../services/CartService'
@@ -7,10 +7,14 @@ import { convertPrice } from '../../utils/convertPrice'
 import { CataloguePageContextType, useCataloguePage } from '../../store/CataloguePageContext.tsx'
 import { CustomerTokensStorage } from '../../store/customerTokensStorage'
 
+// eslint-disable-next-line max-lines-per-function
 export const CartPage = (): JSX.Element | JSX.Element[] => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
   const anonUserAuthToken = anonTokensStorage.getLocalStorageAnonAuthToken()
+
   const [cartsData, setCartsData] = useState<Cart | undefined>(undefined)
+  const [promoValue, setPromoValue] = useState<string>('')
+
   const myCart = new CartService()
   const page = useCataloguePage()
   const { cartListTrigger, setCartListTRigger } = page as CataloguePageContextType
@@ -114,7 +118,26 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
   }
 
   return cartsData?.lineItems.length ? (
-    <Box>
+    <Box mt={4}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box display={'flex'} alignItems={'center'}>
+          <Typography>Enter your promocode:</Typography>
+          <TextField
+            size="small"
+            sx={{ ml: '20px' }}
+            value={promoValue}
+            onChange={(event): void => {
+              setPromoValue(event.currentTarget.value)
+            }}
+          />
+          <Button variant="contained" sx={{ ml: '20px' }}>
+            SUBMIT
+          </Button>
+        </Box>
+        <Button variant="outlined" color="secondary">
+          CLEAR CART
+        </Button>
+      </Box>
       {cartsData.lineItems.map((item) => (
         <Card
           key={item.id}
@@ -167,7 +190,7 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
             size="large"
             sx={{ margin: '0 20px' }}
             onClick={(event): Promise<void> => removeItemFromCart(event, item.quantity)}>
-            <DeleteForever sx={{ width: '50px', height: '50px' }} />
+            <DeleteForever sx={{ width: '40px', height: '40px' }} />
           </IconButton>
         </Card>
       ))}
