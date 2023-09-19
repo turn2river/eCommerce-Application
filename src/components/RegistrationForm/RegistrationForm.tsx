@@ -27,6 +27,7 @@ import { CustomerSignInService } from '../../services/CustomerSignInService'
 import { CustomerSignUpService } from '../../services/CustomerSignUpService'
 import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
 import { AnonTokensService } from '../../services/AnonTokensService'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -80,6 +81,9 @@ export const RegistrationForm = (): JSX.Element => {
     }
     // console.log(id, checked)
   }
+
+  const page = useCataloguePage()
+  const { setCartListTRigger } = page as CataloguePageContextType
 
   const onSubmit = async ({
     email: currentEmail,
@@ -145,6 +149,7 @@ export const RegistrationForm = (): JSX.Element => {
         }
         try {
           await customerService.signInCustomer(customerloginIngfo)
+          setCartListTRigger((prevValue) => prevValue + 1)
         } catch (error) {
           if (error instanceof Error) {
             if (error.message === 'Request failed with status code 400') {

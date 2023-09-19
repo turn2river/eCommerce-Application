@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 import { cardStyle, commonPriceStyle, discountedPriceStyle, modalWindowStyle, priceStyle } from './style'
 import { ProductCardPropsInterface } from '../../models/ProductCardPropsInterface'
 import { CustomGradientButton } from '../CustomGradientButton/CustomGradientButton.tsx'
@@ -49,7 +50,8 @@ export const ProductCard = ({
   const anonUserAuthToken = AnonTokensStorage.getInstance().getLocalStorageAnonAuthToken()
 
   async function addItemToCart(currentId: string): Promise<void> {
-    if (customerToken && id) {
+    const token = customerToken || anonUserAuthToken
+    if (token && id) {
       const lastCart = await myCart.createCart()
       const cartUpdate = {
         version: lastCart?.version,
@@ -63,29 +65,11 @@ export const ProductCard = ({
         ],
       }
       try {
-        await myCart.handleCartItemInUserCart(customerToken, lastCart?.id, cartUpdate)
+        await myCart.handleCartItemInUserCart(token, lastCart?.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
+        toast.success('Product added to cart successfully')
       } catch (error) {
-        console.error(error)
-      }
-    } else if (anonUserAuthToken && id) {
-      const lastCart = await myCart.createCart()
-      const cartUpdate = {
-        version: lastCart?.version,
-        actions: [
-          {
-            action: 'addLineItem',
-            productId: currentId.split('___')[0],
-            variantId: Number.parseFloat(currentId.split('___')[1]),
-            quantity: 1,
-          },
-        ],
-      }
-      try {
-        await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart?.id, cartUpdate)
-        setCartListTRigger((prevValue) => prevValue + 1)
-      } catch (error) {
-        console.error(error)
+        toast.success('Something went wrong')
       }
     }
   }
@@ -100,7 +84,8 @@ export const ProductCard = ({
   }
 
   async function removeItemFromCart(lineId: string, productsQuantity: number): Promise<void> {
-    if (customerToken && lineId) {
+    const token = customerToken || anonUserAuthToken
+    if (token && lineId) {
       const lastCart = await myCart.queryMyActiveCart(customerToken)
       const cartUpdate = {
         version: lastCart.version,
@@ -113,28 +98,11 @@ export const ProductCard = ({
         ],
       }
       try {
-        await myCart.removeLineItem(customerToken, lastCart.id, cartUpdate)
+        await myCart.removeLineItem(token, lastCart.id, cartUpdate)
+        toast.success('Product removed from cart successfully')
         setCartListTRigger((prevValue) => prevValue + 1)
       } catch (error) {
-        console.error(error)
-      }
-    } else if (anonUserAuthToken && lineId) {
-      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
-      const cartUpdate = {
-        version: lastCart.version,
-        actions: [
-          {
-            action: 'removeLineItem',
-            lineItemId: lineId,
-            quantity: productsQuantity,
-          },
-        ],
-      }
-      try {
-        await myCart.removeLineItem(anonUserAuthToken, lastCart.id, cartUpdate)
-        setCartListTRigger((prevValue) => prevValue + 1)
-      } catch (error) {
-        console.error(error)
+        toast.error('Something went wrong')
       }
     }
   }
@@ -250,7 +218,7 @@ export const ProductCard = ({
                 setVariantInCart(true)
                 setModal(false)
               }}>
-              Continue
+              Add to cart
             </CustomGradientButton>
           )}
         </Box>

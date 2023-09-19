@@ -294,7 +294,7 @@ export interface Cart {
   shippingMode: string
   shipping: string[]
   customLineItems: string[]
-  discountCodes: string[]
+  discountCodes: DiscountCodes[]
   directDiscounts: string[]
   inventoryMode: string
   taxMode: string
@@ -413,4 +413,12 @@ interface LineItems {
       value: number[]
     }[]
   }
+}
+
+interface DiscountCodes {
+  discountCode: {
+    id: string
+    typeID: string
+  }
+  state: string
 }
