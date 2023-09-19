@@ -209,7 +209,11 @@ export const ProductCard = ({
                     clickOnVolumeButton(variant)
                     setProductsID(event.currentTarget.id)
                     const currentCartData = await myCart.createCart()
-                    if (currentCartData?.lineItems.some((lineItem) => lineItem.variant.id === variant.id)) {
+                    if (
+                      currentCartData?.lineItems.some(
+                        (lineItem) => lineItem.variant.id === variant.id && lineItem.productId === id,
+                      )
+                    ) {
                       setVariantInCart(true)
                     } else {
                       setVariantInCart(false)
