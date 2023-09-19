@@ -14,8 +14,14 @@ export const Header = (): JSX.Element => {
   const removeTokenOnLogut = new CustomerTokensStorage()
 
   const page = useCataloguePage()
-  const { setCurrentPageName, setCategoriesID, cartListLength, setCartListLength, cartListTrigger } =
-    page as CataloguePageContextType
+  const {
+    setCurrentPageName,
+    setCategoriesID,
+    cartListLength,
+    setCartListLength,
+    cartListTrigger,
+    setCartListTRigger,
+  } = page as CataloguePageContextType
   const myCart = new CartService()
 
   useEffect(() => {
@@ -81,6 +87,7 @@ export const Header = (): JSX.Element => {
               onClick={(): void => {
                 setIsAuth(false)
                 removeTokenOnLogut.clearLocalStorageCustomerTokens()
+                setCartListTRigger((prevValue) => prevValue + 1)
               }}>
               logout
             </Button>

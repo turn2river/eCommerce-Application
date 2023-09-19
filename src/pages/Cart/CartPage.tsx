@@ -1,6 +1,7 @@
 import { useEffect, useState, MouseEvent } from 'react'
 import { Box, Button, ButtonGroup, Card, CardMedia, IconButton, TextField, Typography } from '@mui/material'
 import { Add, DeleteForever, Remove } from '@mui/icons-material'
+import { toast } from 'react-toastify'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { Cart, CartService } from '../../services/CartService'
 import { convertPrice } from '../../utils/convertPrice'
@@ -14,6 +15,7 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
 
   const [cartsData, setCartsData] = useState<Cart | undefined>(undefined)
   const [promoValue, setPromoValue] = useState<string>('')
+  const [isPromoValueAdded, setIsPromoValueAdded] = useState<boolean>(false)
 
   const myCart = new CartService()
   const page = useCataloguePage()
@@ -35,8 +37,9 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
 
   async function addItemToCart(event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const { id } = event.currentTarget
-    if (customerToken && id) {
-      const lastCart = await myCart.queryMyActiveCart(customerToken)
+    const token = customerToken || anonUserAuthToken
+    if (token && id) {
+      const lastCart = await myCart.queryMyActiveCart(token)
       const cartUpdate = {
         version: lastCart.version,
         actions: [
@@ -49,26 +52,7 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
         ],
       }
       try {
-        await myCart.handleCartItemInUserCart(customerToken, lastCart.id, cartUpdate)
-        setCartListTRigger((prevValue) => prevValue + 1)
-      } catch (error) {
-        console.error(error)
-      }
-    } else if (anonUserAuthToken && id) {
-      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
-      const cartUpdate = {
-        version: lastCart.version,
-        actions: [
-          {
-            action: 'addLineItem',
-            productId: id.split('___')[0],
-            variantId: Number.parseFloat(id.split('___')[1]),
-            quantity: 1,
-          },
-        ],
-      }
-      try {
-        await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart.id, cartUpdate)
+        await myCart.handleCartItemInUserCart(token, lastCart.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
       } catch (error) {
         console.error(error)
@@ -78,8 +62,9 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
 
   async function removeItemFromCart(event: MouseEvent<HTMLButtonElement>, productsQuantity: number = 1): Promise<void> {
     const { id } = event.currentTarget
-    if (customerToken && id) {
-      const lastCart = await myCart.queryMyActiveCart(customerToken)
+    const token = customerToken || anonUserAuthToken
+    if (token && id) {
+      const lastCart = await myCart.queryMyActiveCart(token)
       const cartUpdate = {
         version: lastCart.version,
         actions: [
@@ -91,48 +76,59 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
         ],
       }
       try {
-        await myCart.removeLineItem(customerToken, lastCart.id, cartUpdate)
+        await myCart.removeLineItem(token, lastCart.id, cartUpdate)
         setCartListTRigger((prevValue) => prevValue + 1)
       } catch (error) {
-        console.error(error)
-      }
-    } else if (anonUserAuthToken && id) {
-      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
-      const cartUpdate = {
-        version: lastCart.version,
-        actions: [
-          {
-            action: 'removeLineItem',
-            lineItemId: id,
-            quantity: productsQuantity,
-          },
-        ],
-      }
-      try {
-        await myCart.removeLineItem(anonUserAuthToken, lastCart.id, cartUpdate)
-        setCartListTRigger((prevValue) => prevValue + 1)
-      } catch (error) {
-        console.error(error)
+        toast.error(`Something went wrong`)
       }
     }
   }
 
   async function removeCart(): Promise<void> {
-    if (anonUserAuthToken && cartsData) {
+    const token = customerToken || anonUserAuthToken
+    if (token && cartsData) {
       try {
-        await myCart.deleteCart(anonUserAuthToken, cartsData?.id, cartsData?.version)
+        await myCart.deleteCart(token, cartsData.id, cartsData?.version)
         setCartsData(undefined)
         setCartListTRigger((prevValue) => prevValue + 1)
       } catch (error) {
-        console.error(error)
+        toast.error(`Something went wrong`)
       }
-    } else if (customerToken && cartsData) {
+    }
+  }
+
+  async function addPromoCode(): Promise<void> {
+    const token = customerToken || anonUserAuthToken
+    if (token && cartsData && promoValue) {
       try {
-        await myCart.deleteCart(customerToken, cartsData?.id, cartsData?.version)
-        setCartsData(undefined)
-        setCartListTRigger((prevValue) => prevValue + 1)
+        const discountedCart = await myCart.addDiscountCode(token, cartsData.id, cartsData.version, promoValue)
+        setCartsData(discountedCart)
+        setIsPromoValueAdded(true)
+        toast.success('Promo code added successfully')
       } catch (error) {
-        console.error(error)
+        toast.error('Wrong promo code')
+      }
+    } else {
+      toast.error('Enter promo code in input')
+    }
+  }
+
+  async function removePromoCode(): Promise<void> {
+    const token = customerToken || anonUserAuthToken
+    if (token && cartsData && promoValue) {
+      try {
+        const discountedCart = await myCart.removeDiscountCode(
+          token,
+          cartsData.id,
+          cartsData.version,
+          cartsData.discountCodes[0].discountCode.id,
+        )
+        setCartsData(discountedCart)
+        setIsPromoValueAdded(false)
+        setPromoValue('')
+        toast.success('Promo code removed successfully')
+      } catch (error) {
+        toast.error('Something went wrong')
       }
     }
   }
@@ -149,10 +145,17 @@ export const CartPage = (): JSX.Element | JSX.Element[] => {
             onChange={(event): void => {
               setPromoValue(event.currentTarget.value)
             }}
+            disabled={isPromoValueAdded}
           />
-          <Button variant="contained" sx={{ ml: '20px' }}>
-            SUBMIT
-          </Button>
+          {isPromoValueAdded ? (
+            <Button variant="contained" sx={{ ml: '20px' }} onClick={removePromoCode}>
+              CLEAR
+            </Button>
+          ) : (
+            <Button variant="contained" sx={{ ml: '20px' }} onClick={addPromoCode}>
+              SUBMIT
+            </Button>
+          )}
         </Box>
         <Button variant="outlined" color="secondary" onClick={removeCart}>
           CLEAR CART

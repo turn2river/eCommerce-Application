@@ -4,6 +4,7 @@ import { Box } from '@mui/system'
 import { Fragment, useEffect, useState, MouseEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import { Carousel } from 'react-responsive-carousel'
+import { toast } from 'react-toastify'
 import { GetProductByIdService } from '../../services/GetProductByIdService'
 import { AnonTokensStorage } from '../../store/anonTokensStorage'
 import { convertPrice } from '../../utils/convertPrice'
@@ -107,7 +108,8 @@ export const ProductPage = (): JSX.Element => {
   const customerToken = new CustomerTokensStorage().getLocalStorageCustomerAuthToken()
 
   async function addToCart(): Promise<void> {
-    if (customerToken) {
+    const token = customerToken || anonUserAuthToken
+    if (token) {
       const lastCart = await myCart.queryMyActiveCart(customerToken)
 
       const cartUpdate = {
@@ -122,38 +124,19 @@ export const ProductPage = (): JSX.Element => {
         ],
       }
       try {
-        await myCart.handleCartItemInUserCart(customerToken, lastCart.id, cartUpdate)
+        await myCart.handleCartItemInUserCart(token, lastCart.id, cartUpdate)
+        toast.success('Product added to cart successfully')
         setCartListTRigger((prevValue) => prevValue + 1)
         setVariantInCart(true)
       } catch (error) {
-        console.error(error)
-      }
-    } else if (anonUserAuthToken) {
-      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
-
-      const cartUpdate = {
-        version: lastCart.version,
-        actions: [
-          {
-            action: 'addLineItem',
-            productId: productID,
-            variantId: variantID,
-            quantity: 1,
-          },
-        ],
-      }
-      try {
-        await myCart.handleCartItemInUserCart(anonUserAuthToken, lastCart.id, cartUpdate)
-        setCartListTRigger((prevValue) => prevValue + 1)
-        setVariantInCart(true)
-      } catch (error) {
-        console.error(error)
+        toast.success('Something went wrong')
       }
     }
   }
 
   async function removeItemFromCart(lineId: string, productsQuantity: number): Promise<void> {
-    if (customerToken && lineId) {
+    const token = customerToken || anonUserAuthToken
+    if (token && lineId) {
       const lastCart = await myCart.queryMyActiveCart(customerToken)
       const cartUpdate = {
         version: lastCart.version,
@@ -166,28 +149,11 @@ export const ProductPage = (): JSX.Element => {
         ],
       }
       try {
-        await myCart.removeLineItem(customerToken, lastCart.id, cartUpdate)
+        await myCart.removeLineItem(token, lastCart.id, cartUpdate)
+        toast.success('Product removed from cart successfully')
         setCartListTRigger((prevValue) => prevValue + 1)
       } catch (error) {
-        console.error(error)
-      }
-    } else if (anonUserAuthToken && lineId) {
-      const lastCart = await myCart.queryMyActiveCart(anonUserAuthToken)
-      const cartUpdate = {
-        version: lastCart.version,
-        actions: [
-          {
-            action: 'removeLineItem',
-            lineItemId: lineId,
-            quantity: productsQuantity,
-          },
-        ],
-      }
-      try {
-        await myCart.removeLineItem(anonUserAuthToken, lastCart.id, cartUpdate)
-        setCartListTRigger((prevValue) => prevValue + 1)
-      } catch (error) {
-        console.error(error)
+        toast.success('Something went wrong')
       }
     }
   }
@@ -260,7 +226,11 @@ export const ProductPage = (): JSX.Element => {
                               handleVolumeSelect(centPrice, discountCentPrice)
                               setVariantID(variant.id)
                               const cartData = await myCart.createCart()
-                              if (cartData?.lineItems.some((lineItem) => lineItem.variant.id === variant.id)) {
+                              if (
+                                cartData?.lineItems.some(
+                                  (lineItem) => lineItem.variant.id === variant.id && lineItem.productId === id,
+                                )
+                              ) {
                                 setVariantInCart(true)
                               } else {
                                 setVariantInCart(false)
