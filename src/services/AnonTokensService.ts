@@ -41,7 +41,7 @@ export class AnonTokensService {
         password: 'itUuiiHan_5t0wwKkkslnPXc_jIjV3VI',
       },
     })
-    console.log(response.data.active)
+    // console.log(response.data.active)
     return response.data.active
   }
 }

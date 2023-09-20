@@ -251,7 +251,7 @@ export class CartService {
       'Authorization': `Bearer ${token}`,
     }
     const response = await axios.delete(url, { headers })
-    console.log(response.data)
+    // console.log(response.data)
 
     return response.data
   }

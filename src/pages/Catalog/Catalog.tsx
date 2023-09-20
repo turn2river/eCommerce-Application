@@ -63,7 +63,7 @@ export const Catalog = (): JSX.Element => {
     return () => {
       loading = false
     }
-  }, [categoriesID, currentPageName, pageNumber])
+  }, [categoriesID, currentPageName, pageNumber, anonUserAuthToken])
 
   async function priceRangeSelect(): Promise<void> {
     if (anonUserAuthToken) {
