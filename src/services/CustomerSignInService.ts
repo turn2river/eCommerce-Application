@@ -42,6 +42,19 @@ export class CustomerSignInService {
     await axios.post(url, body, { headers })
     // return response.data
   }
+  public async refreshCustomerToken(refresh_token: string): Promise<void> {
+    const url = `https://auth.europe-west1.gcp.commercetools.com/oauth/parfumerie/customers/token?grant_type=refresh_token&refresh_token=${refresh_token}`
+
+    const response = await axios({
+      method: 'post',
+      url,
+      auth: {
+        username: 'siFhmtGmnSioXkUJakkWQafJ',
+        password: 'wBkMaGx7k8lGflmkfPMt0OZe-Bhj9jy5',
+      },
+    })
+    this.customerStorage.setLocalStorageCustomerAuthToken(response.data.access_token)
+  }
 }
 
 export interface MeCustomerData {
