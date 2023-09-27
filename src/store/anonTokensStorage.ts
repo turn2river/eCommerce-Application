@@ -13,6 +13,7 @@ export class AnonTokensStorage {
 
   public setLocalStorageAnonAuthToken(value: string): void {
     window.localStorage.setItem('parfAnonAuthToken', JSON.stringify(value))
+    console.log('storage', value)
   }
 
   public getLocalStorageAnonAuthToken(): string | null {

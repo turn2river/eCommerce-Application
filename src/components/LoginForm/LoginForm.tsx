@@ -10,7 +10,11 @@ import { schema } from '../../utils/LogInValidation'
 import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { AuthContextType, useAuth } from '../../store/AuthContext.tsx'
 import { CustomerSignInService } from '../../services/CustomerSignInService.ts'
+import { AnonTokensStorage } from '../../store/anonTokensStorage'
+import { AnonTokensService } from '../../services/AnonTokensService.ts'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
+const anonTokens = AnonTokensStorage.getInstance()
 export const LoginForm = (): JSX.Element => {
   const {
     register,
@@ -24,13 +28,24 @@ export const LoginForm = (): JSX.Element => {
   const auth = useAuth()
   const { setIsAuth } = auth as AuthContextType
 
+  const page = useCataloguePage()
+  const { setCartListTRigger } = page as CataloguePageContextType
+
   const onSubmit = async (data: LogInInputsInterface): Promise<LogInInputsInterface> => {
     const customerService = new CustomerSignInService()
     // console.log(data)
     try {
+      const { email, password } = data
+      if (anonTokens.getLocalStorageAnonAuthToken()) {
+        const token = anonTokens.getLocalStorageAnonAuthToken()
+        await customerService.authenticateCustomer(token, email, password)
+        const anonymTokens = new AnonTokensService()
+        anonymTokens.getAnonymousTokens()
+      }
       await customerService.signInCustomer(data)
       toast.success('Congratulations, you have successfully signed in!')
       setIsAuth(true)
+      setCartListTRigger((prevValue) => prevValue + 1)
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === 'Request failed with status code 400') {

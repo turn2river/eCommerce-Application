@@ -18,7 +18,7 @@ export const RangeSlider = ({
 }): JSX.Element => {
   const [value, setValue] = useState<number[]>([1, 350])
 
-  const handleChange = (event: Event, newValue: number | number[]): void => {
+  const handleChange = (_: Event, newValue: number | number[]): void => {
     const [min, max] = value
     const minvalue = min * 100
     const maxvalue = max * 100

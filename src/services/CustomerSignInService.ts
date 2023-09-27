@@ -26,4 +26,39 @@ export class CustomerSignInService {
 
     // console.log(response.data)
   }
+
+  public async authenticateCustomer(token: string | null, email: string, password: string): Promise<void> {
+    const url = `https://api.europe-west1.gcp.commercetools.com/parfumerie/me/login`
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    }
+    const body = {
+      email,
+      password,
+      activeCartSignInMode: 'MergeWithExistingCustomerCart',
+    }
+
+    await axios.post(url, body, { headers })
+    // return response.data
+  }
+  public async refreshCustomerToken(refresh_token: string): Promise<void> {
+    const url = `https://auth.europe-west1.gcp.commercetools.com/oauth/parfumerie/customers/token?grant_type=refresh_token&refresh_token=${refresh_token}`
+
+    const response = await axios({
+      method: 'post',
+      url,
+      auth: {
+        username: 'siFhmtGmnSioXkUJakkWQafJ',
+        password: 'wBkMaGx7k8lGflmkfPMt0OZe-Bhj9jy5',
+      },
+    })
+    this.customerStorage.setLocalStorageCustomerAuthToken(response.data.access_token)
+  }
+}
+
+export interface MeCustomerData {
+  email: string
+  password: string
+  activeCartSignInMode: string
 }

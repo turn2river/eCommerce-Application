@@ -26,6 +26,8 @@ import { LogInInputsInterface } from '../../models/LogInInputsInterface'
 import { CustomerSignInService } from '../../services/CustomerSignInService'
 import { CustomerSignUpService } from '../../services/CustomerSignUpService'
 import { useAuth, AuthContextType } from '../../store/AuthContext.tsx'
+import { AnonTokensService } from '../../services/AnonTokensService'
+import { useCataloguePage, CataloguePageContextType } from '../../store/CataloguePageContext.tsx'
 
 export const RegistrationForm = (): JSX.Element => {
   const anonTokensStorage = AnonTokensStorage.getInstance()
@@ -80,6 +82,9 @@ export const RegistrationForm = (): JSX.Element => {
     // console.log(id, checked)
   }
 
+  const page = useCataloguePage()
+  const { setCartListTRigger } = page as CataloguePageContextType
+
   const onSubmit = async ({
     email: currentEmail,
     billing_city: currentBillingCity,
@@ -131,7 +136,10 @@ export const RegistrationForm = (): JSX.Element => {
     if (anonUserAuthToken) {
       try {
         // Make the API call to create a new customer
-        await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
+        // await customerServiceSignUp.signUpCustomer(anonUserAuthToken, customerInfo)
+        await customerServiceSignUp.signUpMeCustomer(anonUserAuthToken, customerInfo)
+        const anonymTokens = new AnonTokensService()
+        anonymTokens.getAnonymousTokens()
         // Check the server response and set the form status and error message accordingly
         toast.success('Congratulations, you have successfully signed up!')
         setIsAuth(true)
@@ -141,6 +149,7 @@ export const RegistrationForm = (): JSX.Element => {
         }
         try {
           await customerService.signInCustomer(customerloginIngfo)
+          setCartListTRigger((prevValue) => prevValue + 1)
         } catch (error) {
           if (error instanceof Error) {
             if (error.message === 'Request failed with status code 400') {

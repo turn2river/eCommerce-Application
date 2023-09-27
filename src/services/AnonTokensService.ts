@@ -25,9 +25,24 @@ export class AnonTokensService {
     }
     const anonTokensStorage = AnonTokensStorage.getInstance()
     anonTokensStorage.setLocalStorageAnonAuthToken(tokens.accessToken)
+    console.log('service', tokens.accessToken)
     anonTokensStorage.setLocalStorageAnonRefreshToken(tokens.refreshToken)
 
     return response.data
+  }
+
+  public async introspectToken(token: string | null): Promise<boolean> {
+    const url = `https://auth.europe-west1.gcp.commercetools.com/oauth/introspect?token=${token}`
+    const response = await axios({
+      method: 'post',
+      url,
+      auth: {
+        username: 'rYRaZX089qXdVYTbWgTytLcU',
+        password: 'itUuiiHan_5t0wwKkkslnPXc_jIjV3VI',
+      },
+    })
+    // console.log(response.data.active)
+    return response.data.active
   }
 }
 type AnonUserType = {
